@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ArrowRight, Check, EyeOff, Gem, MapPin, Search, Sparkles, TrendingUp, X } from "lucide-react";
 import { canEquipItemAtLevel, compareScoredItems, contextualPower, isSystemPowerKey, scoreItem, statDelta, type WeightProfile } from "@/lib/ep";
 import { applyRecommendedEnchant } from "@/lib/enchants";
@@ -96,6 +96,7 @@ function StatLines({ item, compareTo, level, context }: { item: ScoredItem; comp
 
 export function ItemPickerModal({ slot, equipped, candidates, loading = false, level, profile, context, profileLabel, onEquip, onClose }: ItemPickerModalProps) {
   const [search, setSearch] = useState("");
+  const searchRef = useRef<HTMLInputElement>(null);
   const equippedScore = equipped ? scoreItem(equipped, level, profile) : undefined;
   const powerMode = level >= 60 && Boolean(context);
   const equippedPower = equippedScore ? contextualPower(equippedScore.resolvedStats, level, context) : 0;
@@ -115,6 +116,34 @@ export function ItemPickerModal({ slot, equipped, candidates, loading = false, l
   const selectedPowerDelta = selected ? contextualPower(selected.resolvedStats, level, context) - equippedPower : 0;
   const selectedEpDelta = selected ? selected.ep - (equippedScore?.ep ?? 0) : 0;
 
+  useEffect(() => {
+    function handlePickerKeys(event: KeyboardEvent): void {
+      const target = event.target as HTMLElement | null;
+      const editingAnotherField = target?.matches("textarea, select, [contenteditable='true']") ?? false;
+      if (event.key === "/" && !editingAnotherField && document.activeElement !== searchRef.current) {
+        event.preventDefault();
+        searchRef.current?.focus();
+        return;
+      }
+      if ((event.key === "ArrowDown" || event.key === "ArrowUp") && !editingAnotherField && ranked.length) {
+        event.preventDefault();
+        const currentIndex = Math.max(0, ranked.findIndex((item) => item.id === selectedId));
+        const direction = event.key === "ArrowDown" ? 1 : -1;
+        const nextIndex = (currentIndex + direction + ranked.length) % ranked.length;
+        setSelectedId(ranked[nextIndex].id);
+        return;
+      }
+      if (event.key === "Enter" && selected
+        && (document.activeElement === searchRef.current || target?.classList.contains("result-row"))) {
+        event.preventDefault();
+        onEquip(selected);
+        onClose();
+      }
+    }
+    window.addEventListener("keydown", handlePickerKeys);
+    return () => window.removeEventListener("keydown", handlePickerKeys);
+  }, [onClose, onEquip, ranked, selected, selectedId]);
+
   return (
     <div className="modal-backdrop" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && onClose()}>
       <section className="modal-panel" role="dialog" aria-modal="true" aria-label={`Choose ${slot.toLowerCase()} item`}>
@@ -124,12 +153,13 @@ export function ItemPickerModal({ slot, equipped, candidates, loading = false, l
               <p className="eyebrow">Equipment vault</p>
               <h2 className="mt-1 font-display text-2xl text-stone-100">Choose {slot.replace("_", " ").toLowerCase()}</h2>
               <p className="mt-1 text-sm text-stone-500">Verified gear first · Ranked for {profileLabel ?? "your live EP weights"} · Level {level}{level >= 60 && context ? ` · ${context.toUpperCase()} Power, then EP` : " · EP"}</p>
+              <p className="modal-key-hints"><kbd>Esc</kbd> close <kbd>↑↓</kbd> select <kbd>Enter</kbd> equip <kbd>/</kbd> search</p>
             </div>
             <button className="icon-button" onClick={onClose} aria-label="Close item picker"><X size={18} /></button>
           </div>
           <label className="search-box">
             <Search size={17} />
-            <input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search this slot..." autoFocus />
+            <input ref={searchRef} value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search this slot..." autoFocus />
             <kbd>{ranked.length} items</kbd>
           </label>
         </header>

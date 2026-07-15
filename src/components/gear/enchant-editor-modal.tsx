@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Check, Search, Sparkles, Trash2, X } from "lucide-react";
 import { enchantEnhancement, enchantEp, findEnchantsForItem, recommendEnchant, type CoAEnchant } from "@/lib/enchants";
 import type { GearEnhancement, GearItem } from "@/types/gear";
@@ -20,6 +20,7 @@ function EnchantStats({ enchant }: { enchant: CoAEnchant }) {
 
 export function EnchantEditorModal({ item, profile, onApply, onRemove, onClose }: EnchantEditorModalProps) {
   const current = item.enhancements?.find((enhancement) => enhancement.kind === "ENCHANT");
+  const searchRef = useRef<HTMLInputElement>(null);
   const recommendation = useMemo(() => recommendEnchant(item, profile), [item, profile]);
   const available = useMemo(() => findEnchantsForItem(item), [item]);
   const [search, setSearch] = useState("");
@@ -38,11 +39,39 @@ export function EnchantEditorModal({ item, profile, onApply, onRemove, onClose }
     onClose();
   }
 
+  useEffect(() => {
+    function handleEnchantKeys(event: KeyboardEvent): void {
+      const target = event.target as HTMLElement | null;
+      const editingAnotherField = target?.matches("textarea, select, [contenteditable='true']") ?? false;
+      if (event.key === "/" && !editingAnotherField && document.activeElement !== searchRef.current) {
+        event.preventDefault();
+        searchRef.current?.focus();
+        return;
+      }
+      if ((event.key === "ArrowDown" || event.key === "ArrowUp") && !editingAnotherField && ranked.length) {
+        event.preventDefault();
+        const currentIndex = Math.max(0, ranked.findIndex(({ enchant }) => enchant.id === selectedId));
+        const direction = event.key === "ArrowDown" ? 1 : -1;
+        const nextIndex = (currentIndex + direction + ranked.length) % ranked.length;
+        setSelectedId(ranked[nextIndex].enchant.id);
+        return;
+      }
+      if (event.key === "Enter" && selected
+        && (document.activeElement === searchRef.current || target?.classList.contains("enchant-option"))) {
+        event.preventDefault();
+        onApply(enchantEnhancement(selected));
+        onClose();
+      }
+    }
+    window.addEventListener("keydown", handleEnchantKeys);
+    return () => window.removeEventListener("keydown", handleEnchantKeys);
+  }, [onApply, onClose, ranked, selected, selectedId]);
+
   return (
     <div className="modal-backdrop" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && onClose()}>
       <section className="enchant-panel" role="dialog" aria-modal="true" aria-label={`Choose enchant for ${item.name}`}>
         <header className="import-header">
-          <div><p className="eyebrow">In-game enchanting</p><h2>Choose an enchant</h2><p>{item.name} · Item level {item.itemLevel}</p></div>
+          <div><p className="eyebrow">In-game enchanting</p><h2>Choose an enchant</h2><p>{item.name} · Item level {item.itemLevel}</p><p className="modal-key-hints"><kbd>Esc</kbd> close <kbd>↑↓</kbd> select <kbd>Enter</kbd> apply <kbd>/</kbd> search</p></div>
           <button className="icon-button" onClick={onClose} aria-label="Close enchant picker"><X size={18} /></button>
         </header>
 
@@ -52,7 +81,7 @@ export function EnchantEditorModal({ item, profile, onApply, onRemove, onClose }
           <b>Apply <em>{enchantEp(recommendation, profile).toFixed(1)} EP</em></b>
         </button> : null}
 
-        <div className="enchant-search"><Search size={14} /><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search in-game enchants…" autoFocus /></div>
+        <div className="enchant-search"><Search size={14} /><input ref={searchRef} value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search in-game enchants…" autoFocus /></div>
         <div className="enchant-catalog custom-scrollbar">
           {ranked.map(({ enchant, ep }) => <button type="button" key={enchant.id} className={`enchant-option ${selected?.id === enchant.id ? "selected" : ""}`} onClick={() => setSelectedId(enchant.id)}>
             <span className="enchant-option-check">{selected?.id === enchant.id ? <Check size={13} /> : null}</span>

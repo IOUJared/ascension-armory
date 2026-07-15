@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Check, ChevronDown, EyeOff, RotateCcw, Save, Settings2, Sparkles, Trash2, Upload, X } from "lucide-react";
 import { isCoASelection, resolveCoAProfile } from "@/lib/coa";
 import { calculateEp, isSystemPowerKey, resolveItemStats, scoreItem, withoutSystemPowerWeights, type WeightProfile } from "@/lib/ep";
@@ -127,6 +127,14 @@ export function GearPlanner() {
     : 0;
   const hasGearEnchants = useMemo(() => Object.values(loadout)
     .some((item) => item.enhancements?.some((enhancement) => enhancement.kind === "ENCHANT")), [loadout]);
+  const saveBuildNow = useCallback((): void => {
+    try {
+      localStorage.setItem(BUILD_STORAGE_KEY, JSON.stringify(makePlannerBuild(level, selection, weights, loadout)));
+      setSaveConfirmed(true);
+    } catch {
+      setSaveConfirmed(false);
+    }
+  }, [level, loadout, selection, weights]);
 
   useEffect(() => {
     const restoreBuild = window.setTimeout(() => {
@@ -183,6 +191,39 @@ export function GearPlanner() {
   }, [saveConfirmed]);
 
   useEffect(() => {
+    function handleKeyboardShortcut(event: KeyboardEvent): void {
+      const key = event.key.toLowerCase();
+      const target = event.target as HTMLElement | null;
+      const editing = target?.matches("input, textarea, select, [contenteditable='true']") ?? false;
+
+      if (event.key === "Escape") {
+        if (activeEnchantSlot) setActiveEnchantSlot(null);
+        else if (activeSlot) setActiveSlot(null);
+        else if (importerOpen) setImporterOpen(false);
+        else if (selectorOpen && selection) setSelectorOpen(false);
+        return;
+      }
+      if ((event.ctrlKey || event.metaKey) && key === "s") {
+        event.preventDefault();
+        saveBuildNow();
+        return;
+      }
+      if (editing || event.ctrlKey || event.metaKey || event.altKey
+        || activeEnchantSlot || activeSlot || importerOpen || selectorOpen) return;
+      if (key === "i") {
+        event.preventDefault();
+        setImporterOpen(true);
+      } else if (key === "c") {
+        event.preventDefault();
+        setSelectorOpen(true);
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyboardShortcut);
+    return () => window.removeEventListener("keydown", handleKeyboardShortcut);
+  }, [activeEnchantSlot, activeSlot, importerOpen, saveBuildNow, selection, selectorOpen]);
+
+  useEffect(() => {
     if (!activeSlot) return;
     let cancelled = false;
     findStaticItemsForSlot(activeSlot, level)
@@ -216,15 +257,6 @@ export function GearPlanner() {
     setSelectorOpen(false);
   }
 
-  function saveBuildNow(): void {
-    try {
-      localStorage.setItem(BUILD_STORAGE_KEY, JSON.stringify(makePlannerBuild(level, selection, weights, loadout)));
-      setSaveConfirmed(true);
-    } catch {
-      setSaveConfirmed(false);
-    }
-  }
-
   function autoEnchantGear(): void {
     setLoadout((current) => Object.fromEntries(Object.entries(current)
       .map(([slot, item]) => [slot, applyRecommendedEnchant(item, profile, true)])));
@@ -244,6 +276,7 @@ export function GearPlanner() {
         <div className="brand-mark"><span>A</span></div>
         <div><p className="font-display text-lg leading-none text-stone-100">Ascension Armory</p><p className="mt-1 text-[10px] uppercase tracking-[.24em] text-amber-500/80">Conquest Gear Lab</p></div>
         <div className="ml-auto hidden items-center gap-6 text-sm text-stone-500 md:flex"><a className="text-amber-300" href="#planner">Planner</a><a href="#weights">EP Weights</a><a href="#about">Mechanics</a></div>
+        <div className="keyboard-hints" aria-label="Keyboard shortcuts"><span><kbd>Esc</kbd> Close</span><span><kbd>C</kbd> Class</span><span><kbd>I</kbd> Import</span><span><kbd>Ctrl S</kbd> Save</span></div>
         <button className="secondary-button ml-4" onClick={() => setImporterOpen(true)}><Upload size={15} /> Import gear</button>
         <button className="secondary-button ml-2" onClick={saveBuildNow} aria-live="polite">
           {saveConfirmed ? <Check size={15} /> : <Save size={15} />} {saveConfirmed ? "Build saved" : "Save build"}

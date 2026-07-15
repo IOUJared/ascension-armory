@@ -85,12 +85,17 @@ export function GearImportModal({ onImport, onClose }: GearImportModalProps) {
           <ol className="import-steps">
             <li><span>1</span><div><strong>Install the exporter addon</strong><p>Extract its folder into the game’s <code>Interface/AddOns</code> directory, then restart the game or reload the UI.</p><a className="secondary-button" href={addonUrl} download><Download size={14} /> Download exporter addon</a></div></li>
             <li><span>2</span><div><strong>Export in game</strong><p>Log into the character, type <code>/aaexport</code>, then press <kbd>Ctrl+C</kbd> in the highlighted export box.</p></div></li>
-            <li><span>3</span><div><strong>Paste and import</strong><p>The AA2 string contains character level and equipped item snapshots—no account credentials. It can import gear even before that item reaches the website catalog.</p></div></li>
+            <li><span>3</span><div><strong>Paste and import</strong><p>The AA2 string contains character level and equipped item snapshots—no account credentials. Press <kbd>Ctrl+Enter</kbd> to import, or <kbd>Esc</kbd> to close.</p></div></li>
           </ol>
 
           <label className="import-textarea">
             <span><ClipboardPaste size={15} /> Ascension Armory export string</span>
-            <textarea value={exportText} onChange={(event) => setExportText(event.target.value)} placeholder="AA2|60|HEAD=410036:0:0:0...~3~60~55~inv_helmet_30~Item%20Name~ITEM_MOD_STAMINA_SHORT:12..." autoFocus spellCheck={false} />
+            <textarea value={exportText} onChange={(event) => setExportText(event.target.value)} onKeyDown={(event) => {
+              if ((event.ctrlKey || event.metaKey) && event.key === "Enter" && exportText.trim() && !loading) {
+                event.preventDefault();
+                void importGear();
+              }
+            }} placeholder="AA2|60|HEAD=410036:0:0:0...~3~60~55~inv_helmet_30~Item%20Name~ITEM_MOD_STAMINA_SHORT:12..." autoFocus spellCheck={false} />
           </label>
 
           {error ? <div className="import-message error">{error}</div> : null}
