@@ -43,7 +43,7 @@ async function main(): Promise<void> {
         : item.sourceUrl.startsWith("realm-cache://")
           ? "COA_REALM_CACHE"
           : "PLAYER_IMPORT";
-    const payload = item.rawPayload as { item?: { displayId?: unknown } } | null;
+    const payload = item.rawPayload as { item?: { displayId?: unknown }; scalingStatDistribution?: unknown } | null;
     const displayId = Number(payload?.item?.displayId);
     // Armor and weapon DPS are represented by dedicated GearItem fields and
     // resolveItemStats adds them to the EP map. Keeping them here too would
@@ -58,6 +58,10 @@ async function main(): Promise<void> {
     // A calibration capture may prove that an item is fixed. Keep those rows
     // in PostgreSQL as evidence, but only publish snapshots that truly vary.
     const varyingScaleSnapshots = snapshotSignatures.size > 1 ? item.scaleSnapshots : [];
+    const scalingStatDistribution = Number(payload?.scalingStatDistribution ?? 0);
+    // Scaling templates do not contain their resolved primary stats. Publishing
+    // one before exact live snapshots exist makes it look like a DPS-only item.
+    if (scalingStatDistribution > 0 && varyingScaleSnapshots.length === 0) return [];
     return [{
       id: item.id.toString(),
       name: item.name,

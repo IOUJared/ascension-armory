@@ -127,6 +127,19 @@ Use `/aascale ITEM_ID [MIN_LEVEL] [MAX_LEVEL]` for another item, and
 exact captured snapshot for its current character level and labels it as
 scaled; it never interpolates missing levels.
 
+To resolve every current-realm item backed by `ScalingStatDistribution`,
+generate the compact list and run the bulk exact-level scan:
+
+```bash
+npm run generate:scaling-candidates
+# In game: /reload, /aascale all, /aascale status, then /reload when complete
+npm run ingest:addon-scaling -- \
+  --file "/path/to/WTF/Account/ACCOUNT/SavedVariables/AscensionArmoryExporter.lua"
+```
+
+Unresolved scaling templates are withheld from the published catalog so an
+empty base row cannot be mistaken for a complete set of character-level stats.
+
 ## Legacy and client-wide sources
 
 Ascension DB does not expose a documented item JSON API. Its public item pages contain an embedded AoWoW metadata object and tooltip payload. The importer retains this adapter for explicitly requested fallback records, but these records are not exported into the current CoA catalog unless current-realm or player-import evidence also exists.

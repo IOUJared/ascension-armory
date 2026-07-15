@@ -23,6 +23,7 @@
     "import:worldforged": "tsx scripts/import-lootcollector-worldforged.ts",
     "extract:atlasloot": "tsx scripts/extract-atlasloot-coa-items.ts",
     "generate:dungeon-variants": "tsx scripts/generate-dungeon-variants.ts",
+    "generate:scaling-candidates": "tsx scripts/generate-scaling-candidates.ts",
     "generate:addon-candidates": "tsx scripts/generate-addon-candidates.ts",
     "generate:worldforged-upgrades": "tsx scripts/generate-worldforged-upgrades.ts",
     "export:catalog": "tsx scripts/export-static-catalog.ts"

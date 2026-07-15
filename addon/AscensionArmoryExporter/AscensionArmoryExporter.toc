@@ -2,11 +2,12 @@
 ## Title: Ascension Armory Exporter
 ## Notes: Exports character level and equipped gear for Ascension Armory.
 ## Author: Ascension Armory
-## Version: 1.2.1
+## Version: 1.3.0
 ## X-Flavor: 3.3.5
 ## SavedVariables: AscensionArmoryCatalogDB
 
 WorldforgedCandidates.lua
+ScalingCandidates.lua
 AscensionArmoryExporter.lua
 CatalogScanner.lua
 ScaleScanner.lua
