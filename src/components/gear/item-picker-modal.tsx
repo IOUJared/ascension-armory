@@ -98,11 +98,17 @@ export function ItemPickerModal({ slot, equipped, candidates, loading = false, l
   const equippedScore = equipped ? scoreItem(equipped, level, profile) : undefined;
   const powerMode = level >= 60 && Boolean(context);
   const equippedPower = equippedScore ? contextualPower(equippedScore.resolvedStats, level, context) : 0;
-  const ranked = useMemo(() => candidates
-    .filter((item) => canEquipItemAtLevel(item, level) && item.name.toLowerCase().includes(search.toLowerCase()))
-    .map((item) => scoreItem(item, level, profile))
-    .sort((a, b) => compareScoredItems(a, b, level, context)), [candidates, context, level, profile, search]);
-  const [selectedId, setSelectedId] = useState<string | undefined>(ranked[0]?.id);
+  const ranked = useMemo(() => {
+    const matchingCandidates = candidates
+      .filter((item) => canEquipItemAtLevel(item, level) && item.name.toLowerCase().includes(search.toLowerCase()));
+    const includeEquipped = equipped
+      && equipped.name.toLowerCase().includes(search.toLowerCase())
+      && !matchingCandidates.some((item) => item.id === equipped.id);
+    return [...matchingCandidates, ...(includeEquipped ? [equipped] : [])]
+      .map((item) => scoreItem(item, level, profile))
+      .sort((a, b) => compareScoredItems(a, b, level, context));
+  }, [candidates, context, equipped, level, profile, search]);
+  const [selectedId, setSelectedId] = useState<string | undefined>(equipped?.id ?? ranked[0]?.id);
   const selected = ranked.find((item) => item.id === selectedId) ?? ranked[0];
   const selectedPowerDelta = selected ? contextualPower(selected.resolvedStats, level, context) - equippedPower : 0;
   const selectedEpDelta = selected ? selected.ep - (equippedScore?.ep ?? 0) : 0;
@@ -129,16 +135,20 @@ export function ItemPickerModal({ slot, equipped, candidates, loading = false, l
         <div className="grid min-h-0 flex-1 lg:grid-cols-[minmax(300px,0.85fr)_minmax(420px,1.35fr)]">
           <div className="item-results custom-scrollbar">
             {ranked.map((item, index) => {
+              const isEquipped = equipped?.id === item.id;
               const delta = item.ep - (equippedScore?.ep ?? 0);
               const power = contextualPower(item.resolvedStats, level, context);
               const powerDelta = power - equippedPower;
               const hasExactScale = item.scaleSnapshots?.some((snapshot) => snapshot.effectiveLevel === level);
               return (
-                <button className={`result-row ${selected?.id === item.id ? "selected" : ""}`} key={item.id} onClick={() => setSelectedId(item.id)}>
+                <button className={`result-row ${selected?.id === item.id ? "selected" : ""} ${isEquipped ? "equipped" : ""}`} key={item.id} onClick={() => setSelectedId(item.id)}>
                   <span className="rank">{String(index + 1).padStart(2, "0")}</span>
                   <ItemIcon item={item} />
                   <span className="min-w-0 flex-1 text-left">
-                    <span className={`block truncate text-sm font-semibold ${qualityClass[item.quality]}`}>{item.name}</span>
+                    <span className="flex min-w-0 items-center gap-2">
+                      <span className={`min-w-0 truncate text-sm font-semibold ${qualityClass[item.quality]}`}>{item.name}</span>
+                      {isEquipped ? <span className="equipped-badge"><Check size={10} /> Equipped</span> : null}
+                    </span>
                     <span className="mt-1 flex flex-wrap items-center gap-1.5 text-xs text-stone-500">
                       <span>iLvl {item.itemLevel}</span>
                       <span>Requires L{item.requiredLevel}</span>
@@ -150,10 +160,12 @@ export function ItemPickerModal({ slot, equipped, candidates, loading = false, l
                     </span>
                   </span>
                   <span className="text-right">
-                    <span className="block font-display text-lg text-amber-300">{powerMode ? `${power.toFixed(0)} ${context?.toUpperCase()}` : item.ep.toFixed(1)}</span>
-                    {powerMode ? <span className={`block text-[10px] ${powerDelta >= 0 ? "text-blue-300" : "text-rose-400"}`}>{powerDelta >= 0 ? "+" : ""}{powerDelta.toFixed(0)} Power</span> : null}
-                    {powerMode ? <span className="block text-[10px] text-stone-500">{item.ep.toFixed(1)} EP</span> : null}
-                    <span className={`block text-xs ${delta >= 0 ? "text-emerald-400" : "text-rose-400"}`}>{delta >= 0 ? "+" : ""}{delta.toFixed(1)} EP</span>
+                    {isEquipped ? <span className="equipped-score"><Check size={13} /> Currently on</span> : <>
+                      <span className="block font-display text-lg text-amber-300">{powerMode ? `${power.toFixed(0)} ${context?.toUpperCase()}` : item.ep.toFixed(1)}</span>
+                      {powerMode ? <span className={`block text-[10px] ${powerDelta >= 0 ? "text-blue-300" : "text-rose-400"}`}>{powerDelta >= 0 ? "+" : ""}{powerDelta.toFixed(0)} Power</span> : null}
+                      {powerMode ? <span className="block text-[10px] text-stone-500">{item.ep.toFixed(1)} EP</span> : null}
+                      <span className={`block text-xs ${delta >= 0 ? "text-emerald-400" : "text-rose-400"}`}>{delta >= 0 ? "+" : ""}{delta.toFixed(1)} EP</span>
+                    </>}
                   </span>
                 </button>
               );
