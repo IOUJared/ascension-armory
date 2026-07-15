@@ -4,8 +4,9 @@ local CACHED_DELAY = 0.01
 local MAX_ATTEMPTS = 4
 
 local scanner = CreateFrame("Frame", "AscensionArmoryScaleScannerFrame")
-local tooltip = CreateFrame("GameTooltip", "AscensionArmoryScaleScanTooltip", UIParent, "GameTooltipTemplate")
+local tooltip = CreateFrame("GameTooltip", "AscensionArmoryScaleScanTooltip", nil, "GameTooltipTemplate")
 tooltip:SetOwner(UIParent, "ANCHOR_NONE")
+local RETRIEVING_TEXT = "Retrieving item information..."
 local queue = {}
 local queueHead = 1
 local queued = {}
@@ -49,17 +50,19 @@ end
 
 
 local function TooltipLines(link)
+  tooltip:SetOwner(UIParent, "ANCHOR_NONE")
   tooltip:ClearLines()
   local ok = pcall(tooltip.SetHyperlink, tooltip, link)
   if not ok then return nil end
-  tooltip:Show()
+  local first = _G["AscensionArmoryScaleScanTooltipTextLeft1"]
+  local firstText = first and first:GetText()
+  if not firstText or firstText == RETRIEVING_TEXT then return nil end
   local lines = {}
   for index = 1, tooltip:NumLines() do
     local left = _G["AscensionArmoryScaleScanTooltipTextLeft" .. index]
     local right = _G["AscensionArmoryScaleScanTooltipTextRight" .. index]
     table.insert(lines, { left = left and left:GetText(), right = right and right:GetText() })
   end
-  tooltip:Hide()
   return lines
 end
 
@@ -68,8 +71,8 @@ local function TooltipArmor(lines)
     for _, text in ipairs({ line.left, line.right }) do
       if text then
         local clean = string.gsub(string.gsub(text, "|c%x%x%x%x%x%x%x%x", ""), "|r", "")
-        local armor = string.match(clean, "^%s*(%d+)%s+[Aa]rmor%s*$")
-        if armor then return tonumber(armor) end
+        local armor = string.match(clean, "^%s*([%d,]+)%s+[Aa]rmor%s*$")
+        if armor then return tonumber((string.gsub(armor, ",", ""))) end
       end
     end
   end
@@ -81,12 +84,17 @@ local function Remaining()
 end
 
 local function Request(candidate)
+  local cacheRequested = false
   if C_AssetQueryService and C_AssetQueryService.TryCacheItem then
-    return pcall(C_AssetQueryService.TryCacheItem, candidate.id)
+    cacheRequested = pcall(C_AssetQueryService.TryCacheItem, candidate.id)
   elseif TryCacheItem then
-    return pcall(TryCacheItem, candidate.id)
+    cacheRequested = pcall(TryCacheItem, candidate.id)
   end
-  return false
+  tooltip:SetOwner(UIParent, "ANCHOR_NONE")
+  tooltip:ClearLines()
+  local tooltipRequested = pcall(tooltip.SetHyperlink, tooltip, ScaleLink(candidate.id, candidate.level))
+  tooltip:Hide()
+  return cacheRequested or tooltipRequested
 end
 
 local function Snapshot(candidate)
@@ -98,8 +106,8 @@ local function Snapshot(candidate)
     if type(key) == "string" and type(value) == "number" then stats[key] = value end
   end
   local tooltipLines = TooltipLines(query)
-  if stats.RESISTANCE0_NAME and (not tooltipLines or #tooltipLines == 0) then return nil end
   local tooltipArmor = TooltipArmor(tooltipLines)
+  if stats.RESISTANCE0_NAME and not tooltipArmor then return nil end
   if tooltipArmor then stats.RESISTANCE0_NAME = tooltipArmor end
   return {
     link = link,

@@ -7,8 +7,9 @@ local CACHED_DELAY = 0.01
 local MAX_ATTEMPTS = 4
 
 local scanner = CreateFrame("Frame", "AscensionArmoryCatalogScannerFrame")
-local tooltip = CreateFrame("GameTooltip", "AscensionArmoryCatalogScanTooltip", UIParent, "GameTooltipTemplate")
+local tooltip = CreateFrame("GameTooltip", "AscensionArmoryCatalogScanTooltip", nil, "GameTooltipTemplate")
 tooltip:SetOwner(UIParent, "ANCHOR_NONE")
+local RETRIEVING_TEXT = "Retrieving item information..."
 
 local queue = {}
 local queueHead = 1
@@ -43,10 +44,13 @@ local function InstantValue(method, itemID)
 end
 
 local function TooltipLines(link)
+  tooltip:SetOwner(UIParent, "ANCHOR_NONE")
   tooltip:ClearLines()
   local ok = pcall(tooltip.SetHyperlink, tooltip, link)
   if not ok then return nil end
-  tooltip:Show()
+  local first = _G["AscensionArmoryCatalogScanTooltipTextLeft1"]
+  local firstText = first and first:GetText()
+  if not firstText or firstText == RETRIEVING_TEXT then return nil end
   local lines = {}
   for index = 1, tooltip:NumLines() do
     local left = _G["AscensionArmoryCatalogScanTooltipTextLeft" .. index]
@@ -57,7 +61,6 @@ local function TooltipLines(link)
       table.insert(lines, { left = leftText, right = rightText })
     end
   end
-  tooltip:Hide()
   return lines
 end
 
@@ -66,8 +69,8 @@ local function TooltipArmor(lines)
     for _, text in ipairs({ line.left, line.right }) do
       if text then
         local clean = string.gsub(string.gsub(text, "|c%x%x%x%x%x%x%x%x", ""), "|r", "")
-        local armor = string.match(clean, "^%s*(%d+)%s+[Aa]rmor%s*$")
-        if armor then return tonumber(armor) end
+        local armor = string.match(clean, "^%s*([%d,]+)%s+[Aa]rmor%s*$")
+        if armor then return tonumber((string.gsub(armor, ",", ""))) end
       end
     end
   end
@@ -87,8 +90,8 @@ local function Snapshot(candidate)
   local tooltipLines = TooltipLines(link)
   -- CoA can override the client-template armor shown by GetItemStats. Wait for
   -- the rendered tooltip and use its exact armor line as the live authority.
-  if stats.RESISTANCE0_NAME and (not tooltipLines or #tooltipLines == 0) then return nil end
   local tooltipArmor = TooltipArmor(tooltipLines)
+  if stats.RESISTANCE0_NAME and not tooltipArmor then return nil end
   if tooltipArmor then stats.RESISTANCE0_NAME = tooltipArmor end
   return {
     id = candidate.id,
@@ -127,7 +130,7 @@ local function Enqueue(candidate, force)
   local key = tostring(candidate.id) .. "|" .. tostring(candidate.link or "")
   if queued[key] then return end
   queued[key] = true
-  table.insert(queue, { id = candidate.id, link = candidate.link, attempts = 0, key = key })
+  table.insert(queue, { id = candidate.id, link = candidate.link, attempts = 0, key = key, test = candidate.test })
 end
 
 local function Remaining()
@@ -158,6 +161,10 @@ local function Store(candidate, snapshot)
   -- full snapshot as well doubled SavedVariables to tens of megabytes.
   AscensionArmoryCatalogDB.records[tostring(candidate.id)] = nil
   AscensionArmoryCatalogDB.completed = (AscensionArmoryCatalogDB.completed or 0) + 1
+  if candidate.test then
+    Message(string.format("Armor test captured %s with %d Armor.", snapshot.name or candidate.id,
+      snapshot.stats.RESISTANCE0_NAME or 0))
+  end
   if GetItemDifficultyID then
     for difficulty = 4, 9 do
       local ok, difficultyID = pcall(GetItemDifficultyID, candidate.id, difficulty)
@@ -167,13 +174,18 @@ local function Store(candidate, snapshot)
 end
 
 local function Request(candidate)
+  local cacheRequested = false
   if C_AssetQueryService and C_AssetQueryService.TryCacheItem then
-    return pcall(C_AssetQueryService.TryCacheItem, candidate.id)
+    cacheRequested = pcall(C_AssetQueryService.TryCacheItem, candidate.id)
   elseif TryCacheItem then
-    return pcall(TryCacheItem, candidate.id)
+    cacheRequested = pcall(TryCacheItem, candidate.id)
   end
+  tooltip:SetOwner(UIParent, "ANCHOR_NONE")
   tooltip:ClearLines()
-  return pcall(tooltip.SetHyperlink, tooltip, "item:" .. candidate.id)
+  local tooltipRequested = pcall(tooltip.SetHyperlink, tooltip,
+    candidate.link or ("item:" .. candidate.id .. ":0:0:0:0:0:0:0"))
+  tooltip:Hide()
+  return cacheRequested or tooltipRequested
 end
 
 local function Status()
@@ -199,6 +211,7 @@ local function FinishCurrent()
     return REQUEST_DELAY
   end
   AscensionArmoryCatalogDB.failures[tostring(current.id)] = { attempts = current.attempts, checkedAt = time() }
+  if current.test then Message("Armor test failed to read a rendered armor line.") end
   current = nil
   return CACHED_DELAY
 end
@@ -283,6 +296,12 @@ local function RefreshArmor()
   BeginQueue("armor-tooltip refresh")
 end
 
+local function TestArmor()
+  queue, queueHead, queued, current = {}, 1, {}, nil
+  Enqueue({ id = 354178, test = true }, true)
+  BeginQueue("armor test")
+end
+
 SLASH_ASCENSIONARMORYCATALOG1 = "/aacatalog"
 SlashCmdList.ASCENSIONARMORYCATALOG = function(command)
   command = string.lower((command or ""):match("^%s*(.-)%s*$"))
@@ -290,5 +309,6 @@ SlashCmdList.ASCENSIONARMORYCATALOG = function(command)
   elseif command == "status" then Status()
   elseif command == "retry" then RetryFailures()
   elseif command == "armor" then RefreshArmor()
+  elseif command == "armortest" then TestArmor()
   else StartScan() end
 end

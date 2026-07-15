@@ -90,7 +90,8 @@ CoA may override the template armor returned by `GetItemStats`. The scanner
 waits for the rendered item tooltip and treats its exact `N Armor` line as the
 authority. After updating an older catalog, run `/aacatalog armor` to force a
 targeted refresh of every armor-bearing item without rescanning jewelry and
-weapons.
+weapons. Run `/aacatalog armortest` first to verify the hidden tooltip reader
+against Water Seer's Headdress before starting the full pass.
 
 After the base discoveries are verified, `generate:worldforged-upgrades` finds
 their generated item IDs in the installed client index. A subsequent
