@@ -11,6 +11,27 @@ npm run dev
 
 The browser loads the committed `public/data/coa-items.json` catalog and ranks it locally, so the complete planner works as a static site. PostgreSQL is used by the ingestion and catalog-generation tools, but it is not required to serve the UI.
 
+## Quality checks
+
+Run the complete source and catalog safety net before committing a UI or data-pipeline change:
+
+```bash
+npm run check
+```
+
+This runs TypeScript, ESLint, the calculation/import/storage regression tests,
+and structural validation of the published item catalog. `npm run build` remains
+the final static-export check. The GitHub Pages workflow runs both commands
+before deployment.
+
+Catalog validation can also be run independently. It rejects truncated exports,
+duplicate item IDs, unknown stat keys, malformed scaling snapshots, invalid
+equipment slots, and missing provenance:
+
+```bash
+npm run validate:catalog
+```
+
 ## Importing a character
 
 GitHub Pages cannot read a running game process, and Ascension does not expose a public character-equipment API for the planner. The included Wrath 3.3.5-compatible addon provides a small, explicit bridge instead:
