@@ -42,6 +42,7 @@ local function TooltipLines(link)
   tooltip:ClearLines()
   local ok = pcall(tooltip.SetHyperlink, tooltip, link)
   if not ok then return nil end
+  tooltip:Show()
   local lines = {}
   for index = 1, tooltip:NumLines() do
     local left = _G["AscensionArmoryCatalogScanTooltipTextLeft" .. index]

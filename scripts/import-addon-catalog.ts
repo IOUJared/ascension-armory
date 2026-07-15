@@ -32,6 +32,7 @@ interface Snapshot {
   pvpPower: number;
   playerLevel: number;
   stats: Partial<Record<StatKey, number>>;
+  rawStats: Record<string, number>;
   tooltip: string;
   inventoryType: number;
   classID: number;
@@ -52,10 +53,13 @@ function parse(line: string): Snapshot | null {
   if (fields[0] !== "AAI1" || !/^\d+$/.test(fields[1] ?? "") || fields.length < 19) return null;
   const quality = QUALITY[number(fields[3])] ?? "COMMON";
   const stats: Partial<Record<StatKey, number>> = {};
+  const rawStats: Record<string, number> = {};
   for (const pair of (fields[14] ?? "").split(",")) {
     const separator = pair.lastIndexOf(":");
-    const key = API_STAT_KEYS[pair.slice(0, separator)];
+    const rawKey = pair.slice(0, separator);
+    const key = API_STAT_KEYS[rawKey];
     const value = number(pair.slice(separator + 1));
+    if (separator > 0) rawStats[rawKey] = value;
     if (separator > 0 && key && value) stats[key] = (stats[key] ?? 0) + value;
   }
   return {
@@ -64,7 +68,7 @@ function parse(line: string): Snapshot | null {
     itemType: decode(fields[6]), itemSubType: decode(fields[7]),
     equipLocation: decode(fields[8]), icon: decode(fields[9]).toLowerCase(),
     name: decode(fields[10]), pvePower: number(fields[11]), pvpPower: number(fields[12]),
-    playerLevel: number(fields[13]), stats, tooltip: decode(fields[15]),
+    playerLevel: number(fields[13]), stats, rawStats, tooltip: decode(fields[15]),
     inventoryType: number(fields[16]), classID: number(fields[17]), subClassID: number(fields[18]),
   };
 }
@@ -91,7 +95,7 @@ async function main(): Promise<void> {
         capturedAtPlayerLevel: snapshot.playerLevel, itemType: snapshot.itemType,
         itemSubType: snapshot.itemSubType, equipLocation: snapshot.equipLocation,
         inventoryType: snapshot.inventoryType, classID: snapshot.classID,
-        subClassID: snapshot.subClassID, apiStats: snapshot.stats,
+        subClassID: snapshot.subClassID, apiStats: snapshot.stats, apiStatsRaw: snapshot.rawStats,
       } satisfies Prisma.InputJsonObject;
       const data = {
         name: snapshot.name || `Unknown Item ${snapshot.id}`,

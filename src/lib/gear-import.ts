@@ -29,13 +29,18 @@ export const API_STAT_KEYS: Record<string, StatKey> = {
   ITEM_MOD_INTELLECT_SHORT: "intellect", ITEM_MOD_SPIRIT_SHORT: "spirit", ITEM_MOD_ARMOR_SHORT: "armor",
   ITEM_MOD_ATTACK_POWER_SHORT: "attack_power", ITEM_MOD_RANGED_ATTACK_POWER_SHORT: "attack_power",
   ITEM_MOD_SPELL_POWER_SHORT: "spell_power", ITEM_MOD_SPELL_HEALING_DONE_SHORT: "healing_power",
+  ITEM_MOD_SPELL_DAMAGE_DONE_SHORT: "spell_power",
   ITEM_MOD_CRIT_RATING_SHORT: "crit_rating", ITEM_MOD_HIT_RATING_SHORT: "hit_rating", ITEM_MOD_HASTE_RATING_SHORT: "haste_rating",
+  ITEM_MOD_CRIT_MELEE_RATING_SHORT: "crit_rating", ITEM_MOD_CRIT_RANGED_RATING_SHORT: "crit_rating", ITEM_MOD_CRIT_SPELL_RATING_SHORT: "crit_rating",
+  ITEM_MOD_HIT_MELEE_RATING_SHORT: "hit_rating", ITEM_MOD_HIT_RANGED_RATING_SHORT: "hit_rating", ITEM_MOD_HIT_SPELL_RATING_SHORT: "hit_rating",
+  ITEM_MOD_HASTE_MELEE_RATING_SHORT: "haste_rating", ITEM_MOD_HASTE_RANGED_RATING_SHORT: "haste_rating", ITEM_MOD_HASTE_SPELL_RATING_SHORT: "haste_rating",
   ITEM_MOD_EXPERTISE_RATING_SHORT: "expertise_rating", ITEM_MOD_DEFENSE_SKILL_RATING_SHORT: "defense_rating",
   ITEM_MOD_DODGE_RATING_SHORT: "dodge_rating", ITEM_MOD_PARRY_RATING_SHORT: "parry_rating",
   ITEM_MOD_BLOCK_RATING_SHORT: "block_rating", ITEM_MOD_BLOCK_VALUE_SHORT: "block_value",
   ITEM_MOD_ARMOR_PENETRATION_RATING_SHORT: "armor_penetration", ITEM_MOD_SPELL_PENETRATION_SHORT: "spell_penetration",
   ITEM_MOD_RESILIENCE_RATING_SHORT: "resilience_rating", ITEM_MOD_RESILIENCE_RATING: "resilience_rating",
   ITEM_MOD_POWER_REGEN0_SHORT: "mp5", ITEM_MOD_HEALTH_REGEN_SHORT: "hp5", ITEM_MOD_DAMAGE_PER_SECOND_SHORT: "weapon_dps",
+  RESISTANCE0_NAME: "armor",
 };
 
 function decode(value: string): string {
