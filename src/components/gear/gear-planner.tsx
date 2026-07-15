@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { Check, ChevronDown, RotateCcw, Save, Settings2, Sparkles } from "lucide-react";
+import { Check, ChevronDown, RotateCcw, Save, Settings2, Sparkles, Upload } from "lucide-react";
 import { isCoASelection, resolveCoAProfile } from "@/lib/coa";
 import { calculateEp, resolveItemStats, scoreItem, type WeightProfile } from "@/lib/ep";
 import { findStaticItemsForSlot } from "@/lib/items/static-catalog";
@@ -10,6 +10,7 @@ import type { CoASelection } from "@/types/coa";
 import { STAT_LABELS, type EquipmentSlot, type GearItem, type StatKey, type StatMap } from "@/types/gear";
 import { ItemPickerModal } from "./item-picker-modal";
 import { GameItemIcon } from "./game-item-icon";
+import { GearImportModal } from "./gear-import-modal";
 import { ClassicCharacterPaperDoll } from "./classic-character-paper-doll";
 import { CoAClassSelector } from "./coa-class-selector";
 
@@ -44,6 +45,7 @@ export function GearPlanner() {
   const [loadout, setLoadout] = useState<Record<string, GearItem>>({});
   const [storageReady, setStorageReady] = useState(false);
   const [saveConfirmed, setSaveConfirmed] = useState(false);
+  const [importerOpen, setImporterOpen] = useState(false);
   const [activeSlot, setActiveSlot] = useState<EquipmentSlot | null>(null);
   const [candidates, setCandidates] = useState<GearItem[]>([]);
   const [loadingCandidates, setLoadingCandidates] = useState(false);
@@ -156,7 +158,8 @@ export function GearPlanner() {
         <div className="brand-mark"><span>A</span></div>
         <div><p className="font-display text-lg leading-none text-stone-100">Ascension Armory</p><p className="mt-1 text-[10px] uppercase tracking-[.24em] text-amber-500/80">Conquest Gear Lab</p></div>
         <div className="ml-auto hidden items-center gap-6 text-sm text-stone-500 md:flex"><a className="text-amber-300" href="#planner">Planner</a><a href="#weights">EP Weights</a><a href="#about">Mechanics</a></div>
-        <button className="secondary-button ml-4" onClick={saveBuildNow} aria-live="polite">
+        <button className="secondary-button ml-4" onClick={() => setImporterOpen(true)}><Upload size={15} /> Import gear</button>
+        <button className="secondary-button ml-2" onClick={saveBuildNow} aria-live="polite">
           {saveConfirmed ? <Check size={15} /> : <Save size={15} />} {saveConfirmed ? "Build saved" : "Save build"}
         </button>
       </nav>
@@ -165,6 +168,7 @@ export function GearPlanner() {
         <header className="mb-7 flex flex-col justify-between gap-5 lg:flex-row lg:items-end">
           <div><p className="eyebrow">Conquest of Azeroth / Gear planner</p><h1 className="mt-2 font-display text-3xl text-stone-100 sm:text-4xl">Find the right gear for your path.</h1><p className="mt-2 max-w-xl text-sm leading-6 text-stone-500">Choose your class and specialization, then compare every slot against its recommended stat priority.</p></div>
           <div className="flex flex-wrap gap-3">
+            <button className="secondary-button md:hidden" onClick={() => setImporterOpen(true)}><Upload size={15} /> Import gear</button>
             <button className="field-control class-profile-control min-w-60" onClick={() => setSelectorOpen(true)}><span>Class & specialization</span><strong>{profileName}</strong><small>{selectedProfile ? `${selectedProfile.spec.role} · ${selectedProfile.context.toUpperCase()}` : "Select profile"}</small></button>
             <label className="field-control w-28"><span>Level</span><input type="number" min={1} max={60} value={level} onChange={(event) => setLevel(Math.max(1, Math.min(60, Number(event.target.value))))} /></label>
           </div>
@@ -216,6 +220,10 @@ export function GearPlanner() {
         profileLabel={profileName}
         onEquip={(item) => setLoadout((current) => ({ ...current, [activeSlot]: item }))}
         onClose={() => setActiveSlot(null)}
+      /> : null}
+      {importerOpen ? <GearImportModal
+        onImport={(importedLevel, importedLoadout) => { setLevel(importedLevel); setLoadout(importedLoadout); setActiveSlot(null); }}
+        onClose={() => setImporterOpen(false)}
       /> : null}
       {storageReady && selectorOpen ? <CoAClassSelector current={selection} onSelect={chooseClass} onClose={selection ? () => setSelectorOpen(false) : undefined} /> : null}
     </main>

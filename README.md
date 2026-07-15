@@ -11,6 +11,17 @@ npm run dev
 
 The browser loads the committed `public/data/coa-items.json` catalog and ranks it locally, so the complete planner works as a static site. PostgreSQL is used by the ingestion and catalog-generation tools, but it is not required to serve the UI.
 
+## Importing a character
+
+GitHub Pages cannot read a running game process, and Ascension does not expose a public character-equipment API for the planner. The included Wrath 3.3.5-compatible addon provides a small, explicit bridge instead:
+
+1. Download `AscensionArmoryExporter.zip` from the site’s **Import gear** dialog.
+2. Extract `AscensionArmoryExporter` into the Ascension client’s `Interface/AddOns` directory.
+3. Log into the character and run `/aaexport`.
+4. Copy the highlighted `AA1` string and paste it into the site.
+
+The import updates the planner’s character level and recognized equipped slots, then the existing local build persistence saves the result. The export contains item-link data and level only; it contains no login or account credentials. Item-link enchant and gem fields are retained in the import format for future Mystic Enchant/socket resolution.
+
 ## GitHub Pages deployment
 
 The app uses Next.js static export and deploys through `.github/workflows/deploy-pages.yml`. The workflow automatically accounts for the repository subpath, builds the `out/` directory, and publishes it through GitHub Pages whenever `main` is pushed.
@@ -59,6 +70,7 @@ src/
 │   └── page.tsx
 ├── components/gear/
 │   ├── gear-planner.tsx         Profile, paper doll and live EP weights
+│   ├── gear-import-modal.tsx    Addon instructions and AA1 import flow
 │   └── item-picker-modal.tsx    Ranking and side-by-side comparison
 ├── data/demo-items.ts           Zero-setup development fixture
 ├── lib/
@@ -73,6 +85,7 @@ prisma/
 └── seed.ts                      Stat definitions
 scripts/ingest-items.ts          Rate-limited ingestion CLI
 scripts/export-static-catalog.ts PostgreSQL-to-static-catalog exporter
+addon/AscensionArmoryExporter/   In-game level and equipment exporter
 ```
 
 ## Calculation model

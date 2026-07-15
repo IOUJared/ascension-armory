@@ -34,3 +34,9 @@ export async function findStaticItemsForSlot(slot: EquipmentSlot, level: number)
     .filter((item) => matchesSlot(item.slot, slot) && item.requiredLevel <= level)
     .map((item) => item.slot === slot ? item : { ...item, slot });
 }
+
+export async function findStaticItemsById(itemIds: Iterable<string>): Promise<Map<string, GearItem>> {
+  const wanted = new Set(itemIds);
+  const catalog = await loadCatalog();
+  return new Map(catalog.items.filter((item) => wanted.has(item.id)).map((item) => [item.id, item]));
+}
