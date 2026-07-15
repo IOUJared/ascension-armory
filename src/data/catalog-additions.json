@@ -1,0 +1,24 @@
+{
+  "source": "AA1 character exports and user-verified in-game tooltips",
+  "items": [
+    {
+      "id": "7691",
+      "verification": "https://pasteboard.co/J5C3zEYVMSyd.png",
+      "overrides": {
+        "requiredLevel": 35,
+        "armorType": "Cloth",
+        "armor": 42,
+        "stats": { "stamina": 7, "intellect": 11, "spell_power": 14 }
+      }
+    },
+    { "id": "23169" },
+    { "id": "2061226" },
+    { "id": "4732" },
+    { "id": "2800" },
+    { "id": "14148" },
+    { "id": "9395" },
+    { "id": "2067372" },
+    { "id": "6590" },
+    { "id": "890" }
+  ]
+}

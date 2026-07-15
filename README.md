@@ -20,7 +20,7 @@ GitHub Pages cannot read a running game process, and Ascension does not expose a
 3. Log into the character and run `/aaexport`.
 4. Copy the highlighted `AA1` string and paste it into the site.
 
-The import updates the planner’s character level and recognized equipped slots, then the existing local build persistence saves the result. The export contains item-link data and level only; it contains no login or account credentials. Item-link enchant and gem fields are retained in the import format for future Mystic Enchant/socket resolution.
+The import updates the planner’s character level and equipped slots, then the existing local build persistence saves the result. AA2 exports include the game client’s item metadata and current stat snapshot, so an equipped item can be imported even when it is not yet in the published catalog. The export contains no login or account credentials.
 
 ## GitHub Pages deployment
 

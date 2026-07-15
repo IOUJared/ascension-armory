@@ -20,15 +20,48 @@ local EQUIPMENT = {
   { "RANGED", 18 },
 }
 
+local function Encode(value)
+  return string.gsub(tostring(value or ""), "([^%w%-%._])", function(character)
+    return string.format("%%%02X", string.byte(character))
+  end)
+end
+
+local function IconName(texture)
+  return texture and (string.match(texture, "([^\\/]+)$") or texture) or ""
+end
+
+local function BuildItemSnapshot(link)
+  local itemString = string.match(link, "item:([^|]+)")
+  if not itemString then return nil end
+  local name, _, quality, itemLevel, requiredLevel, _, _, _, _, texture = GetItemInfo(link)
+  name = name or string.match(link, "%[(.-)%]") or ("Item " .. string.match(itemString, "^(%d+)") )
+  local statParts = {}
+  for key, value in pairs(GetItemStats(link) or {}) do
+    if type(key) == "string" and type(value) == "number" then
+      table.insert(statParts, key .. ":" .. tostring(value))
+    end
+  end
+  table.sort(statParts)
+  return table.concat({
+    itemString,
+    tostring(quality or 1),
+    tostring(itemLevel or 0),
+    tostring(requiredLevel or 0),
+    Encode(IconName(texture)),
+    Encode(name),
+    table.concat(statParts, ","),
+  }, "~")
+end
+
 local function BuildExport()
   local gear = {}
   for _, entry in ipairs(EQUIPMENT) do
     local slotName, inventorySlot = entry[1], entry[2]
     local link = GetInventoryItemLink("player", inventorySlot)
-    local itemString = link and string.match(link, "item:([^|]+)")
-    if itemString then table.insert(gear, slotName .. "=" .. itemString) end
+    local snapshot = link and BuildItemSnapshot(link)
+    if snapshot then table.insert(gear, slotName .. "=" .. snapshot) end
   end
-  return "AA1|" .. tostring(UnitLevel("player")) .. "|" .. table.concat(gear, ";")
+  return "AA2|" .. tostring(UnitLevel("player")) .. "|" .. table.concat(gear, ";")
 end
 
 local frame = CreateFrame("Frame", ADDON_NAME .. "Frame", UIParent)

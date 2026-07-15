@@ -2,30 +2,36 @@ import { mkdir, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { prisma } from "../src/lib/db";
 import type { GearItem, StatMap } from "../src/types/gear";
+import catalogAdditions from "../src/data/catalog-additions.json";
 
 const outputPath = resolve(process.cwd(), process.argv[2] ?? "public/data/coa-items.json");
 
 async function main(): Promise<void> {
+  const addedIds = catalogAdditions.items.map((item) => BigInt(item.id));
+  const overrides = new Map(catalogAdditions.items.map((item) => [item.id, item.overrides]));
   const rows = await prisma.item.findMany({
-    where: { slot: { not: null }, sourceUpdatedAt: { not: null } },
+    where: { slot: { not: null }, OR: [{ sourceUpdatedAt: { not: null } }, { id: { in: addedIds } }] },
     include: { stats: true, effects: true, sockets: true },
     orderBy: [{ slot: "asc" }, { itemLevel: "desc" }, { name: "asc" }],
   });
 
   const items: GearItem[] = rows.flatMap((item): GearItem[] => {
     if (!item.slot) return [];
+    const override = overrides.get(item.id.toString());
     const payload = item.rawPayload as { item?: { displayId?: unknown } } | null;
     const displayId = Number(payload?.item?.displayId);
+    const stats = Object.fromEntries(item.stats.map((stat) => [stat.statKey, stat.value])) as StatMap;
+    Object.assign(stats, override?.stats ?? {});
     return [{
       id: item.id.toString(),
       name: item.name,
       slot: item.slot,
       quality: item.quality,
       itemLevel: item.itemLevel,
-      requiredLevel: item.requiredLevel,
-      stats: Object.fromEntries(item.stats.map((stat) => [stat.statKey, stat.value])) as StatMap,
-      ...(item.armorType ? { armorType: item.armorType } : {}),
-      ...(item.armor ? { armor: item.armor } : {}),
+      requiredLevel: override?.requiredLevel ?? item.requiredLevel,
+      stats,
+      ...(override?.armorType ?? item.armorType ? { armorType: override?.armorType ?? item.armorType ?? undefined } : {}),
+      ...(override?.armor ?? item.armor ? { armor: override?.armor ?? item.armor } : {}),
       ...(item.weaponMinDamage !== null && item.weaponMaxDamage !== null && item.weaponSpeed !== null
         ? { weaponDamage: { min: item.weaponMinDamage, max: item.weaponMaxDamage, speed: item.weaponSpeed, dps: item.weaponDps ?? 0 } }
         : {}),

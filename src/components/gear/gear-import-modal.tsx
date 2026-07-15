@@ -17,7 +17,7 @@ interface ImportResult {
   missing: Array<{ slot: string; itemId: string }>;
 }
 
-const addonUrl = `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/downloads/AscensionArmoryExporter.zip`;
+const addonUrl = `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/downloads/AscensionArmoryExporter.zip?v=1.1.0`;
 
 export function GearImportModal({ onImport, onClose }: GearImportModalProps) {
   const [exportText, setExportText] = useState("");
@@ -35,8 +35,25 @@ export function GearImportModal({ onImport, onClose }: GearImportModalProps) {
       const loadout: Record<string, GearItem> = {};
       const missing: ImportResult["missing"] = [];
       for (const entry of parsed.gear) {
-        const item = matches.get(entry.itemId);
-        if (item) loadout[entry.slot] = { ...item, slot: entry.slot };
+        const catalogItem = matches.get(entry.itemId);
+        if (entry.snapshot) {
+          loadout[entry.slot] = {
+            ...(catalogItem ?? {}),
+            id: entry.itemId,
+            slot: entry.slot,
+            name: entry.snapshot.name || catalogItem?.name || `Item ${entry.itemId}`,
+            quality: entry.snapshot.quality,
+            itemLevel: entry.snapshot.itemLevel,
+            requiredLevel: entry.snapshot.requiredLevel,
+            icon: entry.snapshot.icon || catalogItem?.icon,
+            stats: Object.keys(entry.snapshot.stats).length ? entry.snapshot.stats : catalogItem?.stats ?? {},
+            armor: undefined,
+            weaponDamage: undefined,
+            effects: undefined,
+            enhancements: undefined,
+            source: "In-game AA2 character export",
+          };
+        } else if (catalogItem) loadout[entry.slot] = { ...catalogItem, slot: entry.slot };
         else missing.push({ slot: entry.slot, itemId: entry.itemId });
       }
       onImport(parsed.level, loadout);
@@ -60,12 +77,12 @@ export function GearImportModal({ onImport, onClose }: GearImportModalProps) {
           <ol className="import-steps">
             <li><span>1</span><div><strong>Install the exporter addon</strong><p>Extract its folder into the game’s <code>Interface/AddOns</code> directory, then restart the game or reload the UI.</p><a className="secondary-button" href={addonUrl} download><Download size={14} /> Download exporter addon</a></div></li>
             <li><span>2</span><div><strong>Export in game</strong><p>Log into the character, type <code>/aaexport</code>, then press <kbd>Ctrl+C</kbd> in the highlighted export box.</p></div></li>
-            <li><span>3</span><div><strong>Paste and import</strong><p>The string contains only character level and equipped item-link data—no account credentials.</p></div></li>
+            <li><span>3</span><div><strong>Paste and import</strong><p>The AA2 string contains character level and equipped item snapshots—no account credentials. It can import gear even before that item reaches the website catalog.</p></div></li>
           </ol>
 
           <label className="import-textarea">
             <span><ClipboardPaste size={15} /> Ascension Armory export string</span>
-            <textarea value={exportText} onChange={(event) => setExportText(event.target.value)} placeholder="AA1|60|HEAD=410036:0:0:0...;NECK=515303:0:0:0..." autoFocus spellCheck={false} />
+            <textarea value={exportText} onChange={(event) => setExportText(event.target.value)} placeholder="AA2|60|HEAD=410036:0:0:0...~3~60~55~inv_helmet_30~Item%20Name~ITEM_MOD_STAMINA_SHORT:12..." autoFocus spellCheck={false} />
           </label>
 
           {error ? <div className="import-message error">{error}</div> : null}
