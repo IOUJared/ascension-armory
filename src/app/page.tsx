@@ -1,4 +1,4 @@
-import { GearPlanner } from "@/components/gear/gear-planner";
+import { GearPlanner } from "@/features/planner/components/gear-planner";
 
 export default function Home() {
   return <GearPlanner />;

@@ -207,11 +207,12 @@ Only import IDs you are entitled to use. The client identifies itself, times out
 ```text
 src/
 ├── app/
-│   ├── globals.css              Tailwind plus the armory theme
+│   ├── globals.css              Tailwind and shared application styles
 │   ├── layout.tsx
 │   └── page.tsx
 ├── components/gear/
-│   ├── gear-planner.tsx         Profile, paper doll and live EP weights
+│   ├── classic-character-paper-doll.tsx
+│   ├── enchant-editor-modal.tsx
 │   ├── gear-import-modal.tsx    Addon instructions and AA1 import flow
 │   └── item-picker-modal.tsx    Ranking and side-by-side comparison
 ├── data/demo-items.ts           Zero-setup development fixture
@@ -223,6 +224,12 @@ src/
 │   ├── scoring.ts               EP profiles, caps and Ascension Power
 │   └── comparison.ts            Ranking and stat deltas
 ├── features/planner/
+│   ├── components/
+│   │   ├── gear-planner.tsx      Planner composition and data loading
+│   │   ├── paper-doll-panel.tsx  Slot layout and equipment controls
+│   │   ├── stat-weights-panel.tsx
+│   │   └── planner-dialogs.tsx   Planner modal routing
+│   ├── planner.css               Planner-owned presentation styles
 │   ├── planner.reducer.ts        Planner state and equipment actions
 │   ├── planner.selectors.ts      Derived weights, totals and summaries
 │   ├── planner-storage.ts        Versioned local-build validation
