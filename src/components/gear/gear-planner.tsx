@@ -125,6 +125,8 @@ export function GearPlanner() {
   const activePower = level >= 60 && selectedProfile
     ? (selectedProfile.context === "pve" ? pvePower : pvpPower)
     : 0;
+  const hasGearEnchants = useMemo(() => Object.values(loadout)
+    .some((item) => item.enhancements?.some((enhancement) => enhancement.kind === "ENCHANT")), [loadout]);
 
   useEffect(() => {
     const restoreBuild = window.setTimeout(() => {
@@ -228,6 +230,14 @@ export function GearPlanner() {
       .map(([slot, item]) => [slot, applyRecommendedEnchant(item, profile, true)])));
   }
 
+  function clearGearEnchants(): void {
+    setLoadout((current) => Object.fromEntries(Object.entries(current).map(([slot, item]) => {
+      const enhancements = (item.enhancements ?? []).filter((enhancement) => enhancement.kind !== "ENCHANT");
+      return [slot, { ...item, enhancements: enhancements.length ? enhancements : undefined }];
+    })));
+    setActiveEnchantSlot(null);
+  }
+
   return (
     <main className="min-h-screen">
       <nav className="topbar">
@@ -252,7 +262,7 @@ export function GearPlanner() {
 
         <div className="planner-layout" id="planner">
           <section className="armory-panel">
-            <div className="panel-heading"><div><p className="eyebrow">Paper doll</p><h2>Equipped loadout</h2></div><div className="panel-heading-actions"><button type="button" className="auto-enchant-button" disabled={Object.keys(loadout).length === 0} onClick={autoEnchantGear}><Sparkles size={13} /> Auto-enchant gear</button><button type="button" className="clear-loadout-button" disabled={Object.keys(loadout).length === 0} onClick={() => { setLoadout({}); setActiveEnchantSlot(null); }}><Trash2 size={13} /> Clear all gear</button><div className="total-ep"><span>Total score</span><strong>{totalEp.toFixed(1)} <small>EP</small></strong></div></div></div>
+            <div className="panel-heading"><div><p className="eyebrow">Paper doll</p><h2>Equipped loadout</h2></div><div className="panel-heading-actions"><button type="button" className="auto-enchant-button" disabled={Object.keys(loadout).length === 0} onClick={autoEnchantGear}><Sparkles size={13} /> Auto-enchant gear</button><button type="button" className="clear-enchants-button" disabled={!hasGearEnchants} onClick={clearGearEnchants}><X size={13} /> Clear enchants</button><button type="button" className="clear-loadout-button" disabled={Object.keys(loadout).length === 0} onClick={() => { setLoadout({}); setActiveEnchantSlot(null); }}><Trash2 size={13} /> Clear all gear</button><div className="total-ep"><span>Total score</span><strong>{totalEp.toFixed(1)} <small>EP</small></strong></div></div></div>
             <div className="paper-doll-grid">
               <div className="slot-column">{leftSlots.map((slot) => <SlotCard key={slot} slot={slot} item={loadout[slot]} level={level} profile={profile} side="left" onClick={() => openSlot(slot)} onClear={() => clearSlot(slot)} onEnchant={() => setActiveEnchantSlot(slot)} />)}</div>
               <div className="character-stage">
