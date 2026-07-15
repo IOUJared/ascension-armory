@@ -45,7 +45,7 @@ jobs:
           firefox-version: latest
 
       - name: Set up geckodriver
-        uses: browser-actions/setup-geckodriver@v1
+        uses: browser-actions/setup-geckodriver@fac5b0424c584257f32cf12c5eb4ba86014c34f8
         with:
           geckodriver-version: "0.36.0"
 
