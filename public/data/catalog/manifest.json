@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-15T19:52:28.626Z",
+  "itemCount": 35181,
+  "idIndexPath": "data/catalog/item-index.json",
+  "shards": {
+    "HEAD": {
+      "path": "data/catalog/slots/head.json",
+      "itemCount": 2053
+    },
+    "NECK": {
+      "path": "data/catalog/slots/neck.json",
+      "itemCount": 1208
+    },
+    "SHOULDERS": {
+      "path": "data/catalog/slots/shoulders.json",
+      "itemCount": 1988
+    },
+    "BACK": {
+      "path": "data/catalog/slots/back.json",
+      "itemCount": 1646
+    },
+    "CHEST": {
+      "path": "data/catalog/slots/chest.json",
+      "itemCount": 2665
+    },
+    "WRISTS": {
+      "path": "data/catalog/slots/wrists.json",
+      "itemCount": 1792
+    },
+    "HANDS": {
+      "path": "data/catalog/slots/hands.json",
+      "itemCount": 2208
+    },
+    "WAIST": {
+      "path": "data/catalog/slots/waist.json",
+      "itemCount": 2016
+    },
+    "LEGS": {
+      "path": "data/catalog/slots/legs.json",
+      "itemCount": 2286
+    },
+    "FEET": {
+      "path": "data/catalog/slots/feet.json",
+      "itemCount": 2359
+    },
+    "FINGER_1": {
+      "path": "data/catalog/slots/finger-1.json",
+      "itemCount": 1581
+    },
+    "TRINKET_1": {
+      "path": "data/catalog/slots/trinket-1.json",
+      "itemCount": 1491
+    },
+    "MAIN_HAND": {
+      "path": "data/catalog/slots/main-hand.json",
+      "itemCount": 7303
+    },
+    "OFF_HAND": {
+      "path": "data/catalog/slots/off-hand.json",
+      "itemCount": 1653
+    },
+    "RANGED": {
+      "path": "data/catalog/slots/ranged.json",
+      "itemCount": 2932
+    }
+  }
+}

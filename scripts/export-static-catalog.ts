@@ -1,5 +1,4 @@
-import { mkdir, writeFile } from "node:fs/promises";
-import { dirname, resolve } from "node:path";
+import { resolve } from "node:path";
 import { prisma } from "../src/lib/db";
 import type { GearAcquisitionSource, GearItem, StatMap } from "../src/domain/gear";
 import catalogAdditions from "../src/data/catalog-additions.json";
@@ -7,6 +6,7 @@ import worldforgedItems from "../src/data/worldforged-items.json";
 import worldforgedUpgrades from "../src/data/worldforged-upgrades.json";
 import atlasLootItems from "../src/data/atlasloot-coa-items.json";
 import dungeonVariants from "../src/data/dungeon-variants.json";
+import { writeCatalogAssets } from "../tooling/catalog/write-catalog-assets";
 
 const outputPath = resolve(process.cwd(), process.argv[2] ?? "public/data/coa-items.json");
 
@@ -158,10 +158,14 @@ async function main(): Promise<void> {
     }];
   });
 
-  const payload = JSON.stringify({ generatedAt: new Date().toISOString(), items });
-  await mkdir(dirname(outputPath), { recursive: true });
-  await writeFile(outputPath, payload);
-  console.log(JSON.stringify({ output: outputPath, items: items.length, bytes: Buffer.byteLength(payload) }));
+  const document = { generatedAt: new Date().toISOString(), items };
+  await writeCatalogAssets(outputPath, document);
+  console.log(JSON.stringify({
+    output: outputPath,
+    items: items.length,
+    bytes: Buffer.byteLength(JSON.stringify(document)),
+    shards: true,
+  }));
 }
 
 main().finally(() => prisma.$disconnect());

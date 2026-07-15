@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit",
     "test": "tsx --test tests/*.test.ts",
     "validate:catalog": "tsx tooling/validation/validate-catalog.ts",
+    "shard:catalog": "tsx tooling/catalog/shard-published-catalog.ts",
     "check": "npm run typecheck && npm run lint && npm test && npm run validate:catalog",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",

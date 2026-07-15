@@ -9,7 +9,7 @@ npm ci
 npm run dev
 ```
 
-The browser loads the committed `public/data/coa-items.json` catalog and ranks it locally, so the complete planner works as a static site. PostgreSQL is used by the ingestion and catalog-generation tools, but it is not required to serve the UI.
+The browser loads the committed slot-specific files under `public/data/catalog/` and ranks them locally, so opening a gear slot downloads only the relevant portion of the item catalog. PostgreSQL is used by the ingestion and catalog-generation tools, but it is not required to serve the UI.
 
 ## Quality checks
 
@@ -72,7 +72,7 @@ realm response must identify an item as equippable before it enters the gear
 catalog. This avoids treating Worldforged scroll IDs as gear because an old
 all-realms DBC reused the same numeric ID.
 
-Commit the regenerated `public/data/coa-items.json` file so GitHub Pages can serve it without database access.
+Commit the regenerated `public/data/coa-items.json` file and `public/data/catalog/` directory so GitHub Pages can serve the catalog without database access. `export:catalog` writes both forms; the monolithic file remains the pipeline authority while the browser reads the smaller slot shards.
 
 ## Current CoA item ingestion
 
@@ -236,7 +236,9 @@ src/
 │   └── hooks/                    Persistence and keyboard behavior
 ├── lib/
 │   ├── ascension/               Fetch, parse and transactional store adapter
-│   ├── items/static-catalog.ts  Browser-side static catalog lookup
+│   ├── items/catalog-repository.ts Browser catalog boundary
+│   ├── items/catalog-schema.ts  Manifest, shard and ID-index contracts
+│   ├── items/static-catalog.ts  Slot-sharded static repository adapter
 │   ├── items/repository.ts      PostgreSQL catalog-generation lookup
 │   └── db.ts                    Shared Prisma client
 └── types/coa.ts                 CoA class and specialization contracts
@@ -245,6 +247,7 @@ prisma/
 └── seed.ts                      Stat definitions
 scripts/ingest-items.ts          Rate-limited ingestion CLI
 scripts/export-static-catalog.ts PostgreSQL-to-static-catalog exporter
+tooling/catalog/                 Static catalog distribution writers
 tooling/validation/              Published-catalog integrity checks
 addon/AscensionArmoryExporter/   In-game level and equipment exporter
 tests/                           Domain and data regression suite
