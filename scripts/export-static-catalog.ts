@@ -88,7 +88,7 @@ async function main(): Promise<void> {
       ?? (dungeonVariant ? atlasLootById.get(dungeonVariant.baseId) : undefined)
       ?? (worldforgedBase ? atlasLootById.get(worldforgedBase) : undefined);
     const sourceNote = dungeonVariant
-      ? `${dungeonVariant.tier} generated version; acquisition follows the base dungeon item.`
+      ? `${dungeonVariant.tier} level-cap version; acquisition follows the base dungeon item.`
       : worldforgedBase
         ? "Worldforged upgrade; acquisition follows the base item."
         : undefined;
@@ -100,6 +100,7 @@ async function main(): Promise<void> {
       quality: item.quality,
       itemLevel: item.itemLevel,
       requiredLevel: override?.requiredLevel ?? item.requiredLevel,
+      ...(dungeonVariant ? { availableAtLevel: 60 } : {}),
       stats,
       ...(override?.armorType ?? item.armorType ? { armorType: override?.armorType ?? item.armorType ?? undefined } : {}),
       ...(override?.armor ?? item.armor ? { armor: override?.armor ?? item.armor } : {}),

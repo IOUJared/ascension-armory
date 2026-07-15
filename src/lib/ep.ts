@@ -40,7 +40,7 @@ export function requiredLevelAt(item: GearItem, level: number): number {
 }
 
 export function canEquipItemAtLevel(item: GearItem, level: number): boolean {
-  return requiredLevelAt(item, level) <= level;
+  return requiredLevelAt(item, level) <= level && (item.availableAtLevel ?? 1) <= level;
 }
 
 function applyHybridRules(stats: StatMap, rules: HybridScalingRule[]): void {

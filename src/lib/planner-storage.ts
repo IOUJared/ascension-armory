@@ -153,6 +153,7 @@ function sanitizeItem(value: unknown, slot: EquipmentSlot): GearItem | undefined
     quality: value.quality as GearItem["quality"],
     itemLevel: value.itemLevel,
     requiredLevel: value.requiredLevel,
+    ...(finiteNumber(value.availableAtLevel) ? { availableAtLevel: value.availableAtLevel } : {}),
     stats: sanitizeStats(value.stats),
     ...(typeof value.armorType === "string" ? { armorType: value.armorType } : {}),
     ...(finiteNumber(value.armor) ? { armor: value.armor } : {}),

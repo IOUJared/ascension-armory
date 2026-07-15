@@ -64,6 +64,8 @@ export interface GearItem {
   quality: "POOR" | "COMMON" | "UNCOMMON" | "RARE" | "EPIC" | "LEGENDARY" | "ARTIFACT" | "HEIRLOOM";
   itemLevel: number;
   requiredLevel: number;
+  /** Lowest character level at which this content-tier version is obtainable. */
+  availableAtLevel?: number;
   armorType?: string;
   armor?: number;
   weaponDamage?: { min: number; max: number; speed: number; dps: number };
