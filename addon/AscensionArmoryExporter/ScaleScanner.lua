@@ -178,7 +178,9 @@ SlashCmdList.ASCENSIONARMORYSCALE = function(command)
   local lowered = string.lower(command)
   if lowered == "stop" then running = false; Message("Scaling scan paused."); return end
   if lowered == "status" then Status(); return end
-  if lowered == "test" then Start({ 7691, 1642943 }, 1, 60); return end
+  -- 7691 is the fixed original dungeon item, 408609 its generated Normal
+  -- dungeon version, and 1642943 a known ScalingStatDistribution control.
+  if lowered == "test" then Start({ 7691, 408609, 1642943 }, 1, 60); return end
 
   local itemID = tonumber(string.match(command, "item:(%d+)")) or tonumber(string.match(command, "^(%d+)"))
   if not itemID then

@@ -96,6 +96,7 @@ then regenerate the addon queue:
 
 ```bash
 npm run extract:atlasloot -- --atlas-dir /path/to/AtlasLootAscension
+npm run generate:dungeon-variants
 npm run generate:addon-candidates
 ```
 
@@ -103,11 +104,16 @@ The generated JSON records the exact AtlasLoot commit, source file and line.
 Atlas-only IDs already present in the current-realm catalog are skipped, and
 new IDs still require a successful `/aacatalog` response before publication.
 
+`generate:dungeon-variants` matches AtlasLoot instance gear to generated
+Normal (item level 57), Heroic (61), and Mythic (64) client items by exact
+name, equipment slot, and display model. These are discovery candidates only;
+the current CoA realm remains the authority for their stats.
+
 ### Exact level-scaling calibration
 
 The addon can capture the same item link at every effective level without
 assuming a generic item-budget formula. Run `/aascale test` to compare a fixed
-dungeon base (Embalmed Shroud) with a true scaling item, then `/reload` and
+dungeon base, its generated Normal version, and a true scaling item, then `/reload` and
 import the saved snapshots:
 
 ```bash

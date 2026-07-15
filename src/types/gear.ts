@@ -72,6 +72,10 @@ export interface GearItem {
   worldforged?: boolean;
   /** Base discovery item for a server-verified Worldforged upgrade record. */
   worldforgedBaseId?: string;
+  /** Generated CoA dungeon difficulty version verified from the live realm. */
+  dungeonTier?: "NORMAL" | "HEROIC" | "MYTHIC";
+  /** AtlasLoot dungeon item from which this generated difficulty version derives. */
+  dungeonBaseId?: string;
   /** Exact current-client snapshots keyed by the item link's effective level. */
   scaleSnapshots?: GearScaleSnapshot[];
 }

@@ -14,6 +14,10 @@ interface AtlasLootSource {
   items: Array<{ id: string; baseId?: string; kind: string }>;
 }
 
+interface DungeonVariantSource {
+  items: Array<{ id: string; baseId: string; itemLevel: number; tier: string }>;
+}
+
 interface CurrentCatalog {
   items: Array<{ id: string }>;
 }
@@ -24,6 +28,7 @@ async function main(): Promise<void> {
   const source = JSON.parse(await readFile(sourcePath, "utf8")) as CandidateSource;
   let upgrades: UpgradeSource = { items: [] };
   let atlasLoot: AtlasLootSource = { items: [] };
+  let dungeonVariants: DungeonVariantSource = { items: [] };
   let currentCatalog: CurrentCatalog = { items: [] };
   try {
     upgrades = JSON.parse(await readFile(resolve("src/data/worldforged-upgrades.json"), "utf8")) as UpgradeSource;
@@ -34,6 +39,11 @@ async function main(): Promise<void> {
     atlasLoot = JSON.parse(await readFile(resolve("src/data/atlasloot-coa-items.json"), "utf8")) as AtlasLootSource;
   } catch {
     // AtlasLoot is an optional additional discovery index.
+  }
+  try {
+    dungeonVariants = JSON.parse(await readFile(resolve("src/data/dungeon-variants.json"), "utf8")) as DungeonVariantSource;
+  } catch {
+    // Generated dungeon variants are optional until the client index is imported.
   }
   try {
     currentCatalog = JSON.parse(await readFile(resolve("public/data/coa-items.json"), "utf8")) as CurrentCatalog;
@@ -50,6 +60,9 @@ async function main(): Promise<void> {
   for (const item of upgrades.items) {
     candidates.set(item.id, `  { id = ${Number(item.id)}, baseId = ${Number(item.baseId)}, itemLevel = ${item.itemLevel}, source = "client-variant" },`);
   }
+  for (const item of dungeonVariants.items) {
+    candidates.set(item.id, `  { id = ${Number(item.id)}, baseId = ${Number(item.baseId)}, itemLevel = ${item.itemLevel}, source = "dungeon-${item.tier.toLowerCase()}" },`);
+  }
   for (const item of atlasLoot.items) {
     // Existing LootCollector/client candidates remain in the list so an
     // interrupted scan can resume. Atlas-only IDs already verified by the
@@ -58,7 +71,7 @@ async function main(): Promise<void> {
     candidates.set(item.id, `  { id = ${Number(item.id)}${item.baseId ? `, baseId = ${Number(item.baseId)}` : ""}, source = "atlasloot" },`);
   }
   const output = [
-    "-- Generated from LootCollector, client variants, and the current CoA AtlasLoot index.",
+    "-- Generated from LootCollector, client variants, generated dungeon tiers, and the current CoA AtlasLoot index.",
     "-- Discovery metadata only; the scanner asks the CoA realm for item data.",
     "AscensionArmoryWorldforgedCandidates = {",
     ...candidates.values(),
@@ -73,6 +86,7 @@ async function main(): Promise<void> {
     candidates: candidates.size,
     lootCollector: source.itemIds.length,
     upgrades: upgrades.items.length,
+    dungeonVariants: dungeonVariants.items.length,
     atlasLoot: atlasLoot.items.length,
     atlasLootAlreadyCurrent: atlasLoot.items.filter((item) => alreadyCurrent.has(item.id)).length,
   }));

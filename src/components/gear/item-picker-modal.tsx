@@ -121,6 +121,7 @@ export function ItemPickerModal({ slot, equipped, candidates, loading = false, l
                       <span>iLvl {item.itemLevel}</span>
                       {hasExactScale ? <span className="scaled-badge">Scaled L{level}</span> : null}
                       {item.worldforged ? <span className="worldforged-badge">Worldforged</span> : null}
+                      {item.dungeonTier ? <span className="dungeon-badge">{item.dungeonTier} dungeon</span> : null}
                       <SourceBadge item={item} />
                     </span>
                   </span>
@@ -150,7 +151,7 @@ export function ItemPickerModal({ slot, equipped, candidates, loading = false, l
                 <div className="hidden pt-16 text-amber-500 sm:block"><ArrowRight size={20} /></div>
                 <article className="compare-card candidate-card">
                   <p className="eyebrow text-amber-400">Potential upgrade</p>
-                  <div className="mt-4 flex items-center gap-3"><ItemIcon item={selected} size="lg" /><div><h3 className={`font-semibold ${qualityClass[selected.quality]}`}>{selected.name}</h3><p className="flex flex-wrap items-center gap-2 text-xs text-stone-500">Item level {selected.itemLevel}{selected.worldforged ? <span className="worldforged-badge">Worldforged</span> : null}<SourceBadge item={selected} /></p></div></div>
+                  <div className="mt-4 flex items-center gap-3"><ItemIcon item={selected} size="lg" /><div><h3 className={`font-semibold ${qualityClass[selected.quality]}`}>{selected.name}</h3><p className="flex flex-wrap items-center gap-2 text-xs text-stone-500">Item level {selected.itemLevel}{selected.worldforged ? <span className="worldforged-badge">Worldforged</span> : null}{selected.dungeonTier ? <span className="dungeon-badge">{selected.dungeonTier} dungeon</span> : null}<SourceBadge item={selected} /></p></div></div>
                   <div className="my-4 h-px bg-white/7" /><StatLines item={selected} compareTo={equippedScore} level={level} context={context} />
                 </article>
               </div>

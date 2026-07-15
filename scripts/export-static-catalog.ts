@@ -6,6 +6,7 @@ import catalogAdditions from "../src/data/catalog-additions.json";
 import worldforgedItems from "../src/data/worldforged-items.json";
 import worldforgedUpgrades from "../src/data/worldforged-upgrades.json";
 import atlasLootItems from "../src/data/atlasloot-coa-items.json";
+import dungeonVariants from "../src/data/dungeon-variants.json";
 
 const outputPath = resolve(process.cwd(), process.argv[2] ?? "public/data/coa-items.json");
 
@@ -13,6 +14,7 @@ async function main(): Promise<void> {
   const upgradeBase = new Map(worldforgedUpgrades.items.map((item) => [item.id, item.baseId]));
   const worldforgedIds = new Set([...worldforgedItems.itemIds, ...worldforgedUpgrades.items.map((item) => item.id)]);
   const atlasLootById = new Map(atlasLootItems.items.map((item) => [item.id, item]));
+  const dungeonVariantById = new Map(dungeonVariants.items.map((item) => [item.id, item]));
   // LootCollector identifies discovery candidates, including non-gear
   // Worldforged scrolls. It must not make a stale all-realms DBC row eligible
   // for export by itself; current realm data or a verified source must do that.
@@ -50,6 +52,12 @@ async function main(): Promise<void> {
       .filter((stat) => stat.statKey !== "armor" && stat.statKey !== "weapon_dps")
       .map((stat) => [stat.statKey, stat.value])) as StatMap;
     Object.assign(stats, override?.stats ?? {});
+    const snapshotSignatures = new Set(item.scaleSnapshots.map((snapshot) => JSON.stringify([
+      snapshot.itemLevel, snapshot.requiredLevel, snapshot.stats, snapshot.armor, snapshot.weaponDps,
+    ])));
+    // A calibration capture may prove that an item is fixed. Keep those rows
+    // in PostgreSQL as evidence, but only publish snapshots that truly vary.
+    const varyingScaleSnapshots = snapshotSignatures.size > 1 ? item.scaleSnapshots : [];
     return [{
       id: item.id.toString(),
       name: item.name,
@@ -67,7 +75,7 @@ async function main(): Promise<void> {
       ...(Number.isInteger(displayId) && displayId > 0 ? { displayId } : {}),
       ...(item.effects.length ? { effects: item.effects.map((effect) => ({ kind: effect.kind, description: effect.description })) } : {}),
       ...(item.sockets.length ? { socketCount: item.sockets.length } : {}),
-      ...(item.scaleSnapshots.length ? { scaleSnapshots: item.scaleSnapshots.map((snapshot) => ({
+      ...(varyingScaleSnapshots.length ? { scaleSnapshots: varyingScaleSnapshots.map((snapshot) => ({
         effectiveLevel: snapshot.effectiveLevel,
         itemLevel: snapshot.itemLevel,
         requiredLevel: snapshot.requiredLevel,
@@ -75,7 +83,9 @@ async function main(): Promise<void> {
         ...(snapshot.armor ? { armor: snapshot.armor } : {}),
         ...(snapshot.weaponDps !== null ? { weaponDps: snapshot.weaponDps } : {}),
       })) } : {}),
-      source: upgradeBase.has(item.id.toString())
+      source: dungeonVariantById.has(item.id.toString())
+        ? `${dataSource === "COA_INGAME_SCAN" ? "Current in-game scan" : "CoA realm cache"} · ${dungeonVariantById.get(item.id.toString())?.tier} dungeon · ${dungeonVariantById.get(item.id.toString())?.section}`
+        : upgradeBase.has(item.id.toString())
         ? `${dataSource === "COA_INGAME_SCAN" ? "Current in-game scan" : "CoA realm cache"} · Worldforged upgrade of ${upgradeBase.get(item.id.toString())}`
         : worldforgedIds.has(item.id.toString())
         ? `${dataSource === "COA_INGAME_SCAN" ? "Current in-game scan" : "CoA realm cache"} · LootCollector discovery`
@@ -85,6 +95,10 @@ async function main(): Promise<void> {
       dataSource,
       ...(worldforgedIds.has(item.id.toString()) ? { worldforged: true } : {}),
       ...(upgradeBase.has(item.id.toString()) ? { worldforgedBaseId: upgradeBase.get(item.id.toString()) } : {}),
+      ...(dungeonVariantById.has(item.id.toString()) ? {
+        dungeonTier: dungeonVariantById.get(item.id.toString())?.tier as GearItem["dungeonTier"],
+        dungeonBaseId: dungeonVariantById.get(item.id.toString())?.baseId,
+      } : {}),
     }];
   });
 

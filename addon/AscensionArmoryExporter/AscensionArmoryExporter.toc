@@ -2,7 +2,7 @@
 ## Title: Ascension Armory Exporter
 ## Notes: Exports character level and equipped gear for Ascension Armory.
 ## Author: Ascension Armory
-## Version: 1.2.0
+## Version: 1.2.1
 ## X-Flavor: 3.3.5
 ## SavedVariables: AscensionArmoryCatalogDB
 
