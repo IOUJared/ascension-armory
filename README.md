@@ -88,6 +88,21 @@ their generated item IDs in the installed client index. A subsequent
 verify each level-60, dungeon, raid and later upgrade record. Client-index
 values alone never enter the published catalog.
 
+AtlasLoot Ascension Edition is a second discovery index. Its current CoA
+Classic, world-event and Worldforged tables contain source-aware item IDs, but
+AtlasLoot itself renders stats from the live game APIs rather than storing a
+complete stat database. Extract its candidate IDs from a checked-out copy and
+then regenerate the addon queue:
+
+```bash
+npm run extract:atlasloot -- --atlas-dir /path/to/AtlasLootAscension
+npm run generate:addon-candidates
+```
+
+The generated JSON records the exact AtlasLoot commit, source file and line.
+Atlas-only IDs already present in the current-realm catalog are skipped, and
+new IDs still require a successful `/aacatalog` response before publication.
+
 ## Legacy and client-wide sources
 
 Ascension DB does not expose a documented item JSON API. Its public item pages contain an embedded AoWoW metadata object and tooltip payload. The importer retains this adapter for explicitly requested fallback records, but these records are not exported into the current CoA catalog unless current-realm or player-import evidence also exists.

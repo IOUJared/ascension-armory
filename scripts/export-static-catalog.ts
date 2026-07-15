@@ -5,12 +5,14 @@ import type { GearItem, StatMap } from "../src/types/gear";
 import catalogAdditions from "../src/data/catalog-additions.json";
 import worldforgedItems from "../src/data/worldforged-items.json";
 import worldforgedUpgrades from "../src/data/worldforged-upgrades.json";
+import atlasLootItems from "../src/data/atlasloot-coa-items.json";
 
 const outputPath = resolve(process.cwd(), process.argv[2] ?? "public/data/coa-items.json");
 
 async function main(): Promise<void> {
   const upgradeBase = new Map(worldforgedUpgrades.items.map((item) => [item.id, item.baseId]));
   const worldforgedIds = new Set([...worldforgedItems.itemIds, ...worldforgedUpgrades.items.map((item) => item.id)]);
+  const atlasLootById = new Map(atlasLootItems.items.map((item) => [item.id, item]));
   // LootCollector identifies discovery candidates, including non-gear
   // Worldforged scrolls. It must not make a stale all-realms DBC row eligible
   // for export by itself; current realm data or a verified source must do that.
@@ -69,6 +71,8 @@ async function main(): Promise<void> {
         ? `${dataSource === "COA_INGAME_SCAN" ? "Current in-game scan" : "CoA realm cache"} · Worldforged upgrade of ${upgradeBase.get(item.id.toString())}`
         : worldforgedIds.has(item.id.toString())
         ? `${dataSource === "COA_INGAME_SCAN" ? "Current in-game scan" : "CoA realm cache"} · LootCollector discovery`
+        : atlasLootById.has(item.id.toString())
+        ? `${dataSource === "COA_INGAME_SCAN" ? "Current in-game scan" : "CoA realm cache"} · AtlasLoot ${atlasLootById.get(item.id.toString())?.section ?? "CoA index"}`
         : item.sourceUrl,
       dataSource,
       ...(worldforgedIds.has(item.id.toString()) ? { worldforged: true } : {}),

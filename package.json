@@ -20,6 +20,7 @@
     "sync:coa-classes": "node scripts/sync-coa-classes.mjs",
     "sync:sidekick-gear": "tsx scripts/sync-sidekick-gear.ts",
     "import:worldforged": "tsx scripts/import-lootcollector-worldforged.ts",
+    "extract:atlasloot": "tsx scripts/extract-atlasloot-coa-items.ts",
     "generate:addon-candidates": "tsx scripts/generate-addon-candidates.ts",
     "generate:worldforged-upgrades": "tsx scripts/generate-worldforged-upgrades.ts",
     "export:catalog": "tsx scripts/export-static-catalog.ts"

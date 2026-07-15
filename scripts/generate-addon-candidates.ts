@@ -10,35 +10,72 @@ interface UpgradeSource {
   items: Array<{ id: string; baseId: string; itemLevel: number }>;
 }
 
+interface AtlasLootSource {
+  items: Array<{ id: string; baseId?: string; kind: string }>;
+}
+
+interface CurrentCatalog {
+  items: Array<{ id: string }>;
+}
+
 async function main(): Promise<void> {
   const sourcePath = resolve(process.argv[2] ?? "src/data/worldforged-items.json");
   const outputPath = resolve(process.argv[3] ?? "addon/AscensionArmoryExporter/WorldforgedCandidates.lua");
   const source = JSON.parse(await readFile(sourcePath, "utf8")) as CandidateSource;
   let upgrades: UpgradeSource = { items: [] };
+  let atlasLoot: AtlasLootSource = { items: [] };
+  let currentCatalog: CurrentCatalog = { items: [] };
   try {
     upgrades = JSON.parse(await readFile(resolve("src/data/worldforged-upgrades.json"), "utf8")) as UpgradeSource;
   } catch {
     // Base discovery scanning remains available before upgrade candidates exist.
   }
+  try {
+    atlasLoot = JSON.parse(await readFile(resolve("src/data/atlasloot-coa-items.json"), "utf8")) as AtlasLootSource;
+  } catch {
+    // AtlasLoot is an optional additional discovery index.
+  }
+  try {
+    currentCatalog = JSON.parse(await readFile(resolve("public/data/coa-items.json"), "utf8")) as CurrentCatalog;
+  } catch {
+    // A first-time scanner can be generated before the static catalog exists.
+  }
+  const alreadyCurrent = new Set(currentCatalog.items.map((item) => item.id));
   const byId = new Map((source.items ?? []).map((item) => [item.id, item.link]));
-  const rows = source.itemIds.map((id) => {
+  const candidates = new Map<string, string>();
+  for (const id of source.itemIds) {
     const link = byId.get(id);
-    return `  { id = ${Number(id)}, link = ${link ? JSON.stringify(link) : "nil"} },`;
-  });
-  const upgradeRows = upgrades.items.map((item) =>
-    `  { id = ${Number(item.id)}, baseId = ${Number(item.baseId)}, itemLevel = ${item.itemLevel} },`);
+    candidates.set(id, `  { id = ${Number(id)}, link = ${link ? JSON.stringify(link) : "nil"}, source = "lootcollector" },`);
+  }
+  for (const item of upgrades.items) {
+    candidates.set(item.id, `  { id = ${Number(item.id)}, baseId = ${Number(item.baseId)}, itemLevel = ${item.itemLevel}, source = "client-variant" },`);
+  }
+  for (const item of atlasLoot.items) {
+    // Existing LootCollector/client candidates remain in the list so an
+    // interrupted scan can resume. Atlas-only IDs already verified by the
+    // realm cache do not need another in-game query.
+    if (candidates.has(item.id) || alreadyCurrent.has(item.id)) continue;
+    candidates.set(item.id, `  { id = ${Number(item.id)}${item.baseId ? `, baseId = ${Number(item.baseId)}` : ""}, source = "atlasloot" },`);
+  }
   const output = [
-    "-- Generated from the current LootCollector SavedVariables database.",
+    "-- Generated from LootCollector, client variants, and the current CoA AtlasLoot index.",
     "-- Discovery metadata only; the scanner asks the CoA realm for item data.",
     "AscensionArmoryWorldforgedCandidates = {",
-    ...rows,
-    ...upgradeRows,
+    ...candidates.values(),
     "}",
     "",
   ].join("\n");
   await mkdir(dirname(outputPath), { recursive: true });
   await writeFile(outputPath, output);
-  console.log(JSON.stringify({ source: sourcePath, output: outputPath, candidates: rows.length, upgrades: upgradeRows.length }));
+  console.log(JSON.stringify({
+    source: sourcePath,
+    output: outputPath,
+    candidates: candidates.size,
+    lootCollector: source.itemIds.length,
+    upgrades: upgrades.items.length,
+    atlasLoot: atlasLoot.items.length,
+    atlasLootAlreadyCurrent: atlasLoot.items.filter((item) => alreadyCurrent.has(item.id)).length,
+  }));
 }
 
 main().catch((error: unknown) => {
