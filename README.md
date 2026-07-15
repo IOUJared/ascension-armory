@@ -222,6 +222,11 @@ src/
 │   ├── eligibility.ts           Character-level equipment rules
 │   ├── scoring.ts               EP profiles, caps and Ascension Power
 │   └── comparison.ts            Ranking and stat deltas
+├── features/planner/
+│   ├── planner.reducer.ts        Planner state and equipment actions
+│   ├── planner.selectors.ts      Derived weights, totals and summaries
+│   ├── planner-storage.ts        Versioned local-build validation
+│   └── hooks/                    Persistence and keyboard behavior
 ├── lib/
 │   ├── ascension/               Fetch, parse and transactional store adapter
 │   ├── items/static-catalog.ts  Browser-side static catalog lookup

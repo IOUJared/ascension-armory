@@ -1,13 +1,17 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useReducer, useState } from "react";
 import { Check, ChevronDown, EyeOff, RotateCcw, Save, Settings2, Sparkles, Trash2, Upload, X } from "lucide-react";
-import { isCoASelection, resolveCoAProfile } from "@/lib/coa";
-import { calculateEp, isSystemPowerKey, resolveItemStats, scoreItem, STAT_LABELS, withoutSystemPowerWeights, type EquipmentSlot, type GearItem, type StatKey, type StatMap, type WeightProfile } from "@/domain/gear";
+import { resolveCoAProfile } from "@/lib/coa";
+import { contextualPower, scoreItem, STAT_LABELS, type EquipmentSlot, type GearItem, type WeightProfile } from "@/domain/gear";
 import { findStaticItemsForSlot } from "@/lib/items/static-catalog";
 import { applyRecommendedEnchant, findEnchantsForItem } from "@/lib/enchants";
-import { BUILD_STORAGE_KEY, LEGACY_BUILD_STORAGE_KEY, LEGACY_PROFILE_STORAGE_KEY, makePlannerBuild, parsePlannerBuild } from "@/lib/planner-storage";
 import type { CoASelection } from "@/types/coa";
+import { FALLBACK_WEIGHTS, LEFT_EQUIPMENT_SLOTS, RIGHT_EQUIPMENT_SLOTS } from "@/features/planner/planner.constants";
+import { createInitialPlannerState, plannerReducer } from "@/features/planner/planner.reducer";
+import { selectActiveWeightKeys, selectEditableWeightKeys, selectHasGearEnchants, selectLoadoutTotals, selectSummaryKeys } from "@/features/planner/planner.selectors";
+import { useBuildStorage } from "@/features/planner/hooks/use-build-storage";
+import { usePlannerShortcuts } from "@/features/planner/hooks/use-planner-shortcuts";
 import { ItemPickerModal } from "./item-picker-modal";
 import { GameItemIcon } from "./game-item-icon";
 import { GearImportModal } from "./gear-import-modal";
@@ -15,10 +19,7 @@ import { ClassicCharacterPaperDoll } from "./classic-character-paper-doll";
 import { CoAClassSelector } from "./coa-class-selector";
 import { EnchantEditorModal } from "./enchant-editor-modal";
 
-const leftSlots: EquipmentSlot[] = ["HEAD", "NECK", "SHOULDERS", "BACK", "CHEST", "WRISTS", "MAIN_HAND", "RANGED"];
-const rightSlots: EquipmentSlot[] = ["HANDS", "WAIST", "LEGS", "FEET", "FINGER_1", "FINGER_2", "TRINKET_1", "TRINKET_2", "OFF_HAND"];
 const qualityBorder: Partial<Record<GearItem["quality"], string>> = { LEGENDARY: "legendary", EPIC: "epic", RARE: "rare" };
-const fallbackWeights: StatMap = { strength: 1, attack_power: 0.48, crit_rating: 0.72, haste_rating: 0.64, hit_rating: 0.86, weapon_dps: 2.4 };
 const levelTicks = Array.from({ length: 12 }, (_, index) => (index + 1) * 5);
 
 function labelSlot(slot: EquipmentSlot): string {
@@ -83,144 +84,29 @@ function LevelSlider({ level, onChange }: { level: number; onChange: (level: num
 }
 
 export function GearPlanner() {
-  const [level, setLevel] = useState(60);
-  const [selection, setSelection] = useState<CoASelection>();
-  const [selectorOpen, setSelectorOpen] = useState(false);
-  const [weights, setWeights] = useState<StatMap>(fallbackWeights);
-  const [loadout, setLoadout] = useState<Record<string, GearItem>>({});
-  const [storageReady, setStorageReady] = useState(false);
-  const [saveConfirmed, setSaveConfirmed] = useState(false);
-  const [importerOpen, setImporterOpen] = useState(false);
-  const [activeSlot, setActiveSlot] = useState<EquipmentSlot | null>(null);
-  const [activeEnchantSlot, setActiveEnchantSlot] = useState<EquipmentSlot | null>(null);
+  const [state, dispatch] = useReducer(plannerReducer, createInitialPlannerState());
+  const { activeDialog, level, loadout, selection, weights } = state;
+  const selectorOpen = activeDialog?.type === "class";
+  const importerOpen = activeDialog?.type === "import";
+  const activeSlot = activeDialog?.type === "item" ? activeDialog.slot : null;
+  const activeEnchantSlot = activeDialog?.type === "enchant" ? activeDialog.slot : null;
   const [candidates, setCandidates] = useState<GearItem[]>([]);
   const [loadingCandidates, setLoadingCandidates] = useState(false);
   const selectedProfile = useMemo(() => selection ? resolveCoAProfile(selection) : undefined, [selection]);
   const profileName = selectedProfile ? `${selectedProfile.classInfo.name} / ${selectedProfile.spec.name}` : "Choose a class";
   const profile = useMemo<WeightProfile>(() => ({ weights, context: selectedProfile?.context }), [selectedProfile?.context, weights]);
-  const activeWeightKeys = useMemo(() => (Object.entries(weights) as Array<[StatKey, number]>)
-    .filter(([key, value]) => value > 0 && !isSystemPowerKey(key))
-    .sort((a, b) => b[1] - a[1])
-    .map(([key]) => key), [weights]);
-  const editableWeightKeys = useMemo(() => {
-    const profileKeys = Object.keys(selectedProfile?.weights ?? fallbackWeights) as StatKey[];
-    const savedKeys = Object.keys(weights) as StatKey[];
-    const keys = [...new Set([...profileKeys, ...savedKeys])].filter((key) => !isSystemPowerKey(key));
-    const originalOrder = new Map(keys.map((key, index) => [key, index]));
-    return keys.sort((left, right) =>
-      (weights[right] ?? 0) - (weights[left] ?? 0)
-        || (originalOrder.get(left) ?? 0) - (originalOrder.get(right) ?? 0));
-  }, [selectedProfile, weights]);
-  const totalEp = useMemo(() => Object.values(loadout).reduce((sum, item) => sum + calculateEp(resolveItemStats(item, level, profile.hybridRules), profile), 0), [level, loadout, profile]);
-  const allStats = useMemo(() => Object.values(loadout).reduce<StatMap>((sum, item) => {
-    for (const [key, value] of Object.entries(resolveItemStats(item, level, profile.hybridRules)) as Array<[StatKey, number]>) sum[key] = (sum[key] ?? 0) + value;
-    return sum;
-  }, {}), [level, loadout, profile]);
-  const summaryKeys = useMemo(() => activeWeightKeys
-    .filter((key) => key !== "weapon_dps" && (allStats[key] ?? 0) > 0)
-    .slice(0, 6), [activeWeightKeys, allStats]);
+  const activeWeightKeys = useMemo(() => selectActiveWeightKeys(weights), [weights]);
+  const editableWeightKeys = useMemo(() => selectEditableWeightKeys(weights, selectedProfile?.weights), [selectedProfile?.weights, weights]);
+  const loadoutTotals = useMemo(() => selectLoadoutTotals(loadout, level, profile), [level, loadout, profile]);
+  const allStats = loadoutTotals.stats;
+  const totalEp = loadoutTotals.ep;
+  const summaryKeys = useMemo(() => selectSummaryKeys(activeWeightKeys, allStats), [activeWeightKeys, allStats]);
   const pvePower = allStats.pve_power ?? 0;
   const pvpPower = allStats.pvp_power ?? 0;
-  const activePower = level >= 60 && selectedProfile
-    ? (selectedProfile.context === "pve" ? pvePower : pvpPower)
-    : 0;
-  const hasGearEnchants = useMemo(() => Object.values(loadout)
-    .some((item) => item.enhancements?.some((enhancement) => enhancement.kind === "ENCHANT")), [loadout]);
-  const saveBuildNow = useCallback((): void => {
-    try {
-      localStorage.setItem(BUILD_STORAGE_KEY, JSON.stringify(makePlannerBuild(level, selection, weights, loadout)));
-      setSaveConfirmed(true);
-    } catch {
-      setSaveConfirmed(false);
-    }
-  }, [level, loadout, selection, weights]);
-
-  useEffect(() => {
-    const restoreBuild = window.setTimeout(() => {
-      try {
-        const savedBuild = parsePlannerBuild(localStorage.getItem(BUILD_STORAGE_KEY))
-          ?? parsePlannerBuild(localStorage.getItem(LEGACY_BUILD_STORAGE_KEY));
-        if (savedBuild) {
-          setLevel(savedBuild.level);
-          setLoadout(savedBuild.loadout);
-          if (savedBuild.selection) {
-            const resolved = resolveCoAProfile(savedBuild.selection);
-            setSelection(savedBuild.selection);
-            setWeights(withoutSystemPowerWeights(Object.keys(savedBuild.weights).length ? savedBuild.weights : resolved?.weights ?? fallbackWeights));
-            setSelectorOpen(false);
-          } else {
-            setWeights(withoutSystemPowerWeights(Object.keys(savedBuild.weights).length ? savedBuild.weights : fallbackWeights));
-            setSelectorOpen(true);
-          }
-          return;
-        }
-
-        const legacyProfile = JSON.parse(localStorage.getItem(LEGACY_PROFILE_STORAGE_KEY) ?? "null") as unknown;
-        if (isCoASelection(legacyProfile)) {
-          const resolved = resolveCoAProfile(legacyProfile);
-          setSelection(legacyProfile);
-          setWeights(resolved?.weights ?? fallbackWeights);
-          setSelectorOpen(false);
-        } else {
-          setSelectorOpen(true);
-        }
-      } catch {
-        setSelectorOpen(true);
-      } finally {
-        setStorageReady(true);
-      }
-    }, 0);
-    return () => window.clearTimeout(restoreBuild);
-  }, []);
-
-  useEffect(() => {
-    if (!storageReady) return;
-    const saveBuild = window.setTimeout(() => {
-      try {
-        localStorage.setItem(BUILD_STORAGE_KEY, JSON.stringify(makePlannerBuild(level, selection, weights, loadout)));
-      } catch { /* storage can be unavailable in locked-down browser contexts */ }
-    }, 250);
-    return () => window.clearTimeout(saveBuild);
-  }, [level, loadout, selection, storageReady, weights]);
-
-  useEffect(() => {
-    if (!saveConfirmed) return;
-    const resetConfirmation = window.setTimeout(() => setSaveConfirmed(false), 1800);
-    return () => window.clearTimeout(resetConfirmation);
-  }, [saveConfirmed]);
-
-  useEffect(() => {
-    function handleKeyboardShortcut(event: KeyboardEvent): void {
-      const key = event.key.toLowerCase();
-      const target = event.target as HTMLElement | null;
-      const editing = target?.matches("input, textarea, select, [contenteditable='true']") ?? false;
-
-      if (event.key === "Escape") {
-        if (activeEnchantSlot) setActiveEnchantSlot(null);
-        else if (activeSlot) setActiveSlot(null);
-        else if (importerOpen) setImporterOpen(false);
-        else if (selectorOpen && selection) setSelectorOpen(false);
-        return;
-      }
-      if ((event.ctrlKey || event.metaKey) && key === "s") {
-        event.preventDefault();
-        saveBuildNow();
-        return;
-      }
-      if (editing || event.ctrlKey || event.metaKey || event.altKey) return;
-      if (key === "i" && !activeEnchantSlot && !activeSlot && !selectorOpen) {
-        event.preventDefault();
-        setImporterOpen((open) => !open);
-      } else if (key === "c" && !activeEnchantSlot && !activeSlot && !importerOpen) {
-        event.preventDefault();
-        if (selectorOpen && !selection) return;
-        setSelectorOpen((open) => !open);
-      }
-    }
-
-    window.addEventListener("keydown", handleKeyboardShortcut);
-    return () => window.removeEventListener("keydown", handleKeyboardShortcut);
-  }, [activeEnchantSlot, activeSlot, importerOpen, saveBuildNow, selection, selectorOpen]);
+  const activePower = contextualPower(allStats, level, selectedProfile?.context);
+  const hasGearEnchants = useMemo(() => selectHasGearEnchants(loadout), [loadout]);
+  const { saveBuildNow, saveConfirmed, storageReady } = useBuildStorage(state, dispatch);
+  usePlannerShortcuts({ activeDialog, dispatch, saveBuildNow });
 
   useEffect(() => {
     if (!activeSlot) return;
@@ -235,38 +121,29 @@ export function GearPlanner() {
   function openSlot(slot: EquipmentSlot): void {
     setCandidates([]);
     setLoadingCandidates(true);
-    setActiveSlot(slot);
+    dispatch({ type: "OPEN_DIALOG", dialog: { type: "item", slot } });
   }
 
   function clearSlot(slot: EquipmentSlot): void {
-    if (activeEnchantSlot === slot) setActiveEnchantSlot(null);
-    setLoadout((current) => {
-      if (!current[slot]) return current;
-      const next = { ...current };
-      delete next[slot];
-      return next;
-    });
+    dispatch({ type: "CLEAR_SLOT", slot });
   }
 
   function chooseClass(nextSelection: CoASelection): void {
     const resolved = resolveCoAProfile(nextSelection);
     if (!resolved) return;
-    setSelection(nextSelection);
-    setWeights(resolved.weights);
-    setSelectorOpen(false);
+    dispatch({ type: "SELECT_PROFILE", selection: nextSelection, weights: resolved.weights });
   }
 
   function autoEnchantGear(): void {
-    setLoadout((current) => Object.fromEntries(Object.entries(current)
-      .map(([slot, item]) => [slot, applyRecommendedEnchant(item, profile, true)])));
+    dispatch({
+      type: "SET_LOADOUT",
+      loadout: Object.fromEntries(Object.entries(loadout)
+        .map(([slot, item]) => [slot, applyRecommendedEnchant(item, profile, true)])),
+    });
   }
 
   function clearGearEnchants(): void {
-    setLoadout((current) => Object.fromEntries(Object.entries(current).map(([slot, item]) => {
-      const enhancements = (item.enhancements ?? []).filter((enhancement) => enhancement.kind !== "ENCHANT");
-      return [slot, { ...item, enhancements: enhancements.length ? enhancements : undefined }];
-    })));
-    setActiveEnchantSlot(null);
+    dispatch({ type: "CLEAR_ENCHANTS" });
   }
 
   return (
@@ -276,7 +153,7 @@ export function GearPlanner() {
         <div><p className="font-display text-lg leading-none text-stone-100">Ascension Armory</p><p className="mt-1 text-[10px] uppercase tracking-[.24em] text-amber-500/80">Conquest Gear Lab</p></div>
         <div className="ml-auto hidden items-center gap-6 text-sm text-stone-500 md:flex"><a className="text-amber-300" href="#planner">Planner</a><a href="#weights">EP Weights</a><a href="#about">Mechanics</a></div>
         <div className="keyboard-hints" aria-label="Keyboard shortcuts"><span><kbd>Esc</kbd> Close</span><span><kbd>C</kbd> Class</span><span><kbd>I</kbd> Import</span><span><kbd>Ctrl S</kbd> Save</span></div>
-        <button className="secondary-button ml-4" onClick={() => setImporterOpen(true)}><Upload size={15} /> Import gear</button>
+        <button className="secondary-button ml-4" onClick={() => dispatch({ type: "OPEN_DIALOG", dialog: { type: "import" } })}><Upload size={15} /> Import gear</button>
         <button className="secondary-button ml-2" onClick={saveBuildNow} aria-live="polite">
           {saveConfirmed ? <Check size={15} /> : <Save size={15} />} {saveConfirmed ? "Build saved" : "Save build"}
         </button>
@@ -286,17 +163,17 @@ export function GearPlanner() {
         <header className="mb-7 flex flex-col justify-between gap-5 lg:flex-row lg:items-end">
           <div><p className="eyebrow">Conquest of Azeroth / Gear planner</p><h1 className="mt-2 font-display text-3xl text-stone-100 sm:text-4xl">Find the right gear for your path.</h1><p className="mt-2 max-w-xl text-sm leading-6 text-stone-500">Choose your class and specialization, then compare every slot against its recommended stat priority.</p></div>
           <div className="flex flex-wrap gap-3">
-            <button className="secondary-button md:hidden" onClick={() => setImporterOpen(true)}><Upload size={15} /> Import gear</button>
-            <button className="field-control class-profile-control min-w-60" onClick={() => setSelectorOpen(true)}><span>Class & specialization</span><strong>{profileName}</strong><small>{selectedProfile ? `${selectedProfile.spec.role} · ${selectedProfile.context.toUpperCase()}` : "Select profile"}</small></button>
-            <LevelSlider level={level} onChange={setLevel} />
+            <button className="secondary-button md:hidden" onClick={() => dispatch({ type: "OPEN_DIALOG", dialog: { type: "import" } })}><Upload size={15} /> Import gear</button>
+            <button className="field-control class-profile-control min-w-60" onClick={() => dispatch({ type: "OPEN_DIALOG", dialog: { type: "class" } })}><span>Class & specialization</span><strong>{profileName}</strong><small>{selectedProfile ? `${selectedProfile.spec.role} · ${selectedProfile.context.toUpperCase()}` : "Select profile"}</small></button>
+            <LevelSlider level={level} onChange={(nextLevel) => dispatch({ type: "SET_LEVEL", level: nextLevel })} />
           </div>
         </header>
 
         <div className="planner-layout" id="planner">
           <section className="armory-panel">
-            <div className="panel-heading"><div><p className="eyebrow">Paper doll</p><h2>Equipped loadout</h2></div><div className="panel-heading-actions"><button type="button" className="auto-enchant-button" disabled={Object.keys(loadout).length === 0} onClick={autoEnchantGear}><Sparkles size={13} /> Auto-enchant gear</button><button type="button" className="clear-enchants-button" disabled={!hasGearEnchants} onClick={clearGearEnchants}><X size={13} /> Clear enchants</button><button type="button" className="clear-loadout-button" disabled={Object.keys(loadout).length === 0} onClick={() => { setLoadout({}); setActiveEnchantSlot(null); }}><Trash2 size={13} /> Clear all gear</button><div className="total-ep"><span>Total score</span><strong>{totalEp.toFixed(1)} <small>EP</small></strong></div></div></div>
+            <div className="panel-heading"><div><p className="eyebrow">Paper doll</p><h2>Equipped loadout</h2></div><div className="panel-heading-actions"><button type="button" className="auto-enchant-button" disabled={Object.keys(loadout).length === 0} onClick={autoEnchantGear}><Sparkles size={13} /> Auto-enchant gear</button><button type="button" className="clear-enchants-button" disabled={!hasGearEnchants} onClick={clearGearEnchants}><X size={13} /> Clear enchants</button><button type="button" className="clear-loadout-button" disabled={Object.keys(loadout).length === 0} onClick={() => dispatch({ type: "CLEAR_LOADOUT" })}><Trash2 size={13} /> Clear all gear</button><div className="total-ep"><span>Total score</span><strong>{totalEp.toFixed(1)} <small>EP</small></strong></div></div></div>
             <div className="paper-doll-grid">
-              <div className="slot-column">{leftSlots.map((slot) => <SlotCard key={slot} slot={slot} item={loadout[slot]} level={level} profile={profile} side="left" onClick={() => openSlot(slot)} onClear={() => clearSlot(slot)} onEnchant={() => setActiveEnchantSlot(slot)} />)}</div>
+              <div className="slot-column">{LEFT_EQUIPMENT_SLOTS.map((slot) => <SlotCard key={slot} slot={slot} item={loadout[slot]} level={level} profile={profile} side="left" onClick={() => openSlot(slot)} onClear={() => clearSlot(slot)} onEnchant={() => dispatch({ type: "OPEN_DIALOG", dialog: { type: "enchant", slot } })} />)}</div>
               <div className="character-stage">
                 <div className="model-nameplate"><span>Level {level}</span><strong>{selectedProfile ? `${selectedProfile.spec.name} ${selectedProfile.classInfo.name}` : "Azerothian Hero"}</strong></div>
                 <div className="character-glow" />
@@ -305,20 +182,20 @@ export function GearPlanner() {
                 <div className="model-turn-control"><small>Equipped appearance</small></div>
                 <div className="realm-chip"><span /> Conquest of Azeroth</div>
               </div>
-              <div className="slot-column">{rightSlots.map((slot) => <SlotCard key={slot} slot={slot} item={loadout[slot]} level={level} profile={profile} side="right" onClick={() => openSlot(slot)} onClear={() => clearSlot(slot)} onEnchant={() => setActiveEnchantSlot(slot)} />)}</div>
+              <div className="slot-column">{RIGHT_EQUIPMENT_SLOTS.map((slot) => <SlotCard key={slot} slot={slot} item={loadout[slot]} level={level} profile={profile} side="right" onClick={() => openSlot(slot)} onClear={() => clearSlot(slot)} onEnchant={() => dispatch({ type: "OPEN_DIALOG", dialog: { type: "enchant", slot } })} />)}</div>
             </div>
-            <div className="mobile-slot-grid">{[...leftSlots, ...rightSlots].map((slot) => <SlotCard key={slot} slot={slot} item={loadout[slot]} level={level} profile={profile} side="left" onClick={() => openSlot(slot)} onClear={() => clearSlot(slot)} onEnchant={() => setActiveEnchantSlot(slot)} />)}</div>
+            <div className="mobile-slot-grid">{[...LEFT_EQUIPMENT_SLOTS, ...RIGHT_EQUIPMENT_SLOTS].map((slot) => <SlotCard key={slot} slot={slot} item={loadout[slot]} level={level} profile={profile} side="left" onClick={() => openSlot(slot)} onClear={() => clearSlot(slot)} onEnchant={() => dispatch({ type: "OPEN_DIALOG", dialog: { type: "enchant", slot } })} />)}</div>
           </section>
 
           <aside className="weights-panel" id="weights">
             <div className="panel-heading compact"><div><p className="eyebrow">Scoring model</p><h2>EP stat weights</h2></div><Settings2 className="text-amber-500" size={19} /></div>
-            <button className="profile-select w-[calc(100%-30px)] text-left" onClick={() => setSelectorOpen(true)}><div><span>Active class profile</span><strong>{profileName}</strong></div><ChevronDown size={16} /></button>
+            <button className="profile-select w-[calc(100%-30px)] text-left" onClick={() => dispatch({ type: "OPEN_DIALOG", dialog: { type: "class" } })}><div><span>Active class profile</span><strong>{profileName}</strong></div><ChevronDown size={16} /></button>
             {selectedProfile ? <div className="stat-priority-card"><span>{selectedProfile.context.toUpperCase()} stat priority</span><p>{selectedProfile.priority}</p><small>{selectedProfile.spec.weapon.style} · {selectedProfile.spec.primaryStats.join(" / ") || "Flexible primary stat"}</small></div> : null}
             <div className="weight-table">
               <div className="weight-header"><span>Attribute</span><span>Weight</span></div>
-              {editableWeightKeys.map((key) => <label className="weight-row" key={key}><span>{STAT_LABELS[key]}</span><input type="number" step="0.01" value={weights[key] ?? 0} onChange={(event) => setWeights((current) => ({ ...current, [key]: Number(event.target.value) }))} /></label>)}
+              {editableWeightKeys.map((key) => <label className="weight-row" key={key}><span>{STAT_LABELS[key]}</span><input type="number" step="0.01" value={weights[key] ?? 0} onChange={(event) => dispatch({ type: "SET_WEIGHT", stat: key, value: Number(event.target.value) })} /></label>)}
             </div>
-            <button className="reset-button" onClick={() => setWeights(selectedProfile?.weights ?? fallbackWeights)}><RotateCcw size={14} /> Reset class priority</button>
+            <button className="reset-button" onClick={() => dispatch({ type: "RESET_WEIGHTS", weights: selectedProfile?.weights ?? FALLBACK_WEIGHTS })}><RotateCcw size={14} /> Reset class priority</button>
             <div className="hybrid-callout"><Sparkles size={18} /><div><p>Class priority active</p><span>Gear results are ranked automatically using the selected specialization’s ordered {selectedProfile?.context.toUpperCase() ?? "PvE"} stats.</span></div></div>
             <div className="system-power-card">
               <div className="system-power-heading"><EyeOff size={16} /><div><p>Hidden Ascension power</p><span>Reported by the live CoA client, separate from EP</span></div></div>
@@ -350,31 +227,21 @@ export function GearPlanner() {
         context={selectedProfile?.context}
         profileLabel={profileName}
         allowedWeaponTypes={activeSlot === "RANGED" ? selectedProfile?.spec.weapon.allowedTypes : undefined}
-        onEquip={(item) => setLoadout((current) => ({ ...current, [activeSlot]: item }))}
-        onClose={() => setActiveSlot(null)}
+        onEquip={(item) => dispatch({ type: "EQUIP_ITEM", slot: activeSlot, item })}
+        onClose={() => dispatch({ type: "CLOSE_DIALOG" })}
       /> : null}
       {activeEnchantSlot && loadout[activeEnchantSlot] ? <EnchantEditorModal
         item={loadout[activeEnchantSlot]}
         profile={profile}
-        onApply={(enchant) => setLoadout((current) => {
-          const item = current[activeEnchantSlot];
-          if (!item) return current;
-          const enhancements = [...(item.enhancements ?? []).filter((enhancement) => enhancement.kind !== "ENCHANT"), enchant];
-          return { ...current, [activeEnchantSlot]: { ...item, enhancements } };
-        })}
-        onRemove={() => setLoadout((current) => {
-          const item = current[activeEnchantSlot];
-          if (!item) return current;
-          const enhancements = (item.enhancements ?? []).filter((enhancement) => enhancement.kind !== "ENCHANT");
-          return { ...current, [activeEnchantSlot]: { ...item, enhancements: enhancements.length ? enhancements : undefined } };
-        })}
-        onClose={() => setActiveEnchantSlot(null)}
+        onApply={(enchant) => dispatch({ type: "APPLY_ENCHANT", slot: activeEnchantSlot, enchant })}
+        onRemove={() => dispatch({ type: "REMOVE_ENCHANT", slot: activeEnchantSlot })}
+        onClose={() => dispatch({ type: "CLOSE_DIALOG" })}
       /> : null}
       {importerOpen ? <GearImportModal
-        onImport={(importedLevel, importedLoadout) => { setLevel(importedLevel); setLoadout(Object.fromEntries(Object.entries(importedLoadout).map(([slot, item]) => [slot, applyRecommendedEnchant(item, profile)]))); setActiveSlot(null); }}
-        onClose={() => setImporterOpen(false)}
+        onImport={(importedLevel, importedLoadout) => dispatch({ type: "IMPORT_LOADOUT", level: importedLevel, loadout: Object.fromEntries(Object.entries(importedLoadout).map(([slot, item]) => [slot, applyRecommendedEnchant(item, profile)])) })}
+        onClose={() => dispatch({ type: "CLOSE_DIALOG" })}
       /> : null}
-      {storageReady && selectorOpen ? <CoAClassSelector current={selection} onSelect={chooseClass} onClose={selection ? () => setSelectorOpen(false) : undefined} /> : null}
+      {storageReady && selectorOpen ? <CoAClassSelector current={selection} onSelect={chooseClass} onClose={selection ? () => dispatch({ type: "CLOSE_DIALOG" }) : undefined} /> : null}
     </main>
   );
 }

@@ -1,4 +1,4 @@
-import { isCoASelection } from "@/lib/coa";
+import { isCoASelection, resolveCoAProfile } from "@/lib/coa";
 import type { CoASelection } from "@/types/coa";
 import {
   EQUIPMENT_SLOTS,
@@ -12,7 +12,10 @@ import {
   type HybridScalingRule,
   type StatKey,
   type StatMap,
+  withoutSystemPowerWeights,
 } from "@/domain/gear";
+import { FALLBACK_WEIGHTS } from "./planner.constants";
+import type { PlannerSnapshot } from "./planner.reducer";
 
 export const BUILD_STORAGE_KEY = "ascension-armory:planner-build";
 export const LEGACY_BUILD_STORAGE_KEY = "conquest-gear:planner-build";
@@ -217,4 +220,34 @@ export function makePlannerBuild(level: number, selection: CoASelection | undefi
     weights,
     loadout,
   };
+}
+
+export function readPlannerSnapshot(storage: Pick<Storage, "getItem">): PlannerSnapshot | undefined {
+  const savedBuild = parsePlannerBuild(storage.getItem(BUILD_STORAGE_KEY))
+    ?? parsePlannerBuild(storage.getItem(LEGACY_BUILD_STORAGE_KEY));
+  if (savedBuild) {
+    const resolved = savedBuild.selection ? resolveCoAProfile(savedBuild.selection) : undefined;
+    const weights = Object.keys(savedBuild.weights).length
+      ? savedBuild.weights
+      : resolved?.weights ?? FALLBACK_WEIGHTS;
+    return {
+      level: savedBuild.level,
+      ...(savedBuild.selection ? { selection: savedBuild.selection } : {}),
+      weights: withoutSystemPowerWeights(weights),
+      loadout: savedBuild.loadout,
+    };
+  }
+
+  try {
+    const legacyProfile: unknown = JSON.parse(storage.getItem(LEGACY_PROFILE_STORAGE_KEY) ?? "null");
+    if (!isCoASelection(legacyProfile)) return undefined;
+    return {
+      level: 60,
+      selection: legacyProfile,
+      weights: resolveCoAProfile(legacyProfile)?.weights ?? FALLBACK_WEIGHTS,
+      loadout: {},
+    };
+  } catch {
+    return undefined;
+  }
 }

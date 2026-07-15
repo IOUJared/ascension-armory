@@ -1,6 +1,13 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { makePlannerBuild, parsePlannerBuild } from "../src/lib/planner-storage";
+import {
+  BUILD_STORAGE_KEY,
+  LEGACY_BUILD_STORAGE_KEY,
+  LEGACY_PROFILE_STORAGE_KEY,
+  makePlannerBuild,
+  parsePlannerBuild,
+  readPlannerSnapshot,
+} from "../src/features/planner/planner-storage";
 import { makeGearItem } from "./fixtures";
 
 test("saved planner builds round-trip without losing loadout data", () => {
@@ -49,4 +56,26 @@ test("invalid JSON and unsupported storage versions are ignored", () => {
   assert.equal(parsePlannerBuild("not-json"), undefined);
   assert.equal(parsePlannerBuild(JSON.stringify({ version: 2 })), undefined);
   assert.equal(parsePlannerBuild(null), undefined);
+});
+
+test("planner restoration prefers the current build and removes legacy Power weights", () => {
+  const current = makePlannerBuild(35, undefined, { intellect: 1, pve_power: 100 }, {});
+  const values = new Map<string, string>([
+    [BUILD_STORAGE_KEY, JSON.stringify(current)],
+    [LEGACY_BUILD_STORAGE_KEY, JSON.stringify(makePlannerBuild(20, undefined, { strength: 1 }, {}))],
+  ]);
+  const restored = readPlannerSnapshot({ getItem: (key) => values.get(key) ?? null });
+  assert.equal(restored?.level, 35);
+  assert.deepEqual(restored?.weights, { intellect: 1 });
+});
+
+test("legacy profile-only storage remains supported", () => {
+  const values = new Map<string, string>([[
+    LEGACY_PROFILE_STORAGE_KEY,
+    JSON.stringify({ classSlug: "starcaller", specName: "Sentinel", context: "pve" }),
+  ]]);
+  const restored = readPlannerSnapshot({ getItem: (key) => values.get(key) ?? null });
+  assert.equal(restored?.level, 60);
+  assert.equal(restored?.selection?.specName, "Sentinel");
+  assert.equal(restored?.weights.intellect, 1);
 });
