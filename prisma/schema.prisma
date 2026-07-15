@@ -63,35 +63,40 @@ enum StatSource {
   CUSTOM_EFFECT
 }
 
+enum BuildContext {
+  PVE
+  PVP
+}
+
 model Item {
-  id               BigInt        @id
-  name             String
-  slug             String?
-  quality          ItemQuality
-  itemLevel        Int
-  requiredLevel    Int            @default(1)
-  slot             EquipmentSlot?
-  inventoryType    Int?
-  armorType        String?
-  armor            Float          @default(0)
-  weaponMinDamage  Float?
-  weaponMaxDamage  Float?
-  weaponSpeed      Float?
-  weaponDps        Float?
-  icon             String?
-  sourceUrl        String
-  sourceRealm      String          @default("CONQUEST_OF_AZEROTH")
-  rawTooltipHtml   String
-  rawPayload       Json            @db.JsonB
-  contentHash      String
-  sourceUpdatedAt  DateTime?
-  ingestedAt       DateTime        @default(now())
-  updatedAt        DateTime        @updatedAt
-  stats            ItemStat[]
-  sockets          ItemSocket[]
-  effects          ItemEffect[]
-  scaleSnapshots   ItemScaleSnapshot[]
-  equippedIn       EquippedItem[]
+  id              BigInt              @id
+  name            String
+  slug            String?
+  quality         ItemQuality
+  itemLevel       Int
+  requiredLevel   Int                 @default(1)
+  slot            EquipmentSlot?
+  inventoryType   Int?
+  armorType       String?
+  armor           Float               @default(0)
+  weaponMinDamage Float?
+  weaponMaxDamage Float?
+  weaponSpeed     Float?
+  weaponDps       Float?
+  icon            String?
+  sourceUrl       String
+  sourceRealm     String              @default("CONQUEST_OF_AZEROTH")
+  rawTooltipHtml  String
+  rawPayload      Json                @db.JsonB
+  contentHash     String
+  sourceUpdatedAt DateTime?
+  ingestedAt      DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+  stats           ItemStat[]
+  sockets         ItemSocket[]
+  effects         ItemEffect[]
+  scaleSnapshots  ItemScaleSnapshot[]
+  equippedIn      EquippedItem[]
 
   @@index([slot, requiredLevel, itemLevel])
   @@index([name])
@@ -119,13 +124,13 @@ model ItemScaleSnapshot {
 }
 
 model StatDefinition {
-  key          String    @id
+  key          String              @id
   label        String
-  unit         String    @default("flat")
+  unit         String              @default("flat")
   category     String
   description  String?
-  isCustom     Boolean   @default(false)
-  isWeightable Boolean   @default(true)
+  isCustom     Boolean             @default(false)
+  isWeightable Boolean             @default(true)
   stats        ItemStat[]
   weights      ProfileStatWeight[]
   gemStats     GemStat[]
@@ -157,28 +162,28 @@ model ItemSocket {
 }
 
 model ItemEffect {
-  id           BigInt     @id @default(autoincrement())
-  itemId       BigInt
-  kind         EffectKind
-  description  String
-  spellId      BigInt?
-  coefficient  Float?
-  procChance   Float?
-  cooldownMs   Int?
-  customData   Json?      @db.JsonB
-  item         Item       @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  id          BigInt     @id @default(autoincrement())
+  itemId      BigInt
+  kind        EffectKind
+  description String
+  spellId     BigInt?
+  coefficient Float?
+  procChance  Float?
+  cooldownMs  Int?
+  customData  Json?      @db.JsonB
+  item        Item       @relation(fields: [itemId], references: [id], onDelete: Cascade)
 
   @@index([itemId, kind])
 }
 
 model Gem {
-  id            BigInt      @id
+  id            BigInt        @id
   name          String
   quality       ItemQuality
   color         SocketColor
-  requiredLevel Int         @default(1)
+  requiredLevel Int           @default(1)
   icon          String?
-  customData    Json?       @db.JsonB
+  customData    Json?         @db.JsonB
   stats         GemStat[]
   equipped      EquippedGem[]
 }
@@ -194,16 +199,16 @@ model GemStat {
 }
 
 model MysticEnchant {
-  id             BigInt    @id
+  id             BigInt                  @id
   name           String
   description    String
-  tier           Int       @default(1)
-  requiredLevel  Int       @default(1)
+  tier           Int                     @default(1)
+  requiredLevel  Int                     @default(1)
   allowedSlots   EquipmentSlot[]
   stackingGroup  String?
-  maxStacks      Int       @default(1)
-  scalingFormula Json?     @db.JsonB
-  customData     Json?     @db.JsonB
+  maxStacks      Int                     @default(1)
+  scalingFormula Json?                   @db.JsonB
+  customData     Json?                   @db.JsonB
   stats          MysticEnchantStat[]
   equipped       EquippedMysticEnchant[]
 }
@@ -211,11 +216,11 @@ model MysticEnchant {
 model MysticEnchantStat {
   mysticEnchantId BigInt
   statKey         String
-  value            Float
-  perLevel         Float    @default(0)
-  hybridRule       Json?    @db.JsonB
-  mysticEnchant    MysticEnchant @relation(fields: [mysticEnchantId], references: [id], onDelete: Cascade)
-  stat             StatDefinition @relation(fields: [statKey], references: [key])
+  value           Float
+  perLevel        Float          @default(0)
+  hybridRule      Json?          @db.JsonB
+  mysticEnchant   MysticEnchant  @relation(fields: [mysticEnchantId], references: [id], onDelete: Cascade)
+  stat            StatDefinition @relation(fields: [statKey], references: [key])
 
   @@id([mysticEnchantId, statKey])
 }
@@ -230,20 +235,24 @@ model User {
 }
 
 model CharacterProfile {
-  id            String              @id @default(cuid())
-  userId        String?
-  name          String
-  level         Int                 @default(60)
-  realm         String              @default("CONQUEST_OF_AZEROTH")
-  buildNotes    String?
-  hybridScaling Json?               @db.JsonB
-  createdAt     DateTime             @default(now())
-  updatedAt     DateTime             @updatedAt
-  user          User?                @relation(fields: [userId], references: [id], onDelete: Cascade)
-  weights       ProfileStatWeight[]
-  loadouts      Loadout[]
+  id                String              @id @default(cuid())
+  userId            String?
+  name              String
+  level             Int                 @default(60)
+  realm             String              @default("CONQUEST_OF_AZEROTH")
+  classKey          String?
+  specializationKey String?
+  context           BuildContext        @default(PVE)
+  buildNotes        String?
+  hybridScaling     Json?               @db.JsonB
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  user              User?               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  weights           ProfileStatWeight[]
+  loadouts          Loadout[]
 
   @@index([userId])
+  @@index([classKey, specializationKey])
 }
 
 model ProfileStatWeight {
@@ -272,14 +281,14 @@ model Loadout {
 }
 
 model EquippedItem {
-  id           String       @id @default(cuid())
+  id           String                  @id @default(cuid())
   loadoutId    String
   itemId       BigInt
   slot         EquipmentSlot
-  randomSuffix Json?        @db.JsonB
-  customStats  Json?        @db.JsonB
-  loadout      Loadout      @relation(fields: [loadoutId], references: [id], onDelete: Cascade)
-  item         Item         @relation(fields: [itemId], references: [id])
+  randomSuffix Json?                   @db.JsonB
+  customStats  Json?                   @db.JsonB
+  loadout      Loadout                 @relation(fields: [loadoutId], references: [id], onDelete: Cascade)
+  item         Item                    @relation(fields: [itemId], references: [id])
   gems         EquippedGem[]
   enchants     EquippedMysticEnchant[]
 
@@ -300,9 +309,9 @@ model EquippedGem {
 model EquippedMysticEnchant {
   equippedItemId  String
   mysticEnchantId BigInt
-  rank             Int            @default(1)
-  equippedItem     EquippedItem   @relation(fields: [equippedItemId], references: [id], onDelete: Cascade)
-  mysticEnchant    MysticEnchant  @relation(fields: [mysticEnchantId], references: [id])
+  rank            Int           @default(1)
+  equippedItem    EquippedItem  @relation(fields: [equippedItemId], references: [id], onDelete: Cascade)
+  mysticEnchant   MysticEnchant @relation(fields: [mysticEnchantId], references: [id])
 
   @@id([equippedItemId, mysticEnchantId])
 }

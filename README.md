@@ -43,6 +43,21 @@ GitHub Pages cannot read a running game process, and Ascension does not expose a
 
 The import updates the planner’s character level and equipped slots, then the existing local build persistence saves the result. AA2 exports include the game client’s item metadata and current stat snapshot, so an equipped item can be imported even when it is not yet in the published catalog. The export contains no login or account credentials.
 
+## Build and database persistence
+
+The deployed static planner saves one versioned build in the browser's local storage. It stores the selected CoA class and specialization, level, EP weights, equipment, and enchants; it does not use cookies, create an account, or send the build to a server.
+
+PostgreSQL is the ingestion authority and also contains an optional account/profile model for a future server-backed build service. `CharacterProfile` records now carry `classKey`, `specializationKey`, and PvE/PvP context alongside weights and loadouts. GitHub Pages does not connect to these user tables.
+
+Fresh development databases are reproducible from the committed migration:
+
+```bash
+npm run db:migrate
+npm run db:seed
+```
+
+Use `npm run db:migrate:deploy` in a managed environment and `npm run db:status` to inspect migration state. A database created before migration tracking must be brought in sync and baselined once; see Prisma's baseline workflow before running the initial migration against existing tables.
+
 ## GitHub Pages deployment
 
 The app uses Next.js static export and deploys through `.github/workflows/deploy-pages.yml`. The workflow automatically accounts for the repository subpath, builds the `out/` directory, and publishes it through GitHub Pages whenever `main` is pushed.
@@ -215,7 +230,7 @@ src/
 │   ├── enchant-editor-modal.tsx
 │   ├── gear-import-modal.tsx    Addon instructions and AA1 import flow
 │   └── item-picker-modal.tsx    Ranking and side-by-side comparison
-├── data/demo-items.ts           Zero-setup development fixture
+├── data/                        Published class and catalog metadata
 ├── domain/gear/
 │   ├── vocabulary.ts            Slots, stat keys and display labels
 │   ├── types.ts                 Gear, enhancement and acquisition models
@@ -244,7 +259,9 @@ src/
 └── types/coa.ts                 CoA class and specialization contracts
 prisma/
 ├── schema.prisma                PostgreSQL schema
+├── migrations/                  Reproducible PostgreSQL migration history
 └── seed.ts                      Stat definitions
+prisma.config.ts                 Schema, migration and seed configuration
 tooling/extraction/              Client, realm-cache and AtlasLoot decoders
 tooling/importers/               Normalized PostgreSQL import adapters
 tooling/enrichment/              Source joins and candidate generation

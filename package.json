@@ -14,6 +14,8 @@
     "check": "npm run typecheck && npm run lint && npm test && npm run validate:catalog",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
+    "db:migrate:deploy": "prisma migrate deploy",
+    "db:status": "prisma migrate status",
     "db:seed": "tsx prisma/seed.ts",
     "ingest:items": "tsx tooling/importers/ingest-items.ts",
     "extract:client-items": "uv run --with mpyq python tooling/extraction/extract-client-items.py",
@@ -35,26 +37,24 @@
     "publish:catalog": "npm run export:catalog && npm run validate:catalog",
     "publish:catalog-existing": "npm run shard:catalog && npm run validate:catalog"
   },
-  "prisma": {
-    "seed": "tsx prisma/seed.ts"
-  },
   "dependencies": {
     "@prisma/client": "6.19.3",
-    "lucide-react": "latest",
-    "next": "latest",
-    "react": "latest",
-    "react-dom": "latest"
+    "lucide-react": "1.24.0",
+    "next": "16.2.10",
+    "react": "19.2.7",
+    "react-dom": "19.2.7"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "latest",
-    "@types/node": "latest",
-    "@types/react": "latest",
-    "@types/react-dom": "latest",
-    "eslint": "latest",
-    "eslint-config-next": "latest",
+    "@tailwindcss/postcss": "4.3.2",
+    "@types/node": "26.1.1",
+    "@types/react": "19.2.17",
+    "@types/react-dom": "19.2.3",
+    "dotenv": "16.6.1",
+    "eslint": "9.39.5",
+    "eslint-config-next": "16.2.10",
     "prisma": "6.19.3",
-    "tailwindcss": "latest",
-    "tsx": "latest",
-    "typescript": "latest"
+    "tailwindcss": "4.3.2",
+    "tsx": "4.23.1",
+    "typescript": "6.0.3"
   }
 }

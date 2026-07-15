@@ -1,9 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { SLOT_ICON } from "@/data/demo-items";
 import { ascensionIconUrl } from "@/lib/icons";
 import type { EquipmentSlot, GearItem } from "@/domain/gear";
+import { SLOT_ICON } from "./slot-icons";
 
 interface GameItemIconProps {
   item?: GearItem;
