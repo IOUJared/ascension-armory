@@ -61,6 +61,19 @@ local function TooltipLines(link)
   return lines
 end
 
+local function TooltipArmor(lines)
+  for _, line in ipairs(lines or {}) do
+    for _, text in ipairs({ line.left, line.right }) do
+      if text then
+        local clean = string.gsub(string.gsub(text, "|c%x%x%x%x%x%x%x%x", ""), "|r", "")
+        local armor = string.match(clean, "^%s*(%d+)%s+[Aa]rmor%s*$")
+        if armor then return tonumber(armor) end
+      end
+    end
+  end
+  return nil
+end
+
 local function Snapshot(candidate)
   local query = candidate.link or candidate.id
   local name, link, quality, itemLevel, requiredLevel, itemType, itemSubType,
@@ -71,6 +84,12 @@ local function Snapshot(candidate)
   for key, value in pairs(GetItemStats(link) or {}) do
     if type(key) == "string" and type(value) == "number" then stats[key] = value end
   end
+  local tooltipLines = TooltipLines(link)
+  -- CoA can override the client-template armor shown by GetItemStats. Wait for
+  -- the rendered tooltip and use its exact armor line as the live authority.
+  if stats.RESISTANCE0_NAME and (not tooltipLines or #tooltipLines == 0) then return nil end
+  local tooltipArmor = TooltipArmor(tooltipLines)
+  if tooltipArmor then stats.RESISTANCE0_NAME = tooltipArmor end
   return {
     id = candidate.id,
     discoveryLink = candidate.link,
@@ -90,16 +109,16 @@ local function Snapshot(candidate)
     classID = InstantValue("GetItemClassID", candidate.id),
     subClassID = InstantValue("GetItemSubClassID", candidate.id),
     stats = stats,
-    tooltip = TooltipLines(link),
+    tooltip = tooltipLines,
     playerLevel = UnitLevel("player"),
     capturedAt = time(),
     sourceRealm = GetRealmName(),
   }
 end
 
-local function Enqueue(candidate)
+local function Enqueue(candidate, force)
   if AscensionArmoryCatalogDB and AscensionArmoryCatalogDB.records
-    and AscensionArmoryCatalogDB.records[tostring(candidate.id)] then return end
+    and AscensionArmoryCatalogDB.records[tostring(candidate.id)] and not force then return end
   local key = tostring(candidate.id) .. "|" .. tostring(candidate.link or "")
   if queued[key] then return end
   queued[key] = true
@@ -241,11 +260,20 @@ local function RetryFailures()
   BeginQueue("previously unresolved")
 end
 
+local function RefreshArmor()
+  queue, queueHead, queued, current = {}, 1, {}, nil
+  for _, itemID in ipairs(AscensionArmoryArmorCandidates or {}) do
+    Enqueue({ id = itemID }, true)
+  end
+  BeginQueue("armor-tooltip refresh")
+end
+
 SLASH_ASCENSIONARMORYCATALOG1 = "/aacatalog"
 SlashCmdList.ASCENSIONARMORYCATALOG = function(command)
   command = string.lower((command or ""):match("^%s*(.-)%s*$"))
   if command == "stop" then running = false; Message("Catalog scan paused.")
   elseif command == "status" then Status()
   elseif command == "retry" then RetryFailures()
+  elseif command == "armor" then RefreshArmor()
   else StartScan() end
 end

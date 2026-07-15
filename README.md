@@ -83,6 +83,12 @@ npm run ingest:addon-catalog -- \
 npm run export:catalog
 ```
 
+CoA may override the template armor returned by `GetItemStats`. The scanner
+waits for the rendered item tooltip and treats its exact `N Armor` line as the
+authority. After updating an older catalog, run `/aacatalog armor` to force a
+targeted refresh of every armor-bearing item without rescanning jewelry and
+weapons.
+
 After the base discoveries are verified, `generate:worldforged-upgrades` finds
 their generated item IDs in the installed client index. A subsequent
 `generate:addon-candidates` and `/aacatalog` pass asks the current realm to
@@ -130,9 +136,10 @@ npm run export:catalog
 ```
 
 Use `/aascale ITEM_ID [MIN_LEVEL] [MAX_LEVEL]` for another item, and
-`/aascale status` or `/aascale stop` while it runs. The planner selects an
-exact captured snapshot for its current character level and labels it as
-scaled; it never interpolates missing levels.
+`/aascale status` or `/aascale stop` while it runs. `/aascale refresh` forces
+new rendered-tooltip snapshots for every scaling candidate. The planner
+selects an exact captured snapshot for its current character level and labels
+it as scaled; it never interpolates missing levels.
 
 To resolve every current-realm item backed by `ScalingStatDistribution`,
 generate the compact list and run the bulk exact-level scan:

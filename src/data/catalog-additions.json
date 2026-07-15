@@ -18,6 +18,13 @@
         "armor": 84
       }
     },
+    {
+      "id": "354178",
+      "verification": "User-verified current CoA in-game tooltip, 2026-07-15",
+      "overrides": {
+        "armor": 14
+      }
+    },
     { "id": "23169" },
     { "id": "2061226" },
     { "id": "4732" },

@@ -103,6 +103,13 @@ async function main(): Promise<void> {
         ? "Worldforged upgrade; acquisition follows the base item."
         : undefined;
     const acquisitionSource = acquisition(atlasSource, sourceNote);
+    const authorityLabel = dataSource === "COA_INGAME_SCAN"
+      ? "Current in-game scan"
+      : dataSource === "USER_VERIFIED"
+        ? "Current in-game tooltip"
+        : dataSource === "COA_REALM_CACHE"
+          ? "CoA realm cache"
+          : "Player import";
     return [{
       id: itemId,
       name: item.name,
@@ -133,13 +140,13 @@ async function main(): Promise<void> {
       })) } : {}),
       ...(acquisitionSource ? { acquisition: acquisitionSource } : {}),
       source: dungeonVariantById.has(itemId)
-        ? `${dataSource === "COA_INGAME_SCAN" ? "Current in-game scan" : "CoA realm cache"} · ${dungeonVariantById.get(itemId)?.tier} dungeon · ${dungeonVariantById.get(itemId)?.section}`
+        ? `${authorityLabel} · ${dungeonVariantById.get(itemId)?.tier} dungeon · ${dungeonVariantById.get(itemId)?.section}`
         : upgradeBase.has(itemId)
-        ? `${dataSource === "COA_INGAME_SCAN" ? "Current in-game scan" : "CoA realm cache"} · Worldforged upgrade of ${upgradeBase.get(itemId)}`
+        ? `${authorityLabel} · Worldforged upgrade of ${upgradeBase.get(itemId)}`
         : worldforgedIds.has(itemId)
-        ? `${dataSource === "COA_INGAME_SCAN" ? "Current in-game scan" : "CoA realm cache"} · LootCollector discovery`
+        ? `${authorityLabel} · LootCollector discovery`
         : atlasLootById.has(itemId)
-        ? `${dataSource === "COA_INGAME_SCAN" ? "Current in-game scan" : "CoA realm cache"} · AtlasLoot ${atlasLootById.get(itemId)?.section ?? "CoA index"}`
+        ? `${authorityLabel} · AtlasLoot ${atlasLootById.get(itemId)?.section ?? "CoA index"}`
         : item.sourceUrl,
       dataSource,
       ...(worldforgedIds.has(itemId) ? { worldforged: true } : {}),

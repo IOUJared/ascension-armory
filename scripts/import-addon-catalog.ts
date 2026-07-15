@@ -48,6 +48,15 @@ function number(value: string): number {
   return Number.isFinite(parsed) ? parsed : 0;
 }
 
+function renderedTooltipArmor(tooltip: string): number | undefined {
+  const clean = tooltip.replace(/\|c[0-9a-f]{8}/gi, "").replaceAll("|r", "");
+  for (const column of clean.split(/[\n\t]/)) {
+    const match = column.match(/^\s*(\d+)\s+armor\s*$/i);
+    if (match) return number(match[1]);
+  }
+  return undefined;
+}
+
 function parse(line: string): Snapshot | null {
   const fields = line.split("~");
   if (fields[0] !== "AAI1" || !/^\d+$/.test(fields[1] ?? "") || fields.length < 19) return null;
@@ -96,7 +105,8 @@ async function main(): Promise<void> {
     for (const snapshot of batch) {
       const existing = existingById.get(snapshot.id);
       if (!existing?.sourceUrl.startsWith("realm-cache://")) continue;
-      if ((existing.armor ?? 0) !== (snapshot.stats.armor ?? 0)) cacheArmorConflicts += 1;
+      const scannedArmor = renderedTooltipArmor(snapshot.tooltip) ?? snapshot.stats.armor ?? 0;
+      if ((existing.armor ?? 0) !== scannedArmor) cacheArmorConflicts += 1;
       const cachedStats = new Map(existing.stats.map((stat) => [stat.statKey, stat.value]));
       if ((Object.entries(snapshot.stats) as Array<[StatKey, number]>).some(([key, value]) =>
         key !== "armor" && key !== "weapon_dps" && cachedStats.has(key) && cachedStats.get(key) !== value)) cacheStatConflicts += 1;
@@ -105,7 +115,8 @@ async function main(): Promise<void> {
       const id = BigInt(snapshot.id);
       const previousPayload = existingById.get(snapshot.id)?.rawPayload as { item?: { displayId?: unknown } } | null | undefined;
       const displayId = Number(previousPayload?.item?.displayId);
-      const armor = snapshot.stats.armor ?? 0;
+      const tooltipArmor = renderedTooltipArmor(snapshot.tooltip);
+      const armor = tooltipArmor ?? snapshot.stats.armor ?? 0;
       const weaponDps = snapshot.stats.weapon_dps ?? null;
       const rawPayload = {
         source: "ascension-armory-ingame-scanner", link: snapshot.link,
@@ -113,6 +124,7 @@ async function main(): Promise<void> {
         itemSubType: snapshot.itemSubType, equipLocation: snapshot.equipLocation,
         inventoryType: snapshot.inventoryType, classID: snapshot.classID,
         subClassID: snapshot.subClassID, apiStats: snapshot.stats, apiStatsRaw: snapshot.rawStats,
+        armorAuthority: tooltipArmor === undefined ? "game-api" : "rendered-tooltip",
         ...(Number.isInteger(displayId) && displayId > 0 ? { item: { displayId } } : {}),
       } satisfies Prisma.InputJsonObject;
       const data = {

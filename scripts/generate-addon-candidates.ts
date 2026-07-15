@@ -19,7 +19,7 @@ interface DungeonVariantSource {
 }
 
 interface CurrentCatalog {
-  items: Array<{ id: string; dataSource?: string }>;
+  items: Array<{ id: string; dataSource?: string; armor?: number }>;
 }
 
 async function main(): Promise<void> {
@@ -76,11 +76,20 @@ async function main(): Promise<void> {
     if (candidates.has(item.id) || alreadyCurrent.has(item.id)) continue;
     candidates.set(item.id, `  { id = ${Number(item.id)}${item.baseId ? `, baseId = ${Number(item.baseId)}` : ""}, source = "atlasloot" },`);
   }
+  const armorCandidates = currentCatalog.items
+    .filter((item) => Number(item.armor) > 0)
+    .map((item) => Number(item.id));
   const output = [
     "-- Generated from LootCollector, client variants, generated dungeon tiers, and the current CoA AtlasLoot index.",
     "-- Discovery metadata only; the scanner asks the CoA realm for item data.",
     "AscensionArmoryWorldforgedCandidates = {",
     ...candidates.values(),
+    "}",
+    "",
+    "-- Existing armor-bearing catalog entries for rendered-tooltip verification.",
+    "AscensionArmoryArmorCandidates = {",
+    ...Array.from({ length: Math.ceil(armorCandidates.length / 20) }, (_, index) =>
+      `  ${armorCandidates.slice(index * 20, index * 20 + 20).join(", ")},`),
     "}",
     "",
   ].join("\n");
@@ -96,6 +105,7 @@ async function main(): Promise<void> {
     realmCacheValidation: currentCatalog.items.filter((item) => item.dataSource === "COA_REALM_CACHE").length,
     atlasLoot: atlasLoot.items.length,
     atlasLootAlreadyCurrent: atlasLoot.items.filter((item) => alreadyCurrent.has(item.id)).length,
+    armorRefresh: armorCandidates.length,
   }));
 }
 
