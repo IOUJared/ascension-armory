@@ -1,13 +1,17 @@
 local ADDON_PREFIX = "|cfff0ce78Ascension Armory:|r "
-local REQUEST_DELAY = 0.70
-local CACHED_DELAY = 0.03
-local MAX_ATTEMPTS = 3
+-- Most item-query responses arrive well below 250 ms. Four attempts preserve
+-- a full second for slower responses while avoiding multi-second stalls on
+-- IDs that do not exist on the current realm.
+local REQUEST_DELAY = 0.25
+local CACHED_DELAY = 0.01
+local MAX_ATTEMPTS = 4
 
 local scanner = CreateFrame("Frame", "AscensionArmoryCatalogScannerFrame")
 local tooltip = CreateFrame("GameTooltip", "AscensionArmoryCatalogScanTooltip", UIParent, "GameTooltipTemplate")
 tooltip:SetOwner(UIParent, "ANCHOR_NONE")
 
 local queue = {}
+local queueHead = 1
 local queued = {}
 local running = false
 local elapsed = 0
@@ -94,10 +98,16 @@ local function Snapshot(candidate)
 end
 
 local function Enqueue(candidate)
+  if AscensionArmoryCatalogDB and AscensionArmoryCatalogDB.records
+    and AscensionArmoryCatalogDB.records[tostring(candidate.id)] then return end
   local key = tostring(candidate.id) .. "|" .. tostring(candidate.link or "")
   if queued[key] then return end
   queued[key] = true
   table.insert(queue, { id = candidate.id, link = candidate.link, attempts = 0, key = key })
+end
+
+local function Remaining()
+  return math.max(0, #queue - queueHead + 1)
 end
 
 local function Store(candidate, snapshot)
@@ -144,7 +154,7 @@ local function Status()
   local failures = 0
   for _ in pairs(AscensionArmoryCatalogDB.failures) do failures = failures + 1 end
   Message(string.format("%d captured, %d queued, %d unresolved%s.",
-    AscensionArmoryCatalogDB.completed or 0, #queue, failures, running and " (scanning)" or ""))
+    AscensionArmoryCatalogDB.completed or 0, Remaining(), failures, running and " (scanning)" or ""))
 end
 
 local function FinishCurrent()
@@ -170,7 +180,10 @@ end
 local function Pump()
   local delay = FinishCurrent()
   if current then return delay end
-  current = table.remove(queue, 1)
+  -- Advancing a cursor is constant-time. table.remove(queue, 1) shifted every
+  -- remaining row on each item and became costly on five-figure scans.
+  current = queue[queueHead]
+  queueHead = queueHead + 1
   if not current then
     running = false
     Status()
@@ -200,7 +213,7 @@ scanner:SetScript("OnEvent", function(_, event, addonName)
 end)
 
 local function StartScan()
-  queue, queued, current = {}, {}, nil
+  queue, queueHead, queued, current = {}, 1, {}, nil
   for _, candidate in ipairs(AscensionArmoryWorldforgedCandidates or {}) do
     if not AscensionArmoryCatalogDB.records[tostring(candidate.id)] then Enqueue(candidate) end
   end
