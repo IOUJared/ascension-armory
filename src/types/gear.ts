@@ -61,6 +61,8 @@ export interface GearItem {
   dataSource?: "COA_INGAME_SCAN" | "COA_REALM_CACHE" | "USER_VERIFIED" | "PLAYER_IMPORT";
   /** Identified by LootCollector as an upgradeable Worldforged item. */
   worldforged?: boolean;
+  /** Base discovery item for a server-verified Worldforged upgrade record. */
+  worldforgedBaseId?: string;
 }
 
 export interface ScoredItem extends GearItem {

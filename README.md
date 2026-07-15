@@ -40,6 +40,7 @@ SavedVariables database before exporting the catalog:
 
 ```bash
 npm run import:worldforged -- --file "/path/to/WTF/Account/YOUR_ACCOUNT/SavedVariables/LootCollector.lua"
+npm run generate:worldforged-upgrades
 npm run generate:addon-candidates
 npm run export:catalog
 ```
@@ -80,6 +81,12 @@ npm run ingest:addon-catalog -- \
   --file "/path/to/WTF/Account/ACCOUNT/SavedVariables/AscensionArmoryExporter.lua"
 npm run export:catalog
 ```
+
+After the base discoveries are verified, `generate:worldforged-upgrades` finds
+their generated item IDs in the installed client index. A subsequent
+`generate:addon-candidates` and `/aacatalog` pass asks the current realm to
+verify each level-60, dungeon, raid and later upgrade record. Client-index
+values alone never enter the published catalog.
 
 ## Legacy and client-wide sources
 

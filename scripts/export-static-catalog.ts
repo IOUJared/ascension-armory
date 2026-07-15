@@ -4,11 +4,13 @@ import { prisma } from "../src/lib/db";
 import type { GearItem, StatMap } from "../src/types/gear";
 import catalogAdditions from "../src/data/catalog-additions.json";
 import worldforgedItems from "../src/data/worldforged-items.json";
+import worldforgedUpgrades from "../src/data/worldforged-upgrades.json";
 
 const outputPath = resolve(process.cwd(), process.argv[2] ?? "public/data/coa-items.json");
 
 async function main(): Promise<void> {
-  const worldforgedIds = new Set(worldforgedItems.itemIds);
+  const upgradeBase = new Map(worldforgedUpgrades.items.map((item) => [item.id, item.baseId]));
+  const worldforgedIds = new Set([...worldforgedItems.itemIds, ...worldforgedUpgrades.items.map((item) => item.id)]);
   // LootCollector identifies discovery candidates, including non-gear
   // Worldforged scrolls. It must not make a stale all-realms DBC row eligible
   // for export by itself; current realm data or a verified source must do that.
@@ -63,11 +65,14 @@ async function main(): Promise<void> {
       ...(Number.isInteger(displayId) && displayId > 0 ? { displayId } : {}),
       ...(item.effects.length ? { effects: item.effects.map((effect) => ({ kind: effect.kind, description: effect.description })) } : {}),
       ...(item.sockets.length ? { socketCount: item.sockets.length } : {}),
-      source: worldforgedIds.has(item.id.toString())
+      source: upgradeBase.has(item.id.toString())
+        ? `${dataSource === "COA_INGAME_SCAN" ? "Current in-game scan" : "CoA realm cache"} · Worldforged upgrade of ${upgradeBase.get(item.id.toString())}`
+        : worldforgedIds.has(item.id.toString())
         ? `${dataSource === "COA_INGAME_SCAN" ? "Current in-game scan" : "CoA realm cache"} · LootCollector discovery`
         : item.sourceUrl,
       dataSource,
       ...(worldforgedIds.has(item.id.toString()) ? { worldforged: true } : {}),
+      ...(upgradeBase.has(item.id.toString()) ? { worldforgedBaseId: upgradeBase.get(item.id.toString()) } : {}),
     }];
   });
 
