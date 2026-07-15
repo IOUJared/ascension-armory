@@ -350,6 +350,7 @@ export function GearPlanner() {
         profile={profile}
         context={selectedProfile?.context}
         profileLabel={profileName}
+        allowedWeaponTypes={activeSlot === "RANGED" ? selectedProfile?.spec.weapon.allowedTypes : undefined}
         onEquip={(item) => setLoadout((current) => ({ ...current, [activeSlot]: item }))}
         onClose={() => setActiveSlot(null)}
       /> : null}

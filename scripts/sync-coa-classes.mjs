@@ -3,6 +3,9 @@ import path from "node:path";
 
 const SOURCE_URL = "https://ascensionsidekick.com/data.js";
 const PREFIX = "window.ASC = ";
+const WEAPON_TYPE_OVERRIDES = {
+  "Starcaller|Sentinel": ["Bows"],
+};
 
 const response = await fetch(SOURCE_URL, {
   headers: { "user-agent": "ConquestGearPlanner/0.1 class-data sync" },
@@ -49,6 +52,7 @@ const classes = source.coaClasses.classes.map((classInfo) => ({
         main: weapon.main ?? "Any allowed weapon",
         off: weapon.off ?? "—",
         note: weapon.note ?? "",
+        ...(WEAPON_TYPE_OVERRIDES[key] ? { allowedTypes: WEAPON_TYPE_OVERRIDES[key] } : {}),
       },
     };
   }),

@@ -31,13 +31,13 @@
           "statPriority": {
             "pve": "Hit (until your specials stop missing a +3-level target) > Expertise (until your attacks stop being dodged/parried) > Agility > Critical Strike > Armor Penetration > Haste",
             "pvp": "Resilience > Stamina > Agility > Hit (to cap) > Critical Strike > Expertise > Haste",
-            "note": "Pure Physical builder-spender, but Agility (not Strength) is the primary attribute: Ancestral Might turns Agility straight into attack power and Body Builder converts 3 Agility into 1 Strength (which Ogre's Strength then re-converts to AP), so Agility scales AP through two paths while Strength only helps as an Agi sink. After the Hit/Expertise caps, stack Agility, then Crit (Brutal Strikes amplifies physical crit damage and Battle Rhythm/Blood Pact chain off critical strikes) over Armor Pen and Haste."
+            "note": "Pure Physical builder-spender, but Agility (not Strength) is the primary attribute: Ancestral Might turns Agility straight into attack power and Body Builder converts 3 Agility into 1 Strength (which Ogre's Strength then re-converts to AP), so Agility scales AP through two paths while Strength only helps as an Agi sink. After the Hit/Expertise caps, stack Agility, then Crit (Brutal Strikes amplifies physical crit damage and Battle Rhythm/Blood Pact chain off critical strikes) over Armor Pen and Haste. Live-server note: top players also rate Armor Penetration highly (some above Crit) and stack Strength through external buffs for its large AP conversion — chase group Strength/attribute buffs, and many run leather for the baseline Agility."
           },
           "weapon": {
-            "style": "Two-handed",
-            "main": "Two-hand weapon",
-            "off": "—",
-            "note": "Two-handed — Battering Ram requires a two-hander."
+            "style": "Dual-wield or two-handed",
+            "main": "One-hand (dual-wield) or two-hand weapon",
+            "off": "One-hand (when dual-wielding)",
+            "note": "Plays naturally dual-wield — Smash and Barbaric Whirl both hit \"with both weapons\" and a competitive 1H build exists — but a two-hander also works (Battering Ram rewards a 2H). Run whichever your gear favors."
           }
         },
         {
@@ -213,7 +213,7 @@
           "statPriority": {
             "pve": "Hit (until dual-wield white/special swings stop missing) > Expertise (until attacks stop being dodged/parried) > Agility > Critical Strike > Haste > Armor Penetration",
             "pvp": "Resilience > Stamina > Hit (dual-wield cap) > Expertise (until attacks stop being dodged/parried) > Agility > Critical Strike > Haste > Armor Penetration",
-            "note": "Physical DW spec scaling off AP-from-Agility (Azzinoth's Assault attack power, Oblivion attack power+Agility, Felspill attack power; Felcaked Blades/Spite add Agi). The kit is heavily crit-proc-driven — Dancing Blades (crit → off-hand AoE), Twin Fury (crit → Felfury), Chaotic (crit → Energy refund), You Cheat Gul'dan (crit-dmg) — so Crit must sit above Haste and Armor Pen, not below ArmPen as previously listed. PvP order re-fronted with Resilience > Stamina."
+            "note": "Physical DW spec scaling off AP-from-Agility (Azzinoth's Assault attack power, Oblivion attack power+Agility; Felcaked Blades/Spite add Agi). The kit is heavily crit-proc-driven — Dancing Blades (crit → off-hand AoE), Twin Fury (crit → Felfury), Chaotic (crit → Energy refund), You Cheat Gul'dan (crit-dmg) — so Crit must sit above Haste and Armor Pen, not below ArmPen as previously listed. PvP order re-fronted with Resilience > Stamina."
           },
           "weapon": {
             "style": "One-hand melee",
@@ -232,15 +232,15 @@
           ],
           "complexity": "Intermediate",
           "primaryStats": [
-            "Intellect",
-            "Spirit"
+            "Spirit",
+            "Intellect"
           ],
           "resource": "ENERGY",
           "playstyle": "Fel magic annihilation — the caster-leaning Felsworn line (Fire 13 / Shadow 15 school mix). Built around Felstrike procs and fel eruptions; a pure ranged Felfury builder-spender whose Fel Fireball filler auto-procs Felstrikes — you react to what the fel gives you.",
           "statPriority": {
-            "pve": "Spirit > Intellect > Critical Strike > Haste",
-            "pvp": "Resilience > Stamina > Spirit > Intellect > Critical Strike > Haste",
-            "note": "Now a pure ranged Felfury builder-spender — no manual melee; Felstrikes proc automatically off your Fel Fireball casts. Spirit leads because it scales spell damage (Hidden Power converts Intellect AND Spirit into spell damage) and crit (Nether Spirit), so it's a true throughput stat here, not just regen — keep Spell Hit capped, then Spirit > Intellect > Critical Strike > Haste."
+            "pve": "Spirit > Critical Strike > Intellect > Spell Power > Haste",
+            "pvp": "Resilience > Stamina > Spirit > Critical Strike > Intellect > Haste",
+            "note": "Now a pure ranged Felfury builder-spender — no manual melee; Felstrikes proc automatically off your Fel Fireball casts. Spirit leads because it scales spell damage (Hidden Power converts Intellect AND Spirit into spell damage) and crit (Nether Spirit), so it's a true throughput stat here, not just regen — keep Spell Hit capped, then Spirit > Critical Strike > Intellect > Haste (bisbeard: Spirit ~2.17 dominant, Crit ~1.3 above Intellect ~0.66)."
           },
           "weapon": {
             "style": "Caster weapon",
@@ -1206,9 +1206,9 @@
           "resource": "MANA",
           "playstyle": "Weaving fire through the class's combo system (Flame Orb, Path of Flames): DoT-laced AoE that rewards routing flames through as many targets as possible — with a Nature-school thread (15 abilities) that hints at flame-tending utility. The pack-clearing Pyromancer.",
           "statPriority": {
-            "pve": "Intellect > Spirit > Critical Strike > Haste > Spell Power",
-            "pvp": "Resilience > Stamina > Intellect > Spirit > Critical Strike > Haste > Spell Power",
-            "note": "Pure healer, so spell hit is dropped from the PvE order. The L15 passive converts Spirit directly into healing spell power and Ember Touch/Cinderheart/Kindle/Roaring Pyre/Phoenix Dive all scale off Spirit, so Spirit rides right behind the Intellect primary. PvP fronts Resilience > Stamina."
+            "pve": "Spirit > Intellect > Critical Strike > Spell Power > Haste",
+            "pvp": "Resilience > Stamina > Spirit > Intellect > Critical Strike > Haste > Spell Power",
+            "note": "Pure healer, so spell hit is dropped from the PvE order. The L15 passive converts Spirit directly into healing spell power and Ember Touch/Cinderheart/Kindle/Roaring Pyre/Phoenix Dive all scale off Spirit, so Spirit edges out Intellect as the top primary (bisbeard ~0.54 vs ~0.46), with Critical Strike the standout secondary (bisbeard's highest weight ~1.3). PvP fronts Resilience > Stamina."
           },
           "weapon": {
             "style": "Caster weapon",
@@ -1389,9 +1389,9 @@
           "resource": "MANA",
           "playstyle": "Martial weapons imbued with Moon and Stars: the kit's 5 shields and 3 defensives over an Arcane-Physical melee core make this the Starcaller's frontline line — an astral warder who guards with moonlight barriers. Role read from the kit; verify in the builder.",
           "statPriority": {
-            "pve": "Defense (crit-immune (far less Defense than retail at level 60)) > Stamina > Hit/Expertise (land Starsunder/Celestial Cleave threat swings) > Parry (feeds the Vengeance of Elune parry-proc plus Cosmic Vengeance/Lunar Blades/Starsweeper triggers) > Dodge > Block (Celestial Aegis, Blanket of Stars, Enchanted Aegis) > Agility (Attack Power via Virtue, block value) > Intellect (fuels %-mana shields: Astral Armor, Moonlit Bulwark, Cosmic Presence) > Critical Strike",
+            "pve": "Defense (crit-immune (far less Defense than retail at level 60)) > Stamina > Hit/Expertise (land Starsunder/Celestial Cleave threat swings) > Parry (feeds the Vengeance of Elune parry-proc plus Cosmic Vengeance/Lunar Blades/Starsweeper triggers) > Dodge > Block (Celestial Aegis, Blanket of Stars, Enchanted Aegis) > Agility (Attack Power via Virtue, block value) > Strength / Intellect (Moon Guard converts Strength 1:1 into Intellect, so they are effectively one stat here — fuelling the %-mana shields Moonlit Bulwark / Astral Reconstitution and the spell-power/max-mana damage scaling; a damage-leaning PvP build like Bigdaddy's itemizes heavily for Strength) > Critical Strike",
             "pvp": "Resilience > Stamina > Defense/Dodge/Parry/Block (Blanket of Stars, Cosmic Crown) > Hit/Expertise > Agility > Intellect",
-            "note": "Five shield/block talents (Blanket of Stars, Cosmic Crown, Enchanted Aegis) and a parry-gated Vengeance of Elune push Defense-capped avoidance to the top, while the kit's %-mana barriers (Astral Armor, Moonlit Bulwark) make Intellect matter more than for a typical tank."
+            "note": "Five shield/block talents (Blanket of Stars, Cosmic Crown, Enchanted Aegis) and a parry-gated Vengeance of Elune push Defense-capped avoidance to the top, while the kit's %-mana barriers (Astral Armor, Moonlit Bulwark) make Intellect matter more than for a typical tank. Moon Guard converts Strength into Intellect 1:1, so Strength doubles as your damage/mana-shield stat; and with no PvP-power stat live in COA right now, high-stat crafted/blacksmith plate (e.g. Imperial Plate) can outvalue Resilience-bearing PvP gear for a damage-leaning build (per Bigdaddy)."
           },
           "weapon": {
             "style": "1H + Shield",
@@ -1415,15 +1415,18 @@
           "resource": "MANA",
           "playstyle": "Arrows enchanted with Elune's power: Arcane-and-Fire ranged volleys (the old 'Moonbow' school). Sustained celestial archery — starfall on a bowstring.",
           "statPriority": {
-            "pve": "Hit (ranged special-attack cap (until your specials stop missing a +3-level target)) > Agility (Ranged AP and weapon-damage scaling on Starfire/Huntress Shot, plus the RAP term in Aspect of the Huntress) > Critical Strike (Astral Quickness haste-on-crit, Starfury, Scattered Stars application) > Haste (faster Starfire Shot/Starcall casts and cooldowns) > Spell Power (Rain of Comets, Starcall, the SP term in Aspect of the Huntress) > Intellect (mana)",
-            "pvp": "Resilience > Stamina > Agility > Critical Strike > Haste > Spell Power",
-            "note": "Starfire Shot and Huntress Shot are majority Ranged-Weapon-Damage physical hits needing the ranged hit cap and Agility, but Rain of Comets, Starcall, and Aspect of the Huntress scale directly off Spell Power, making this a true Agility/Spell-Power hybrid archer."
+            "pve": "Intellect (the master stat — Explosive Moonlight converts it into ranged attack power AND hit rating, Huntress Training converts it into haste, and Huntress Shot / Starfire Shot / Trueshot all scale off your maximum mana, so Intellect drives nearly every part of your damage) > Spell Power (Starcall, Rain of Comets, Lunar Lance, and the SP term on every shot) > Critical Strike (Eye of Elune plus the bonus crit damage on Starfire Shot) > Haste > Hit only until your shots stop missing a +3-level target (Explosive Moonlight already supplies a chunk of hit from Intellect) > Agility (a minor ranged-AP/crit contributor once Intellect covers attack power)",
+            "pvp": "Resilience > Stamina > Intellect > Critical Strike > Haste > Spell Power > Agility",
+            "note": "Intellect-driven arcane archer: despite firing a ranged weapon, Intellect — not Agility — is the master stat. Explosive Moonlight turns Intellect into ranged attack power and hit, Huntress Training turns it into haste, and Huntress Shot / Starfire Shot / Trueshot scale off maximum mana (Intellect), so it gears like a caster, not an Agility hunter. Matches the community bisbeard weights (Intellect ≫ Agility)."
           },
           "weapon": {
             "style": "Ranged",
             "main": "Ranged weapon",
             "off": "—",
-            "note": "Ranged weapon — Arrow of the Goddess requires one."
+            "note": "Ranged weapon — Arrow of the Goddess requires one.",
+            "allowedTypes": [
+              "Bows"
+            ]
           }
         },
         {
@@ -1761,15 +1764,15 @@
           ],
           "complexity": "Normal",
           "primaryStats": [
-            "Intellect",
+            "Agility",
             "Stamina"
           ],
           "resource": "RAGE",
           "playstyle": "Armored Scorpid tanking: transform and absorb massive punishment behind chitin (5 defensives, 2 HoTs, Nature 38) while 8 venom effects punish attackers. A self-sustaining poison-tank — damage into you becomes damage over them.",
           "statPriority": {
-            "pve": "Defense rating (to the crit-immunity cap) > Stamina > Intellect (Beetle Form adds max health from a % of Intellect, and Regenerative Strikes self-healing scales off Intellect + spell power) > Agility (also feeds Beetle Form's bonus max health and the Toxic Rage self-heal) > Dodge rating > Armor > Attack Power/Spell Power (Carapace Crash/Chitin Rush/Hivebreak/Venomtip threat scale off attack power + spell power, and Poisonous converts attack power into spell damage)",
-            "pvp": "Resilience > Stamina > Defense rating > Intellect > Agility > Dodge rating > Armor",
-            "note": "There is no Defense-rating conversion in this kit — the previous 'Enchanted Exoskeleton converts Agility into Defense' is a misattribution (that passive belongs to Stalking and converts Intellect into dodge). Beetle Form scales bonus max health off Intellect and Agility, Regenerative Strikes self-heals off Intellect (Intellect), and Poisonous turns attack power into spell-damage threat, so after the Defense crit-immunity cap Intellect leads Agility."
+            "pve": "Agility (the top scaling stat by far — it feeds the attack power behind Chitin Rush / Carapace Crash / Hivebreak / Venomtip, plus critical strike AND dodge, so it triple-dips damage and avoidance; bisbeard weights it ~2.5, above everything else) > Stamina (raw tank HP, and Claw Strike scales off it) > Critical Strike > Haste > Attack Power / Weapon damage > Defense / Dodge rating to the crit-immunity cap > Armor > Intellect (Beetle Form converts a share of Intellect into max health and it feeds the self-heals, but bisbeard weights it only ~0.5 — a distant secondary, not a lead stat)",
+            "pvp": "Resilience > Stamina > Agility > Critical Strike > Defense rating > Dodge rating > Intellect > Armor",
+            "note": "Agility is the master stat despite the tank role: it converts to attack power (your Nature-poison damage), critical strike, and dodge all at once, so both the Moony cheat sheet (Stam > Agi > SP >= AP > Int) and the bisbeard sim weights (Agility ~2.5 vs Intellect ~0.5) put it far above Intellect. Beetle Form's Intellect->max-health and the Int-scaled self-heals are real but a distant second — the earlier 'Intellect leads Agility' read was wrong."
           },
           "weapon": {
             "style": "Caster weapon",

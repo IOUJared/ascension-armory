@@ -13,7 +13,7 @@ export interface CoASpec {
   resource: string;
   playstyle: string;
   statPriority: { pve: string; pvp: string; note: string };
-  weapon: { style: string; main: string; off: string; note: string };
+  weapon: { style: string; main: string; off: string; note: string; allowedTypes?: string[] };
 }
 
 export interface CoAClass {

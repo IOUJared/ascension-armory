@@ -124,7 +124,7 @@ async function main(): Promise<void> {
       ...(item.weaponMinDamage !== null && item.weaponMaxDamage !== null && item.weaponSpeed !== null
         ? { weaponDamage: { min: item.weaponMinDamage, max: item.weaponMaxDamage, speed: item.weaponSpeed, dps: item.weaponDps ?? 0 } }
         : {}),
-      ...(item.weaponMinDamage !== null && typeof payload?.itemSubType === "string" ? { weaponType: payload.itemSubType } : {}),
+      ...(item.slot === "RANGED" && typeof payload?.itemSubType === "string" ? { weaponType: payload.itemSubType } : {}),
       ...(twoHanded ? { twoHanded: true } : {}),
       ...(item.icon ? { icon: item.icon } : {}),
       ...(Number.isInteger(displayId) && displayId > 0 ? { displayId } : {}),

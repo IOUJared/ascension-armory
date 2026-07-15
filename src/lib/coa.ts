@@ -46,8 +46,12 @@ export function weightsFromPriority(priority: string, spec: CoASpec): StatMap {
   const weights: StatMap = {};
   segments.forEach((segment, index) => {
     const rankWeight = Math.max(0.25, 1 - index * 0.11);
+    // Sidekick priorities include detailed scaling explanations in
+    // parentheses. Only the ordered label before that explanation is a rank;
+    // mentioned downstream stats must not inherit the same weight.
+    const priorityLabel = segment.split("(", 1)[0];
     for (const [key, pattern] of STAT_PATTERNS) {
-      if (!pattern.test(segment)) continue;
+      if (!pattern.test(priorityLabel)) continue;
       weights[key] = Math.max(weights[key] ?? 0, Number((rankWeight * (BUDGET_NORMALIZER[key] ?? 1)).toFixed(2)));
     }
   });

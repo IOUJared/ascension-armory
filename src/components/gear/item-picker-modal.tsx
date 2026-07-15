@@ -22,6 +22,7 @@ interface ItemPickerModalProps {
   profile: WeightProfile;
   context?: GearContext;
   profileLabel?: string;
+  allowedWeaponTypes?: string[];
   onEquip: (item: GearItem) => void;
   onClose: () => void;
 }
@@ -94,23 +95,27 @@ function StatLines({ item, compareTo, level, context }: { item: ScoredItem; comp
   );
 }
 
-export function ItemPickerModal({ slot, equipped, candidates, loading = false, level, profile, context, profileLabel, onEquip, onClose }: ItemPickerModalProps) {
+export function ItemPickerModal({ slot, equipped, candidates, loading = false, level, profile, context, profileLabel, allowedWeaponTypes, onEquip, onClose }: ItemPickerModalProps) {
   const [search, setSearch] = useState("");
   const searchRef = useRef<HTMLInputElement>(null);
   const equippedScore = equipped ? scoreItem(equipped, level, profile) : undefined;
   const powerMode = level >= 60 && Boolean(context);
   const equippedPower = equippedScore ? contextualPower(equippedScore.resolvedStats, level, context) : 0;
   const ranked = useMemo(() => {
+    const allowedTypes = new Set((allowedWeaponTypes ?? []).map((type) => type.toLowerCase()));
+    const weaponAllowed = (item: GearItem) => !allowedTypes.size
+      || (typeof item.weaponType === "string" && allowedTypes.has(item.weaponType.toLowerCase()));
     const matchingCandidates = candidates
-      .filter((item) => canEquipItemAtLevel(item, level) && item.name.toLowerCase().includes(search.toLowerCase()));
+      .filter((item) => weaponAllowed(item) && canEquipItemAtLevel(item, level) && item.name.toLowerCase().includes(search.toLowerCase()));
     const includeEquipped = equipped
+      && weaponAllowed(equipped)
       && equipped.name.toLowerCase().includes(search.toLowerCase())
       && !matchingCandidates.some((item) => item.id === equipped.id);
     return [...matchingCandidates, ...(includeEquipped ? [equipped] : [])]
       .map((item) => applyRecommendedEnchant(item, profile))
       .map((item) => scoreItem(item, level, profile))
       .sort((a, b) => compareScoredItems(a, b, level, context));
-  }, [candidates, context, equipped, level, profile, search]);
+  }, [allowedWeaponTypes, candidates, context, equipped, level, profile, search]);
   const [selectedId, setSelectedId] = useState<string | undefined>(equipped?.id ?? ranked[0]?.id);
   const selected = ranked.find((item) => item.id === selectedId) ?? ranked[0];
   const selectedPowerDelta = selected ? contextualPower(selected.resolvedStats, level, context) - equippedPower : 0;
@@ -153,6 +158,7 @@ export function ItemPickerModal({ slot, equipped, candidates, loading = false, l
               <p className="eyebrow">Equipment vault</p>
               <h2 className="mt-1 font-display text-2xl text-stone-100">Choose {slot.replace("_", " ").toLowerCase()}</h2>
               <p className="mt-1 text-sm text-stone-500">Verified gear first · Ranked for {profileLabel ?? "your live EP weights"} · Level {level}{level >= 60 && context ? ` · ${context.toUpperCase()} Power, then EP` : " · EP"}</p>
+              {allowedWeaponTypes?.length ? <p className="mt-1 text-xs font-medium text-amber-300">Compatible weapon type: {allowedWeaponTypes.join(" or ")}</p> : null}
               <p className="modal-key-hints"><kbd>Esc</kbd> close <kbd>↑↓</kbd> select <kbd>Enter</kbd> equip <kbd>/</kbd> search</p>
             </div>
             <button className="icon-button" onClick={onClose} aria-label="Close item picker"><X size={18} /></button>
