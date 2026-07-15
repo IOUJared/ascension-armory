@@ -48,6 +48,15 @@ export interface GearScaleSnapshot {
   weaponDps?: number;
 }
 
+export interface GearAcquisitionSource {
+  type: "DUNGEON" | "RAID" | "CRAFTING" | "FACTION" | "PVP" | "WORLD_EVENT" | "COLLECTION" | "WORLD_DROP" | "WORLDFORGED";
+  name: string;
+  encounter?: string;
+  confidence: "EXACT" | "CATEGORY";
+  provenance: "ATLASLOOT_ASCENSION";
+  note?: string;
+}
+
 export interface GearItem {
   id: string;
   name: string;
@@ -78,6 +87,8 @@ export interface GearItem {
   dungeonBaseId?: string;
   /** Exact current-client snapshots keyed by the item link's effective level. */
   scaleSnapshots?: GearScaleSnapshot[];
+  /** Structured, provenance-aware directions for obtaining the item. */
+  acquisition?: GearAcquisitionSource;
 }
 
 export interface ScoredItem extends GearItem {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { ArrowRight, Check, EyeOff, Gem, Search, Sparkles, TrendingUp, X } from "lucide-react";
+import { ArrowRight, Check, EyeOff, Gem, MapPin, Search, Sparkles, TrendingUp, X } from "lucide-react";
 import { canEquipItemAtLevel, compareScoredItems, contextualPower, isSystemPowerKey, scoreItem, statDelta, type WeightProfile } from "@/lib/ep";
 import type { GearContext } from "@/types/coa";
 import { STAT_LABELS, type EquipmentSlot, type GearItem, type ScoredItem, type StatKey } from "@/types/gear";
@@ -35,6 +35,28 @@ function SourceBadge({ item }: { item: GearItem }) {
       : item.dataSource === "PLAYER_IMPORT" ? "Player import"
         : "CoA base template";
   return <span className={`source-badge ${item.dataSource === "COA_INGAME_SCAN" || item.dataSource === "USER_VERIFIED" ? "verified" : ""}`}>{label}</span>;
+}
+
+const acquisitionLabels: Record<NonNullable<GearItem["acquisition"]>["type"], string> = {
+  DUNGEON: "Dungeon drop", RAID: "Raid drop", CRAFTING: "Crafting", FACTION: "Faction reward",
+  PVP: "PvP reward", WORLD_EVENT: "World event", COLLECTION: "Collection", WORLD_DROP: "World drop",
+  WORLDFORGED: "Worldforged",
+};
+
+function AcquisitionCard({ item }: { item: GearItem }) {
+  const source = item.acquisition;
+  return <div className={`acquisition-card ${source ? "known" : "unknown"}`}>
+    <MapPin size={18} />
+    <div className="min-w-0 flex-1">
+      <div className="acquisition-heading"><p>Where to get it</p>{source ? <span>{acquisitionLabels[source.type]}</span> : null}</div>
+      {source ? <>
+        <strong>{source.name}</strong>
+        {source.encounter ? <small>{source.type === "DUNGEON" || source.type === "RAID" ? `Encounter/source: ${source.encounter}` : source.encounter}</small> : null}
+        {source.note ? <em>{source.note}</em> : null}
+        <em>{source.confidence === "EXACT" ? "Exact AtlasLoot encounter mapping" : "AtlasLoot category mapping"}</em>
+      </> : <><strong>Source not yet verified</strong><small>This item is confirmed on CoA, but its acquisition location is not in the current source index.</small></>}
+    </div>
+  </div>;
 }
 
 function StatLines({ item, compareTo, level, context }: { item: ScoredItem; compareTo?: ScoredItem; level: number; context?: GearContext }) {
@@ -156,6 +178,8 @@ export function ItemPickerModal({ slot, equipped, candidates, loading = false, l
                   <div className="my-4 h-px bg-white/7" /><StatLines item={selected} compareTo={equippedScore} level={level} context={context} />
                 </article>
               </div>
+
+              <AcquisitionCard item={selected} />
 
               <div className="mt-4 grid gap-3 sm:grid-cols-2">
                 <div className="mechanic-tile"><Sparkles size={16} /><div><p>Mystic Enchant</p><span>{selected.enhancements?.[0]?.name ?? "No RE inserted"}</span></div></div>

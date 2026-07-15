@@ -10,6 +10,16 @@ interface AtlasItem {
   section?: string;
   kind: "atlasloot-entry" | "worldforged-variant";
   baseId?: string;
+  sourceType?: "DUNGEON" | "RAID" | "CRAFTING" | "FACTION" | "PVP" | "WORLD_EVENT" | "COLLECTION" | "WORLD_DROP" | "WORLDFORGED";
+  sourceName?: string;
+  encounter?: string;
+  sourceConfidence?: "EXACT" | "CATEGORY";
+}
+
+interface AtlasMenu {
+  name?: string;
+  type?: string;
+  groups: string[];
 }
 
 function argument(name: string, fallback: string): string {
@@ -24,6 +34,88 @@ function sourceName(line: string): string | undefined {
 
 function lineNumber(source: string, offset: number): number {
   return source.slice(0, offset).split("\n").length;
+}
+
+function braceDelta(line: string): number {
+  const code = line.replace(/--.*$/, "").replace(/"(?:\\.|[^"\\])*"/g, "");
+  return (code.match(/\{/g)?.length ?? 0) - (code.match(/\}/g)?.length ?? 0);
+}
+
+function humanize(value: string): string {
+  return value
+    .replace(/CLASSIC$/i, "")
+    .replace(/([A-Z]+)([A-Z][a-z])/g, "$1 $2")
+    .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
+    .replaceAll("_", " ")
+    .trim();
+}
+
+function menuValue(line: string): string | undefined {
+  return line.match(/"([^"]+)"/)?.[1]
+    ?? line.match(/AL\["([^"]+)"\]/)?.[1]
+    ?? (line.match(/^\s*\{\s*([A-Z][A-Z0-9_]*)\s*,/)?.[1]?.replaceAll("_", " "));
+}
+
+async function extractMenus(atlasDir: string): Promise<Map<string, AtlasMenu>> {
+  const menuDir = join(atlasDir, "AtlasLoot/UI/Menus");
+  const files = (await readdir(menuDir)).filter((file) => file.endsWith(".lua")).sort();
+  const menus = new Map<string, AtlasMenu>();
+  for (const file of files) {
+    const lines = (await readFile(join(menuDir, file), "utf8")).split("\n");
+    let depth = 0;
+    let section: string | undefined;
+    let sectionDepth = -1;
+    for (const line of lines) {
+      const before = depth;
+      const sectionMatch = line.match(/^\s*\["([^"]+)"\]\s*=\s*\{/);
+      if (sectionMatch) {
+        section = sectionMatch[1];
+        sectionDepth = before;
+        menus.set(section, { groups: [] });
+      }
+      if (section) {
+        const menu = menus.get(section)!;
+        const name = line.match(/^\s*Name\s*=\s*"([^"]+)"/)?.[1];
+        const type = line.match(/^\s*Type\s*=\s*"([^"]+)"/)?.[1];
+        if (name) menu.name = name;
+        if (type) menu.type = type;
+        if (before === sectionDepth + 1 && /^\s*\{/.test(line)) {
+          const group = menuValue(line);
+          if (group) menu.groups.push(group);
+        }
+      }
+      depth += braceDelta(line);
+      if (section && depth <= sectionDepth) {
+        section = undefined;
+        sectionDepth = -1;
+      }
+    }
+  }
+  return menus;
+}
+
+function sourceMetadata(sourceFile: string, section: string | undefined, groupIndex: number, menus: Map<string, AtlasMenu>): Partial<AtlasItem> {
+  if (!section) return {};
+  const menu = menus.get(section);
+  const file = sourceFile.split("/").at(-1) ?? "";
+  let sourceType: AtlasItem["sourceType"];
+  if (section === "WorldforgedClassic") sourceType = "WORLDFORGED";
+  else if (section === "AQOpening") sourceType = "WORLD_EVENT";
+  else if (/WorldEpics/i.test(section)) sourceType = "WORLD_DROP";
+  else if (file === "Instances.lua") sourceType = /Raid/i.test(menu?.type ?? "") ? "RAID" : "DUNGEON";
+  else if (file === "Crafting.lua") sourceType = "CRAFTING";
+  else if (file === "Factions.lua") sourceType = "FACTION";
+  else if (file === "PvP.lua") sourceType = "PVP";
+  else if (file === "Worldevents.lua") sourceType = "WORLD_EVENT";
+  else if (file === "Collections.lua") sourceType = "COLLECTION";
+  if (!sourceType) return {};
+  const encounter = groupIndex > 0 ? menu?.groups[groupIndex - 1] : undefined;
+  return {
+    sourceType,
+    sourceName: section === "AQOpening" ? "Ahn'Qiraj Opening Event" : menu?.name ?? humanize(section),
+    ...(encounter ? { encounter } : {}),
+    sourceConfidence: encounter && (sourceType === "DUNGEON" || sourceType === "RAID") ? "EXACT" : "CATEGORY",
+  };
 }
 
 async function main(): Promise<void> {
@@ -42,40 +134,59 @@ async function main(): Promise<void> {
 
   const itemsById = new Map<string, AtlasItem>();
   const worldforgedBaseIds = new Set<string>();
+  const menus = await extractMenus(atlasDir);
 
   for (const file of sourceFiles) {
     const source = await readFile(file, "utf8");
     const sourceFile = relative(atlasDir, file).split(sep).join("/");
     const lines = source.split("\n");
     let section: string | undefined;
+    let sectionDepth = -1;
+    let depth = 0;
+    let groupIndex = 0;
     let inWorldforged = false;
 
     for (let index = 0; index < lines.length; index += 1) {
       const line = lines[index];
+      const before = depth;
       const sectionMatch = line.match(/^\s*\["([^"]+)"\]\s*=\s*\{/);
-      if (sectionMatch) section = sectionMatch[1];
+      if (sectionMatch) {
+        section = sectionMatch[1];
+        sectionDepth = before;
+        groupIndex = 0;
+      }
       if (/^\s*WorldforgedClassic\s*=\s*\{/.test(line)) {
         section = "WorldforgedClassic";
+        sectionDepth = before;
+        groupIndex = 0;
         inWorldforged = true;
-        continue;
       }
       if (inWorldforged && /^\s*if AtlasLoot_Data_Cache/.test(line)) {
         inWorldforged = false;
         section = undefined;
       }
+      if (section && before === sectionDepth + 1 && /^\s*\{\s*(?:--.*)?$/.test(line)) groupIndex += 1;
       const match = line.match(/\bitemID\s*=\s*(\d+)/);
-      if (!match || match[1] === "0") continue;
-      const id = match[1];
-      if (inWorldforged) worldforgedBaseIds.add(id);
-      if (!itemsById.has(id)) {
-        itemsById.set(id, {
-          id,
-          ...(sourceName(line) ? { name: sourceName(line) } : {}),
-          sourceFile,
-          line: index + 1,
-          ...(section ? { section } : {}),
-          kind: "atlasloot-entry",
-        });
+      if (match && match[1] !== "0") {
+        const id = match[1];
+        if (inWorldforged) worldforgedBaseIds.add(id);
+        if (!itemsById.has(id)) {
+          itemsById.set(id, {
+            id,
+            ...(sourceName(line) ? { name: sourceName(line) } : {}),
+            sourceFile,
+            line: index + 1,
+            ...(section ? { section } : {}),
+            ...sourceMetadata(sourceFile, section, groupIndex, menus),
+            kind: "atlasloot-entry",
+          });
+        }
+      }
+      depth += braceDelta(line);
+      if (section && !inWorldforged && depth <= sectionDepth) {
+        section = undefined;
+        sectionDepth = -1;
+        groupIndex = 0;
       }
     }
   }
@@ -93,6 +204,7 @@ async function main(): Promise<void> {
     for (const value of values.matchAll(/\b\d+\b/g)) {
       const id = value[0];
       if (id === "0" || id === baseId || itemsById.has(id)) continue;
+      const baseSource = itemsById.get(baseId);
       itemsById.set(id, {
         id,
         ...(name ? { name } : {}),
@@ -101,6 +213,16 @@ async function main(): Promise<void> {
         section: "WorldforgedClassic",
         kind: "worldforged-variant",
         baseId,
+        ...(baseSource?.sourceType ? {
+          sourceType: baseSource.sourceType,
+          sourceName: baseSource.sourceName,
+          encounter: baseSource.encounter,
+          sourceConfidence: baseSource.sourceConfidence,
+        } : {
+          sourceType: "WORLDFORGED",
+          sourceName: "Worldforged discovery",
+          sourceConfidence: "CATEGORY",
+        }),
       });
     }
   }

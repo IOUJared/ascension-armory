@@ -6,6 +6,7 @@ import {
   type EquipmentSlot,
   type GearEffect,
   type GearEnhancement,
+  type GearAcquisitionSource,
   type GearItem,
   type GearScaleSnapshot,
   type HybridScalingRule,
@@ -32,6 +33,9 @@ const qualities = new Set<GearItem["quality"]>(["POOR", "COMMON", "UNCOMMON", "R
 const effectKinds = new Set<GearEffect["kind"]>(["EQUIP", "USE", "PROC", "SET_BONUS", "ASCENSION"]);
 const enhancementKinds = new Set<GearEnhancement["kind"]>(["MYSTIC_ENCHANT", "GEM", "SOCKET_BONUS", "CUSTOM"]);
 const scalingModes = new Set<HybridScalingRule["mode"]>(["ADD", "HIGHEST_OF", "PERCENT_OF"]);
+const acquisitionTypes = new Set<GearAcquisitionSource["type"]>(["DUNGEON", "RAID", "CRAFTING", "FACTION", "PVP", "WORLD_EVENT", "COLLECTION", "WORLD_DROP", "WORLDFORGED"]);
+const acquisitionConfidences = new Set<GearAcquisitionSource["confidence"]>(["EXACT", "CATEGORY"]);
+const dataSources = new Set<NonNullable<GearItem["dataSource"]>>(["COA_INGAME_SCAN", "COA_REALM_CACHE", "USER_VERIFIED", "PLAYER_IMPORT"]);
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return Boolean(value) && typeof value === "object" && !Array.isArray(value);
@@ -114,6 +118,20 @@ function sanitizeScaleSnapshots(value: unknown): GearScaleSnapshot[] | undefined
   return snapshots.length ? snapshots : undefined;
 }
 
+function sanitizeAcquisition(value: unknown): GearAcquisitionSource | undefined {
+  if (!isRecord(value) || !acquisitionTypes.has(value.type as GearAcquisitionSource["type"])
+    || typeof value.name !== "string" || !acquisitionConfidences.has(value.confidence as GearAcquisitionSource["confidence"])
+    || value.provenance !== "ATLASLOOT_ASCENSION") return undefined;
+  return {
+    type: value.type as GearAcquisitionSource["type"],
+    name: value.name,
+    confidence: value.confidence as GearAcquisitionSource["confidence"],
+    provenance: "ATLASLOOT_ASCENSION",
+    ...(typeof value.encounter === "string" ? { encounter: value.encounter } : {}),
+    ...(typeof value.note === "string" ? { note: value.note } : {}),
+  };
+}
+
 function sanitizeItem(value: unknown, slot: EquipmentSlot): GearItem | undefined {
   if (!isRecord(value) || typeof value.id !== "string" || typeof value.name !== "string"
     || !qualities.has(value.quality as GearItem["quality"]) || !finiteNumber(value.itemLevel)
@@ -126,6 +144,7 @@ function sanitizeItem(value: unknown, slot: EquipmentSlot): GearItem | undefined
   const effects = sanitizeEffects(value.effects);
   const enhancements = sanitizeEnhancements(value.enhancements);
   const scaleSnapshots = sanitizeScaleSnapshots(value.scaleSnapshots);
+  const acquisition = sanitizeAcquisition(value.acquisition);
 
   return {
     id: value.id,
@@ -145,6 +164,12 @@ function sanitizeItem(value: unknown, slot: EquipmentSlot): GearItem | undefined
     ...(scaleSnapshots ? { scaleSnapshots } : {}),
     ...(finiteNumber(value.socketCount) ? { socketCount: value.socketCount } : {}),
     ...(typeof value.source === "string" ? { source: value.source } : {}),
+    ...(dataSources.has(value.dataSource as NonNullable<GearItem["dataSource"]>) ? { dataSource: value.dataSource as NonNullable<GearItem["dataSource"]> } : {}),
+    ...(value.worldforged === true ? { worldforged: true } : {}),
+    ...(typeof value.worldforgedBaseId === "string" ? { worldforgedBaseId: value.worldforgedBaseId } : {}),
+    ...(value.dungeonTier === "NORMAL" || value.dungeonTier === "HEROIC" || value.dungeonTier === "MYTHIC" ? { dungeonTier: value.dungeonTier } : {}),
+    ...(typeof value.dungeonBaseId === "string" ? { dungeonBaseId: value.dungeonBaseId } : {}),
+    ...(acquisition ? { acquisition } : {}),
   };
 }
 

@@ -104,6 +104,12 @@ The generated JSON records the exact AtlasLoot commit, source file and line.
 Atlas-only IDs already present in the current-realm catalog are skipped, and
 new IDs still require a successful `/aacatalog` response before publication.
 
+The extractor also aligns AtlasLoot item-group positions with its menu data to
+produce structured acquisition metadata. Dungeon and raid entries can name the
+exact encounter; crafting, faction, PvP, event, collection, Worldforged, and
+world-drop entries are labeled as category-level sources. Generated dungeon
+tiers inherit the verified source of their base item.
+
 `generate:dungeon-variants` matches AtlasLoot instance gear to generated
 Normal (item level 57), Heroic (61), and Mythic (64) client items by exact
 name, equipment slot, and display model. These are discovery candidates only;

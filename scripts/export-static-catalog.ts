@@ -1,7 +1,7 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { prisma } from "../src/lib/db";
-import type { GearItem, StatMap } from "../src/types/gear";
+import type { GearAcquisitionSource, GearItem, StatMap } from "../src/types/gear";
 import catalogAdditions from "../src/data/catalog-additions.json";
 import worldforgedItems from "../src/data/worldforged-items.json";
 import worldforgedUpgrades from "../src/data/worldforged-upgrades.json";
@@ -9,6 +9,25 @@ import atlasLootItems from "../src/data/atlasloot-coa-items.json";
 import dungeonVariants from "../src/data/dungeon-variants.json";
 
 const outputPath = resolve(process.cwd(), process.argv[2] ?? "public/data/coa-items.json");
+
+interface AtlasSourceEntry {
+  sourceType?: GearAcquisitionSource["type"];
+  sourceName?: string;
+  encounter?: string;
+  sourceConfidence?: GearAcquisitionSource["confidence"];
+}
+
+function acquisition(entry: AtlasSourceEntry | undefined, note?: string): GearAcquisitionSource | undefined {
+  if (!entry?.sourceType || !entry.sourceName || !entry.sourceConfidence) return undefined;
+  return {
+    type: entry.sourceType,
+    name: entry.sourceName,
+    ...(entry.encounter ? { encounter: entry.encounter } : {}),
+    confidence: entry.sourceConfidence,
+    provenance: "ATLASLOOT_ASCENSION",
+    ...(note ? { note } : {}),
+  };
+}
 
 async function main(): Promise<void> {
   const upgradeBase = new Map(worldforgedUpgrades.items.map((item) => [item.id, item.baseId]));
@@ -62,8 +81,20 @@ async function main(): Promise<void> {
     // Scaling templates do not contain their resolved primary stats. Publishing
     // one before exact live snapshots exist makes it look like a DPS-only item.
     if (scalingStatDistribution > 0 && varyingScaleSnapshots.length === 0) return [];
+    const itemId = item.id.toString();
+    const dungeonVariant = dungeonVariantById.get(itemId);
+    const worldforgedBase = upgradeBase.get(itemId);
+    const atlasSource = atlasLootById.get(itemId)
+      ?? (dungeonVariant ? atlasLootById.get(dungeonVariant.baseId) : undefined)
+      ?? (worldforgedBase ? atlasLootById.get(worldforgedBase) : undefined);
+    const sourceNote = dungeonVariant
+      ? `${dungeonVariant.tier} generated version; acquisition follows the base dungeon item.`
+      : worldforgedBase
+        ? "Worldforged upgrade; acquisition follows the base item."
+        : undefined;
+    const acquisitionSource = acquisition(atlasSource, sourceNote);
     return [{
-      id: item.id.toString(),
+      id: itemId,
       name: item.name,
       slot: item.slot,
       quality: item.quality,
@@ -87,21 +118,22 @@ async function main(): Promise<void> {
         ...(snapshot.armor ? { armor: snapshot.armor } : {}),
         ...(snapshot.weaponDps !== null ? { weaponDps: snapshot.weaponDps } : {}),
       })) } : {}),
-      source: dungeonVariantById.has(item.id.toString())
-        ? `${dataSource === "COA_INGAME_SCAN" ? "Current in-game scan" : "CoA realm cache"} · ${dungeonVariantById.get(item.id.toString())?.tier} dungeon · ${dungeonVariantById.get(item.id.toString())?.section}`
-        : upgradeBase.has(item.id.toString())
-        ? `${dataSource === "COA_INGAME_SCAN" ? "Current in-game scan" : "CoA realm cache"} · Worldforged upgrade of ${upgradeBase.get(item.id.toString())}`
-        : worldforgedIds.has(item.id.toString())
+      ...(acquisitionSource ? { acquisition: acquisitionSource } : {}),
+      source: dungeonVariantById.has(itemId)
+        ? `${dataSource === "COA_INGAME_SCAN" ? "Current in-game scan" : "CoA realm cache"} · ${dungeonVariantById.get(itemId)?.tier} dungeon · ${dungeonVariantById.get(itemId)?.section}`
+        : upgradeBase.has(itemId)
+        ? `${dataSource === "COA_INGAME_SCAN" ? "Current in-game scan" : "CoA realm cache"} · Worldforged upgrade of ${upgradeBase.get(itemId)}`
+        : worldforgedIds.has(itemId)
         ? `${dataSource === "COA_INGAME_SCAN" ? "Current in-game scan" : "CoA realm cache"} · LootCollector discovery`
-        : atlasLootById.has(item.id.toString())
-        ? `${dataSource === "COA_INGAME_SCAN" ? "Current in-game scan" : "CoA realm cache"} · AtlasLoot ${atlasLootById.get(item.id.toString())?.section ?? "CoA index"}`
+        : atlasLootById.has(itemId)
+        ? `${dataSource === "COA_INGAME_SCAN" ? "Current in-game scan" : "CoA realm cache"} · AtlasLoot ${atlasLootById.get(itemId)?.section ?? "CoA index"}`
         : item.sourceUrl,
       dataSource,
-      ...(worldforgedIds.has(item.id.toString()) ? { worldforged: true } : {}),
-      ...(upgradeBase.has(item.id.toString()) ? { worldforgedBaseId: upgradeBase.get(item.id.toString()) } : {}),
-      ...(dungeonVariantById.has(item.id.toString()) ? {
-        dungeonTier: dungeonVariantById.get(item.id.toString())?.tier as GearItem["dungeonTier"],
-        dungeonBaseId: dungeonVariantById.get(item.id.toString())?.baseId,
+      ...(worldforgedIds.has(itemId) ? { worldforged: true } : {}),
+      ...(upgradeBase.has(itemId) ? { worldforgedBaseId: upgradeBase.get(itemId) } : {}),
+      ...(dungeonVariantById.has(itemId) ? {
+        dungeonTier: dungeonVariantById.get(itemId)?.tier as GearItem["dungeonTier"],
+        dungeonBaseId: dungeonVariantById.get(itemId)?.baseId,
       } : {}),
     }];
   });
