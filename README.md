@@ -73,8 +73,9 @@ Base realm templates do not contain every level-scaled Worldforged result. The
 included addon can query LootCollector candidates through the current realm and
 capture `GetItemStats`, the rendered tooltip, PvE/PvP power, inventory type and
 the player level used for the snapshot. In game, run `/aacatalog`; use
-`/aacatalog status` or `/aacatalog stop` as needed, and `/reload` after it
-finishes. Then import the saved snapshots:
+`/aacatalog status` or `/aacatalog stop` as needed. After a completed pass,
+`/aacatalog retry` queues only the previously unresolved IDs. Run `/reload`
+after the scan finishes to save it for import. Then import the saved snapshots:
 
 ```bash
 npm run ingest:addon-catalog -- \

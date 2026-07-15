@@ -212,18 +212,33 @@ scanner:SetScript("OnEvent", function(_, event, addonName)
   AscensionArmoryCatalogDB.completed = AscensionArmoryCatalogDB.completed or 0
 end)
 
+local function BeginQueue(label)
+  if #queue == 0 then
+    Message("No " .. label .. " candidates need to be scanned.")
+    return
+  end
+  running = true
+  elapsed = 0
+  Message(string.format("Scanning %d %s candidates. You can keep playing normally.", #queue, label))
+end
+
 local function StartScan()
   queue, queueHead, queued, current = {}, 1, {}, nil
   for _, candidate in ipairs(AscensionArmoryWorldforgedCandidates or {}) do
     if not AscensionArmoryCatalogDB.records[tostring(candidate.id)] then Enqueue(candidate) end
   end
-  if #queue == 0 then
-    Message("All current candidates have already been captured.")
-    return
+  BeginQueue("current CoA")
+end
+
+local function RetryFailures()
+  queue, queueHead, queued, current = {}, 1, {}, nil
+  for itemID in pairs(AscensionArmoryCatalogDB.failures) do
+    local numericID = tonumber(itemID)
+    if numericID and not AscensionArmoryCatalogDB.records[itemID] then
+      Enqueue({ id = numericID })
+    end
   end
-  running = true
-  elapsed = 0
-  Message(string.format("Scanning %d current CoA candidates. You can keep playing normally.", #queue))
+  BeginQueue("previously unresolved")
 end
 
 SLASH_ASCENSIONARMORYCATALOG1 = "/aacatalog"
@@ -231,5 +246,6 @@ SlashCmdList.ASCENSIONARMORYCATALOG = function(command)
   command = string.lower((command or ""):match("^%s*(.-)%s*$"))
   if command == "stop" then running = false; Message("Catalog scan paused.")
   elseif command == "status" then Status()
+  elseif command == "retry" then RetryFailures()
   else StartScan() end
 end
