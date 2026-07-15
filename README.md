@@ -35,6 +35,20 @@ npm run db:generate
 npm run export:catalog
 ```
 
+Worldforged discoveries can be refreshed from LootCollector's account-level
+SavedVariables database before exporting the catalog:
+
+```bash
+npm run import:worldforged -- --file "/path/to/WTF/Account/YOUR_ACCOUNT/SavedVariables/LootCollector.lua"
+npm run export:catalog
+```
+
+The importer reads discovery type `1` (Worldforged) as data without executing
+the Lua file. Equippable matches are published with a Worldforged badge and
+their verified base stats. Upgrade tiers are identified in the UI, but the
+planner does not fabricate scaled tier stats that only the running game client
+can resolve.
+
 Commit the regenerated `public/data/coa-items.json` file so GitHub Pages can serve it without database access.
 
 ## Item ingestion

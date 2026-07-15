@@ -16,6 +16,7 @@
     "ingest:client-items": "tsx scripts/import-client-items.ts",
     "sync:coa-classes": "node scripts/sync-coa-classes.mjs",
     "sync:sidekick-gear": "tsx scripts/sync-sidekick-gear.ts",
+    "import:worldforged": "tsx scripts/import-lootcollector-worldforged.ts",
     "export:catalog": "tsx scripts/export-static-catalog.ts"
   },
   "prisma": {

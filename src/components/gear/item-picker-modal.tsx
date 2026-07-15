@@ -86,7 +86,10 @@ export function ItemPickerModal({ slot, equipped, candidates, loading = false, l
                   <ItemIcon item={item} />
                   <span className="min-w-0 flex-1 text-left">
                     <span className={`block truncate text-sm font-semibold ${qualityClass[item.quality]}`}>{item.name}</span>
-                    <span className="mt-1 block text-xs text-stone-500">iLvl {item.itemLevel} · {item.source}</span>
+                    <span className="mt-1 flex flex-wrap items-center gap-1.5 text-xs text-stone-500">
+                      <span>iLvl {item.itemLevel}</span>
+                      {item.worldforged ? <span className="worldforged-badge">Worldforged</span> : <span>· {item.source}</span>}
+                    </span>
                   </span>
                   <span className="text-right">
                     <span className="block font-display text-lg text-amber-300">{item.ep.toFixed(1)}</span>
@@ -112,14 +115,16 @@ export function ItemPickerModal({ slot, equipped, candidates, loading = false, l
                 <div className="hidden pt-16 text-amber-500 sm:block"><ArrowRight size={20} /></div>
                 <article className="compare-card candidate-card">
                   <p className="eyebrow text-amber-400">Potential upgrade</p>
-                  <div className="mt-4 flex items-center gap-3"><ItemIcon item={selected} size="lg" /><div><h3 className={`font-semibold ${qualityClass[selected.quality]}`}>{selected.name}</h3><p className="text-xs text-stone-500">Item level {selected.itemLevel}</p></div></div>
+                  <div className="mt-4 flex items-center gap-3"><ItemIcon item={selected} size="lg" /><div><h3 className={`font-semibold ${qualityClass[selected.quality]}`}>{selected.name}</h3><p className="flex flex-wrap items-center gap-2 text-xs text-stone-500">Item level {selected.itemLevel}{selected.worldforged ? <span className="worldforged-badge">Worldforged</span> : null}</p></div></div>
                   <div className="my-4 h-px bg-white/7" /><StatLines item={selected} compareTo={equippedScore} />
                 </article>
               </div>
 
               <div className="mt-4 grid gap-3 sm:grid-cols-2">
                 <div className="mechanic-tile"><Sparkles size={16} /><div><p>Mystic Enchant</p><span>{selected.enhancements?.[0]?.name ?? "No RE inserted"}</span></div></div>
-                <div className="mechanic-tile"><Gem size={16} /><div><p>Custom sockets</p><span>{selected.socketCount ? `${selected.socketCount} socket available` : "No sockets"}</span></div></div>
+                {selected.worldforged
+                  ? <div className="mechanic-tile worldforged-tile"><Sparkles size={16} /><div><p>Worldforged upgrade path</p><span>Level 60 · Dungeon · ZG · T1 · T2 · AQ · T3. Score shown uses verified current-tier stats.</span></div></div>
+                  : <div className="mechanic-tile"><Gem size={16} /><div><p>Custom sockets</p><span>{selected.socketCount ? `${selected.socketCount} socket available` : "No sockets"}</span></div></div>}
               </div>
 
               <div className="mt-5 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-amber-400/15 bg-amber-400/5 p-4">

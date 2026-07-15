@@ -182,6 +182,9 @@ button { cursor: pointer; }
 .muted-card { opacity: .85; }
 .mechanic-tile { padding: 11px; display: flex; gap: 9px; border: 1px solid rgba(132,82,189,.19); border-radius: 8px; color: #a87ad8; background: rgba(118,69,168,.06); }
 .mechanic-tile p { color: #bba2d4; font-size: 9px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }.mechanic-tile span { display: block; margin-top: 2px; color: #77717d; font-size: 9px; }
+.worldforged-badge { display: inline-flex; align-items: center; width: fit-content; border: 1px solid rgba(52,211,153,.3); border-radius: 999px; padding: 1px 6px; color: #6ee7b7; background: rgba(16,185,129,.08); font-size: 9px; font-weight: 800; letter-spacing: .08em; line-height: 1.5; text-transform: uppercase; }
+.mechanic-tile.worldforged-tile { border-color: rgba(52,211,153,.22); color: #34d399; background: rgba(16,185,129,.06); }
+.mechanic-tile.worldforged-tile p { color: #6ee7b7; }
 .custom-scrollbar { scrollbar-width: thin; scrollbar-color: #3a3429 transparent; }
 @keyframes fade-in { from { opacity: 0; } } @keyframes rise-in { from { opacity: 0; transform: translateY(8px) scale(.992); } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; } }

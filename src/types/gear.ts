@@ -57,6 +57,8 @@ export interface GearItem {
   enhancements?: GearEnhancement[];
   socketCount?: number;
   source?: string;
+  /** Identified by LootCollector as an upgradeable Worldforged item. */
+  worldforged?: boolean;
 }
 
 export interface ScoredItem extends GearItem {

@@ -3,11 +3,13 @@ import { dirname, resolve } from "node:path";
 import { prisma } from "../src/lib/db";
 import type { GearItem, StatMap } from "../src/types/gear";
 import catalogAdditions from "../src/data/catalog-additions.json";
+import worldforgedItems from "../src/data/worldforged-items.json";
 
 const outputPath = resolve(process.cwd(), process.argv[2] ?? "public/data/coa-items.json");
 
 async function main(): Promise<void> {
-  const addedIds = catalogAdditions.items.map((item) => BigInt(item.id));
+  const worldforgedIds = new Set(worldforgedItems.itemIds);
+  const addedIds = [...catalogAdditions.items.map((item) => item.id), ...worldforgedItems.itemIds].map((id) => BigInt(id));
   const overrides = new Map(catalogAdditions.items.map((item) => [item.id, item.overrides]));
   const rows = await prisma.item.findMany({
     where: { slot: { not: null }, OR: [{ sourceUpdatedAt: { not: null } }, { id: { in: addedIds } }] },
@@ -39,7 +41,8 @@ async function main(): Promise<void> {
       ...(Number.isInteger(displayId) && displayId > 0 ? { displayId } : {}),
       ...(item.effects.length ? { effects: item.effects.map((effect) => ({ kind: effect.kind, description: effect.description })) } : {}),
       ...(item.sockets.length ? { socketCount: item.sockets.length } : {}),
-      source: item.sourceUrl,
+      source: worldforgedIds.has(item.id.toString()) ? "LootCollector · Worldforged" : item.sourceUrl,
+      ...(worldforgedIds.has(item.id.toString()) ? { worldforged: true } : {}),
     }];
   });
 
