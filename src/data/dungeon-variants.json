@@ -1,6 +1,6 @@
 {
   "source": "Current Ascension client generated dungeon variants matched to the AtlasLoot CoA instance index",
-  "generatedAt": "2026-07-15T18:01:10.367Z",
+  "generatedAt": "2026-07-15T19:00:02.824Z",
   "rules": [
     "Exact name, equipment slot, and ItemDisplayInfo match to an AtlasLoot instance item",
     "Normal item level 57, Heroic item level 61, or Mythic item level 64",
