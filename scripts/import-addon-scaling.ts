@@ -45,7 +45,7 @@ function parse(line: string): ScaleSnapshot | null {
     effectiveLevel: number(fields[2]),
     link: decode(fields[3]),
     itemLevel: number(fields[4]),
-    requiredLevel: number(fields[5]),
+    requiredLevel: Math.max(1, number(fields[5])),
     capturedPlayerLevel: number(fields[6]),
     stats,
     rawStats,
