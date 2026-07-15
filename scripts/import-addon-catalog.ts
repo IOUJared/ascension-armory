@@ -118,8 +118,8 @@ async function main(): Promise<void> {
       const stats = Object.entries(snapshot.stats)
         .filter(([key, value]) => key !== "armor" && key !== "weapon_dps" && value)
         .map(([statKey, value]) => ({ itemId: id, statKey, value: value as number, source: "BASE" as const }));
-      if (snapshot.pvePower) stats.push({ itemId: id, statKey: "pve_power", value: snapshot.pvePower, source: "BASE" });
-      if (snapshot.pvpPower) stats.push({ itemId: id, statKey: "pvp_power", value: snapshot.pvpPower, source: "BASE" });
+      if (snapshot.pvePower && !snapshot.stats.pve_power) stats.push({ itemId: id, statKey: "pve_power", value: snapshot.pvePower, source: "BASE" });
+      if (snapshot.pvpPower && !snapshot.stats.pvp_power) stats.push({ itemId: id, statKey: "pvp_power", value: snapshot.pvpPower, source: "BASE" });
       return [
         prisma.item.upsert({ where: { id }, update: data, create: { id, ...data } }),
         prisma.itemStat.deleteMany({ where: { itemId: id } }),

@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { Check, ChevronDown, RotateCcw, Save, Settings2, Sparkles, Upload } from "lucide-react";
+import { Check, ChevronDown, EyeOff, RotateCcw, Save, Settings2, Sparkles, Upload } from "lucide-react";
 import { isCoASelection, resolveCoAProfile } from "@/lib/coa";
-import { calculateEp, resolveItemStats, scoreItem, type WeightProfile } from "@/lib/ep";
+import { calculateEp, isSystemPowerKey, resolveItemStats, scoreItem, withoutSystemPowerWeights, type WeightProfile } from "@/lib/ep";
 import { findStaticItemsForSlot } from "@/lib/items/static-catalog";
 import { BUILD_STORAGE_KEY, LEGACY_BUILD_STORAGE_KEY, LEGACY_PROFILE_STORAGE_KEY, makePlannerBuild, parsePlannerBuild } from "@/lib/planner-storage";
 import type { CoASelection } from "@/types/coa";
@@ -17,7 +17,7 @@ import { CoAClassSelector } from "./coa-class-selector";
 const leftSlots: EquipmentSlot[] = ["HEAD", "NECK", "SHOULDERS", "BACK", "CHEST", "WRISTS", "MAIN_HAND", "RANGED"];
 const rightSlots: EquipmentSlot[] = ["HANDS", "WAIST", "LEGS", "FEET", "FINGER_1", "FINGER_2", "TRINKET_1", "TRINKET_2", "OFF_HAND"];
 const qualityBorder: Partial<Record<GearItem["quality"], string>> = { LEGENDARY: "legendary", EPIC: "epic", RARE: "rare" };
-const fallbackWeights: StatMap = { strength: 1, attack_power: 0.48, crit_rating: 0.72, haste_rating: 0.64, hit_rating: 0.86, pve_power: 0.35, weapon_dps: 2.4 };
+const fallbackWeights: StatMap = { strength: 1, attack_power: 0.48, crit_rating: 0.72, haste_rating: 0.64, hit_rating: 0.86, weapon_dps: 2.4 };
 
 function labelSlot(slot: EquipmentSlot): string {
   return slot.replace("_1", " I").replace("_2", " II").replaceAll("_", " ");
@@ -51,9 +51,9 @@ export function GearPlanner() {
   const [loadingCandidates, setLoadingCandidates] = useState(false);
   const selectedProfile = useMemo(() => selection ? resolveCoAProfile(selection) : undefined, [selection]);
   const profileName = selectedProfile ? `${selectedProfile.classInfo.name} / ${selectedProfile.spec.name}` : "Choose a class";
-  const profile = useMemo<WeightProfile>(() => ({ weights }), [weights]);
+  const profile = useMemo<WeightProfile>(() => ({ weights, context: selectedProfile?.context }), [selectedProfile?.context, weights]);
   const activeWeightKeys = useMemo(() => (Object.entries(weights) as Array<[StatKey, number]>)
-    .filter(([, value]) => value > 0)
+    .filter(([key, value]) => value > 0 && !isSystemPowerKey(key))
     .sort((a, b) => b[1] - a[1])
     .map(([key]) => key), [weights]);
   const totalEp = useMemo(() => Object.values(loadout).reduce((sum, item) => sum + calculateEp(resolveItemStats(item, level, profile.hybridRules), profile), 0), [level, loadout, profile]);
@@ -64,6 +64,11 @@ export function GearPlanner() {
   const summaryKeys = useMemo(() => activeWeightKeys
     .filter((key) => key !== "weapon_dps" && (allStats[key] ?? 0) > 0)
     .slice(0, 6), [activeWeightKeys, allStats]);
+  const pvePower = allStats.pve_power ?? 0;
+  const pvpPower = allStats.pvp_power ?? 0;
+  const activePower = level >= 60 && selectedProfile
+    ? (selectedProfile.context === "pve" ? pvePower : pvpPower)
+    : 0;
 
   useEffect(() => {
     const restoreBuild = window.setTimeout(() => {
@@ -76,10 +81,10 @@ export function GearPlanner() {
           if (savedBuild.selection) {
             const resolved = resolveCoAProfile(savedBuild.selection);
             setSelection(savedBuild.selection);
-            setWeights(Object.keys(savedBuild.weights).length ? savedBuild.weights : resolved?.weights ?? fallbackWeights);
+            setWeights(withoutSystemPowerWeights(Object.keys(savedBuild.weights).length ? savedBuild.weights : resolved?.weights ?? fallbackWeights));
             setSelectorOpen(false);
           } else {
-            setWeights(Object.keys(savedBuild.weights).length ? savedBuild.weights : fallbackWeights);
+            setWeights(withoutSystemPowerWeights(Object.keys(savedBuild.weights).length ? savedBuild.weights : fallbackWeights));
             setSelectorOpen(true);
           }
           return;
@@ -202,6 +207,18 @@ export function GearPlanner() {
             </div>
             <button className="reset-button" onClick={() => setWeights(selectedProfile?.weights ?? fallbackWeights)}><RotateCcw size={14} /> Reset class priority</button>
             <div className="hybrid-callout"><Sparkles size={18} /><div><p>Class priority active</p><span>Gear results are ranked automatically using the selected specialization’s ordered {selectedProfile?.context.toUpperCase() ?? "PvE"} stats.</span></div></div>
+            <div className="system-power-card">
+              <div className="system-power-heading"><EyeOff size={16} /><div><p>Hidden Ascension power</p><span>Reported by the live CoA client, separate from EP</span></div></div>
+              <div className="system-power-totals">
+                <div className={level >= 60 && selectedProfile?.context === "pve" ? "active" : ""}><span>PvE Power</span><strong>{Math.round(pvePower)}</strong></div>
+                <div className={level >= 60 && selectedProfile?.context === "pvp" ? "active" : ""}><span>PvP Power</span><strong>{Math.round(pvpPower)}</strong></div>
+              </div>
+              <small>{level < 60
+                ? "Recorded for reference; inactive in rankings below level 60."
+                : selectedProfile
+                  ? `${selectedProfile.context.toUpperCase()} ranking uses ${Math.round(activePower)} matching Power first, then EP to break ties.`
+                  : "Choose a class profile to activate the matching max-level Power."}</small>
+            </div>
             <div className="summary-card">
               <p className="eyebrow">Loadout totals</p>
               <div className="mt-3 grid grid-cols-2 gap-x-5 gap-y-3">{summaryKeys.map((key) => <div className="summary-stat" key={key}><span>{STAT_LABELS[key]}</span><strong>{Math.round(allStats[key] ?? 0)}</strong></div>)}</div>
@@ -217,6 +234,7 @@ export function GearPlanner() {
         loading={loadingCandidates}
         level={level}
         profile={profile}
+        context={selectedProfile?.context}
         profileLabel={profileName}
         onEquip={(item) => setLoadout((current) => ({ ...current, [activeSlot]: item }))}
         onClose={() => setActiveSlot(null)}

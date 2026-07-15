@@ -40,6 +40,7 @@ export const API_STAT_KEYS: Record<string, StatKey> = {
   ITEM_MOD_ARMOR_PENETRATION_RATING_SHORT: "armor_penetration", ITEM_MOD_SPELL_PENETRATION_SHORT: "spell_penetration",
   ITEM_MOD_RESILIENCE_RATING_SHORT: "resilience_rating", ITEM_MOD_RESILIENCE_RATING: "resilience_rating",
   ITEM_MOD_POWER_REGEN0_SHORT: "mp5", ITEM_MOD_HEALTH_REGEN_SHORT: "hp5", ITEM_MOD_DAMAGE_PER_SECOND_SHORT: "weapon_dps",
+  PVE_POWER: "pve_power", PVP_POWER: "pvp_power",
   RESISTANCE0_NAME: "armor",
 };
 

@@ -1,5 +1,5 @@
 import classData from "@/data/coa-classes.json";
-import type { CoAClass, CoAProfile, CoASelection, CoASpec, GearContext } from "@/types/coa";
+import type { CoAClass, CoAProfile, CoASelection, CoASpec } from "@/types/coa";
 import type { StatKey, StatMap } from "@/types/gear";
 
 export const COA_CLASSES = classData.classes as CoAClass[];
@@ -41,7 +41,7 @@ const BUDGET_NORMALIZER: Partial<Record<StatKey, number>> = {
   mp5: 0.6,
 };
 
-export function weightsFromPriority(priority: string, spec: CoASpec, context: GearContext): StatMap {
+export function weightsFromPriority(priority: string, spec: CoASpec): StatMap {
   const segments = priority.split(/\s*>\s*/);
   const weights: StatMap = {};
   segments.forEach((segment, index) => {
@@ -55,8 +55,6 @@ export function weightsFromPriority(priority: string, spec: CoASpec, context: Ge
   const physicalWeapon = !/caster|held off-hand/i.test(`${spec.weapon.style} ${spec.weapon.main}`)
     && !spec.roles.every((role) => /healer|support/i.test(role));
   if (physicalWeapon) weights.weapon_dps = 2.4;
-  if (context === "pve") weights.pve_power = 0.35;
-  else weights.pvp_power = 0.8;
   return weights;
 }
 
@@ -65,7 +63,7 @@ export function resolveCoAProfile(selection: CoASelection): CoAProfile | undefin
   const spec = classInfo?.specs.find((item) => item.name === selection.specName);
   if (!classInfo || !spec) return undefined;
   const priority = spec.statPriority[selection.context] || spec.statPriority.pve;
-  return { classInfo, spec, context: selection.context, priority, weights: weightsFromPriority(priority, spec, selection.context) };
+  return { classInfo, spec, context: selection.context, priority, weights: weightsFromPriority(priority, spec) };
 }
 
 export function isCoASelection(value: unknown): value is CoASelection {

@@ -96,8 +96,8 @@ export const STAT_LABELS: Record<StatKey, string> = {
   resilience_rating: "Resilience",
   mp5: "Mana / 5 sec",
   hp5: "Health / 5 sec",
-  pve_power: "PvE Power",
-  pvp_power: "PvP Power",
+  pve_power: "PvE Power (hidden)",
+  pvp_power: "PvP Power (hidden)",
   weapon_dps: "Weapon DPS",
   custom_power: "Custom Power",
 };

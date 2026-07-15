@@ -1,7 +1,12 @@
 import type { GearItem, HybridScalingRule, ScoredItem, StatKey, StatMap } from "@/types/gear";
+import type { GearContext } from "@/types/coa";
+
+export const SYSTEM_POWER_KEYS = ["pve_power", "pvp_power"] as const satisfies readonly StatKey[];
+const systemPowerKeys = new Set<StatKey>(SYSTEM_POWER_KEYS);
 
 export interface WeightProfile {
   weights: StatMap;
+  context?: GearContext;
   caps?: Partial<Record<StatKey, { soft?: number; hard?: number; afterSoftCapWeight?: number }>>;
   hybridRules?: HybridScalingRule[];
 }
@@ -37,6 +42,9 @@ function applyHybridRules(stats: StatMap, rules: HybridScalingRule[]): void {
 export function calculateEp(stats: StatMap, profile: WeightProfile): number {
   let score = 0;
   for (const [key, value] of Object.entries(stats) as Array<[StatKey, number]>) {
+    // Ascension Power is an endgame progression system, not a normal EP stat.
+    // It is compared separately so a guessed conversion cannot distort EP.
+    if (systemPowerKeys.has(key)) continue;
     const weight = profile.weights[key] ?? 0;
     const cap = profile.caps?.[key];
     if (!cap?.soft) {
@@ -48,6 +56,29 @@ export function calculateEp(stats: StatMap, profile: WeightProfile): number {
     score += below * weight + above * weight * (cap.afterSoftCapWeight ?? 0.25);
   }
   return score;
+}
+
+export function isSystemPowerKey(key: StatKey): key is (typeof SYSTEM_POWER_KEYS)[number] {
+  return systemPowerKeys.has(key);
+}
+
+export function withoutSystemPowerWeights(weights: StatMap): StatMap {
+  return Object.fromEntries((Object.entries(weights) as Array<[StatKey, number]>)
+    .filter(([key]) => !isSystemPowerKey(key))) as StatMap;
+}
+
+export function contextualPower(stats: StatMap, level: number, context?: GearContext): number {
+  if (level < 60 || !context) return 0;
+  return stats[context === "pve" ? "pve_power" : "pvp_power"] ?? 0;
+}
+
+/**
+ * At max level, compare the matching Ascension progression power first and
+ * use normal EP as the tie-breaker. Below max level, ranking is EP-only.
+ */
+export function compareScoredItems(a: ScoredItem, b: ScoredItem, level: number, context?: GearContext): number {
+  const powerDifference = contextualPower(b.resolvedStats, level, context) - contextualPower(a.resolvedStats, level, context);
+  return Math.abs(powerDifference) > 0.001 ? powerDifference : b.ep - a.ep;
 }
 
 export function scoreItem(item: GearItem, level: number, profile: WeightProfile): ScoredItem {
