@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { Check, ChevronDown, EyeOff, RotateCcw, Save, Settings2, Sparkles, Upload } from "lucide-react";
+import { Check, ChevronDown, EyeOff, RotateCcw, Save, Settings2, Sparkles, Trash2, Upload, X } from "lucide-react";
 import { isCoASelection, resolveCoAProfile } from "@/lib/coa";
 import { calculateEp, isSystemPowerKey, resolveItemStats, scoreItem, withoutSystemPowerWeights, type WeightProfile } from "@/lib/ep";
 import { findStaticItemsForSlot } from "@/lib/items/static-catalog";
@@ -24,17 +24,20 @@ function labelSlot(slot: EquipmentSlot): string {
   return slot.replace("_1", " I").replace("_2", " II").replaceAll("_", " ");
 }
 
-function SlotCard({ slot, item, level, profile, side, onClick }: { slot: EquipmentSlot; item?: GearItem; level: number; profile: WeightProfile; side: "left" | "right"; onClick: () => void }) {
+function SlotCard({ slot, item, level, profile, side, onClick, onClear }: { slot: EquipmentSlot; item?: GearItem; level: number; profile: WeightProfile; side: "left" | "right"; onClick: () => void; onClear: () => void }) {
   const ep = item ? scoreItem(item, level, profile).ep : 0;
   return (
-    <button className={`gear-slot ${side} group`} onClick={onClick} aria-label={`Choose item for ${labelSlot(slot)}`}>
-      <GameItemIcon item={item} slot={slot} className={`slot-icon ${qualityBorder[item?.quality ?? "COMMON"] ?? ""}`} />
-      <div className={`min-w-0 flex-1 ${side === "right" ? "text-right" : "text-left"}`}>
-        <span className="slot-label">{labelSlot(slot)}</span>
-        <span className="item-name">{item?.name ?? "Empty slot"}</span>
-      </div>
-      <span className="slot-ep">{ep.toFixed(0)}</span>
-    </button>
+    <div className="gear-slot-wrap">
+      <button className={`gear-slot ${side} group`} onClick={onClick} aria-label={`Choose item for ${labelSlot(slot)}`}>
+        <GameItemIcon item={item} slot={slot} className={`slot-icon ${qualityBorder[item?.quality ?? "COMMON"] ?? ""}`} />
+        <div className={`min-w-0 flex-1 ${side === "right" ? "text-right" : "text-left"}`}>
+          <span className="slot-label">{labelSlot(slot)}</span>
+          <span className="item-name">{item?.name ?? "Empty slot"}</span>
+        </div>
+        <span className="slot-ep">{ep.toFixed(0)}</span>
+      </button>
+      {item ? <button type="button" className={`slot-clear ${side}`} onClick={onClear} aria-label={`Unequip ${item.name} from ${labelSlot(slot)}`} title={`Unequip ${item.name}`}><X size={12} /></button> : null}
+    </div>
   );
 }
 
@@ -178,6 +181,15 @@ export function GearPlanner() {
     setActiveSlot(slot);
   }
 
+  function clearSlot(slot: EquipmentSlot): void {
+    setLoadout((current) => {
+      if (!current[slot]) return current;
+      const next = { ...current };
+      delete next[slot];
+      return next;
+    });
+  }
+
   function chooseClass(nextSelection: CoASelection): void {
     const resolved = resolveCoAProfile(nextSelection);
     if (!resolved) return;
@@ -219,9 +231,9 @@ export function GearPlanner() {
 
         <div className="planner-layout" id="planner">
           <section className="armory-panel">
-            <div className="panel-heading"><div><p className="eyebrow">Paper doll</p><h2>Equipped loadout</h2></div><div className="total-ep"><span>Total score</span><strong>{totalEp.toFixed(1)} <small>EP</small></strong></div></div>
+            <div className="panel-heading"><div><p className="eyebrow">Paper doll</p><h2>Equipped loadout</h2></div><div className="panel-heading-actions"><button type="button" className="clear-loadout-button" disabled={Object.keys(loadout).length === 0} onClick={() => setLoadout({})}><Trash2 size={13} /> Clear all gear</button><div className="total-ep"><span>Total score</span><strong>{totalEp.toFixed(1)} <small>EP</small></strong></div></div></div>
             <div className="paper-doll-grid">
-              <div className="slot-column">{leftSlots.map((slot) => <SlotCard key={slot} slot={slot} item={loadout[slot]} level={level} profile={profile} side="left" onClick={() => openSlot(slot)} />)}</div>
+              <div className="slot-column">{leftSlots.map((slot) => <SlotCard key={slot} slot={slot} item={loadout[slot]} level={level} profile={profile} side="left" onClick={() => openSlot(slot)} onClear={() => clearSlot(slot)} />)}</div>
               <div className="character-stage">
                 <div className="model-nameplate"><span>Level {level}</span><strong>{selectedProfile ? `${selectedProfile.spec.name} ${selectedProfile.classInfo.name}` : "Azerothian Hero"}</strong></div>
                 <div className="character-glow" />
@@ -230,9 +242,9 @@ export function GearPlanner() {
                 <div className="model-turn-control"><small>Equipped appearance</small></div>
                 <div className="realm-chip"><span /> Conquest of Azeroth</div>
               </div>
-              <div className="slot-column">{rightSlots.map((slot) => <SlotCard key={slot} slot={slot} item={loadout[slot]} level={level} profile={profile} side="right" onClick={() => openSlot(slot)} />)}</div>
+              <div className="slot-column">{rightSlots.map((slot) => <SlotCard key={slot} slot={slot} item={loadout[slot]} level={level} profile={profile} side="right" onClick={() => openSlot(slot)} onClear={() => clearSlot(slot)} />)}</div>
             </div>
-            <div className="mobile-slot-grid">{[...leftSlots, ...rightSlots].map((slot) => <SlotCard key={slot} slot={slot} item={loadout[slot]} level={level} profile={profile} side="left" onClick={() => openSlot(slot)} />)}</div>
+            <div className="mobile-slot-grid">{[...leftSlots, ...rightSlots].map((slot) => <SlotCard key={slot} slot={slot} item={loadout[slot]} level={level} profile={profile} side="left" onClick={() => openSlot(slot)} onClear={() => clearSlot(slot)} />)}</div>
           </section>
 
           <aside className="weights-panel" id="weights">
