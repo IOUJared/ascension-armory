@@ -1,64 +1,64 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-15T19:52:28.626Z",
-  "itemCount": 35181,
+  "generatedAt": "2026-07-15T21:31:52.193Z",
+  "itemCount": 37943,
   "idIndexPath": "data/catalog/item-index.json",
   "shards": {
     "HEAD": {
       "path": "data/catalog/slots/head.json",
-      "itemCount": 2053
+      "itemCount": 2402
     },
     "NECK": {
       "path": "data/catalog/slots/neck.json",
-      "itemCount": 1208
+      "itemCount": 1225
     },
     "SHOULDERS": {
       "path": "data/catalog/slots/shoulders.json",
-      "itemCount": 1988
+      "itemCount": 2386
     },
     "BACK": {
       "path": "data/catalog/slots/back.json",
-      "itemCount": 1646
+      "itemCount": 1792
     },
     "CHEST": {
       "path": "data/catalog/slots/chest.json",
-      "itemCount": 2665
+      "itemCount": 2875
     },
     "WRISTS": {
       "path": "data/catalog/slots/wrists.json",
-      "itemCount": 1792
+      "itemCount": 2056
     },
     "HANDS": {
       "path": "data/catalog/slots/hands.json",
-      "itemCount": 2208
+      "itemCount": 2570
     },
     "WAIST": {
       "path": "data/catalog/slots/waist.json",
-      "itemCount": 2016
+      "itemCount": 2226
     },
     "LEGS": {
       "path": "data/catalog/slots/legs.json",
-      "itemCount": 2286
+      "itemCount": 2655
     },
     "FEET": {
       "path": "data/catalog/slots/feet.json",
-      "itemCount": 2359
+      "itemCount": 2672
     },
     "FINGER_1": {
       "path": "data/catalog/slots/finger-1.json",
-      "itemCount": 1581
+      "itemCount": 1609
     },
     "TRINKET_1": {
       "path": "data/catalog/slots/trinket-1.json",
-      "itemCount": 1491
+      "itemCount": 1497
     },
     "MAIN_HAND": {
       "path": "data/catalog/slots/main-hand.json",
-      "itemCount": 7303
+      "itemCount": 7327
     },
     "OFF_HAND": {
       "path": "data/catalog/slots/off-hand.json",
-      "itemCount": 1653
+      "itemCount": 1719
     },
     "RANGED": {
       "path": "data/catalog/slots/ranged.json",

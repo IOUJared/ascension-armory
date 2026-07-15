@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
-import type { GearItem } from "../src/domain/gear";
+import { isSystemPowerKey, type GearItem, type StatMap } from "../src/domain/gear";
 
 interface CatalogDocument {
   generatedAt: string;
@@ -17,6 +17,10 @@ function item(id: string): GearItem {
   return found;
 }
 
+function visibleStats(entry: GearItem): StatMap {
+  return Object.fromEntries(Object.entries(entry.stats).filter(([key]) => !isSystemPowerKey(key as keyof StatMap))) as StatMap;
+}
+
 test("the published catalog retains the current verified CoA corpus", () => {
   assert.ok(catalog.items.length >= 35_000);
   assert.ok(Number.isFinite(Date.parse(catalog.generatedAt)));
@@ -30,7 +34,7 @@ test("rendered-tooltip armor corrections cannot regress to template values", () 
 
   assert.equal(item("7691").name, "Embalmed Shroud");
   assert.equal(item("7691").armor, 42);
-  assert.deepEqual(item("7691").stats, { intellect: 11, stamina: 7, spell_power: 14 });
+  assert.deepEqual(visibleStats(item("7691")), { intellect: 11, spell_power: 14, stamina: 7 });
 
   assert.equal(item("6688").name, "Whisperwind Headdress");
   assert.equal(item("6688").armor, 84);
@@ -40,7 +44,7 @@ test("Black Velvet Robes retains its in-game armor and primary stats", () => {
   const robes = item("2800");
   assert.equal(robes.name, "Black Velvet Robes");
   assert.equal(robes.armor, 50);
-  assert.deepEqual(robes.stats, { intellect: 15, stamina: 6 });
+  assert.deepEqual(visibleStats(robes), { intellect: 15, stamina: 6 });
 });
 
 test("Staff of Jordan retains caster stats as well as weapon damage", () => {
