@@ -116,9 +116,14 @@ local function Snapshot(candidate)
   }
 end
 
+local function HasRecord(itemID)
+  local key = tostring(itemID)
+  return (AscensionArmoryCatalogDB.exports and AscensionArmoryCatalogDB.exports[key])
+    or (AscensionArmoryCatalogDB.records and AscensionArmoryCatalogDB.records[key])
+end
+
 local function Enqueue(candidate, force)
-  if AscensionArmoryCatalogDB and AscensionArmoryCatalogDB.records
-    and AscensionArmoryCatalogDB.records[tostring(candidate.id)] and not force then return end
+  if AscensionArmoryCatalogDB and HasRecord(candidate.id) and not force then return end
   local key = tostring(candidate.id) .. "|" .. tostring(candidate.link or "")
   if queued[key] then return end
   queued[key] = true
@@ -130,7 +135,6 @@ local function Remaining()
 end
 
 local function Store(candidate, snapshot)
-  AscensionArmoryCatalogDB.records[tostring(candidate.id)] = snapshot
   local statParts = {}
   for key, value in pairs(snapshot.stats or {}) do
     table.insert(statParts, key .. ":" .. tostring(value))
@@ -150,6 +154,9 @@ local function Store(candidate, snapshot)
     tostring(snapshot.inventoryType or 0), tostring(snapshot.classID or 0),
     tostring(snapshot.subClassID or 0),
   }, "~")
+  -- The encoded export contains everything the importer needs. Keeping the
+  -- full snapshot as well doubled SavedVariables to tens of megabytes.
+  AscensionArmoryCatalogDB.records[tostring(candidate.id)] = nil
   AscensionArmoryCatalogDB.completed = (AscensionArmoryCatalogDB.completed or 0) + 1
   if GetItemDifficultyID then
     for difficulty = 4, 9 do
@@ -229,6 +236,11 @@ scanner:SetScript("OnEvent", function(_, event, addonName)
   AscensionArmoryCatalogDB.exports = AscensionArmoryCatalogDB.exports or {}
   AscensionArmoryCatalogDB.failures = AscensionArmoryCatalogDB.failures or {}
   AscensionArmoryCatalogDB.completed = AscensionArmoryCatalogDB.completed or 0
+  for itemID in pairs(AscensionArmoryCatalogDB.records) do
+    if AscensionArmoryCatalogDB.exports[itemID] then
+      AscensionArmoryCatalogDB.records[itemID] = nil
+    end
+  end
 end)
 
 local function BeginQueue(label)
@@ -244,7 +256,7 @@ end
 local function StartScan()
   queue, queueHead, queued, current = {}, 1, {}, nil
   for _, candidate in ipairs(AscensionArmoryWorldforgedCandidates or {}) do
-    if not AscensionArmoryCatalogDB.records[tostring(candidate.id)] then Enqueue(candidate) end
+    if not HasRecord(candidate.id) then Enqueue(candidate) end
   end
   BeginQueue("current CoA")
 end
@@ -253,9 +265,12 @@ local function RetryFailures()
   queue, queueHead, queued, current = {}, 1, {}, nil
   for itemID in pairs(AscensionArmoryCatalogDB.failures) do
     local numericID = tonumber(itemID)
-    if numericID and not AscensionArmoryCatalogDB.records[itemID] then
+    if numericID and not HasRecord(itemID) then
       Enqueue({ id = numericID })
     end
+  end
+  for _, itemID in ipairs(AscensionArmoryRetryCandidates or {}) do
+    if not HasRecord(itemID) then Enqueue({ id = itemID }) end
   end
   BeginQueue("previously unresolved")
 end

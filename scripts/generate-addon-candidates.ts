@@ -1,5 +1,6 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
+import { prisma } from "../src/lib/db";
 
 interface CandidateSource {
   items?: Array<{ id: string; link?: string }>;
@@ -79,11 +80,35 @@ async function main(): Promise<void> {
   const armorCandidates = currentCatalog.items
     .filter((item) => Number(item.armor) > 0)
     .map((item) => Number(item.id));
+  let retryCandidates: number[] = [];
+  try {
+    const candidateIds = [...candidates.keys()];
+    const captured = new Set<string>();
+    for (let offset = 0; offset < candidateIds.length; offset += 500) {
+      const rows = await prisma.item.findMany({
+        where: {
+          id: { in: candidateIds.slice(offset, offset + 500).map(BigInt) },
+          sourceUrl: { startsWith: "ingame-scan://" },
+        },
+        select: { id: true },
+      });
+      for (const row of rows) captured.add(row.id.toString());
+    }
+    retryCandidates = candidateIds.filter((id) => !captured.has(id)).map(Number);
+  } catch (error) {
+    console.warn(`Could not derive pending in-game candidates: ${error instanceof Error ? error.message : error}`);
+  }
   const output = [
     "-- Generated from LootCollector, client variants, generated dungeon tiers, and the current CoA AtlasLoot index.",
     "-- Discovery metadata only; the scanner asks the CoA realm for item data.",
     "AscensionArmoryWorldforgedCandidates = {",
     ...candidates.values(),
+    "}",
+    "",
+    "-- Candidates not yet present in the imported current-realm database.",
+    "AscensionArmoryRetryCandidates = {",
+    ...Array.from({ length: Math.ceil(retryCandidates.length / 20) }, (_, index) =>
+      `  ${retryCandidates.slice(index * 20, index * 20 + 20).join(", ")},`),
     "}",
     "",
     "-- Existing armor-bearing catalog entries for rendered-tooltip verification.",
@@ -106,10 +131,11 @@ async function main(): Promise<void> {
     atlasLoot: atlasLoot.items.length,
     atlasLootAlreadyCurrent: atlasLoot.items.filter((item) => alreadyCurrent.has(item.id)).length,
     armorRefresh: armorCandidates.length,
+    retryMissing: retryCandidates.length,
   }));
 }
 
-main().catch((error: unknown) => {
+main().finally(() => prisma.$disconnect()).catch((error: unknown) => {
   console.error(error instanceof Error ? error.message : error);
   process.exitCode = 1;
 });

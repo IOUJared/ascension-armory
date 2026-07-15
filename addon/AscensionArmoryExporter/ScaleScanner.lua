@@ -35,9 +35,14 @@ local function ScaleLink(itemID, effectiveLevel)
   return "item:" .. tostring(itemID) .. ":0:0:0:0:0:0:0:" .. tostring(effectiveLevel)
 end
 
+local function HasScaleRecord(key)
+  return (AscensionArmoryCatalogDB.scaleExports and AscensionArmoryCatalogDB.scaleExports[key])
+    or (AscensionArmoryCatalogDB.scaleRecords and AscensionArmoryCatalogDB.scaleRecords[key])
+end
+
 local function Enqueue(itemID, effectiveLevel, force)
   local key = ScaleKey(itemID, effectiveLevel)
-  if queued[key] or (AscensionArmoryCatalogDB.scaleRecords[key] and not force) then return end
+  if queued[key] or (HasScaleRecord(key) and not force) then return end
   queued[key] = true
   table.insert(queue, { id = itemID, level = effectiveLevel, key = key, attempts = 0 })
 end
@@ -116,15 +121,6 @@ local function Store(candidate, snapshot)
     table.insert(statParts, key .. ":" .. tostring(value))
   end
   table.sort(statParts)
-  AscensionArmoryCatalogDB.scaleRecords[candidate.key] = {
-    itemID = candidate.id,
-    effectiveLevel = candidate.level,
-    itemLevel = snapshot.itemLevel,
-    requiredLevel = snapshot.requiredLevel,
-    stats = snapshot.stats,
-    capturedPlayerLevel = snapshot.playerLevel,
-    capturedAt = snapshot.capturedAt,
-  }
   AscensionArmoryCatalogDB.scaleExports[candidate.key] = table.concat({
     "AAS1", tostring(candidate.id), tostring(candidate.level), Encode(snapshot.link),
     tostring(snapshot.itemLevel or 0), tostring(snapshot.requiredLevel or 0),
@@ -132,6 +128,7 @@ local function Store(candidate, snapshot)
     Encode(snapshot.sourceRealm), tostring(snapshot.quality or 1),
     Encode(IconName(snapshot.icon)), Encode(snapshot.name),
   }, "~")
+  AscensionArmoryCatalogDB.scaleRecords[candidate.key] = nil
   AscensionArmoryCatalogDB.scaleFailures[candidate.key] = nil
   AscensionArmoryCatalogDB.scaleCompleted = (AscensionArmoryCatalogDB.scaleCompleted or 0) + 1
 end
@@ -191,6 +188,11 @@ scanner:SetScript("OnEvent", function(_, event, addonName)
   AscensionArmoryCatalogDB.scaleExports = AscensionArmoryCatalogDB.scaleExports or {}
   AscensionArmoryCatalogDB.scaleFailures = AscensionArmoryCatalogDB.scaleFailures or {}
   AscensionArmoryCatalogDB.scaleCompleted = AscensionArmoryCatalogDB.scaleCompleted or 0
+  for key in pairs(AscensionArmoryCatalogDB.scaleRecords) do
+    if AscensionArmoryCatalogDB.scaleExports[key] then
+      AscensionArmoryCatalogDB.scaleRecords[key] = nil
+    end
+  end
 end)
 
 local function Start(items, minimumLevel, maximumLevel, force)

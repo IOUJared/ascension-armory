@@ -74,8 +74,11 @@ included addon can query LootCollector candidates through the current realm and
 capture `GetItemStats`, the rendered tooltip, PvE/PvP power, inventory type and
 the player level used for the snapshot. In game, run `/aacatalog`; use
 `/aacatalog status` or `/aacatalog stop` as needed. After a completed pass,
-`/aacatalog retry` queues only the previously unresolved IDs. Run `/reload`
-after the scan finishes to save it for import. Then import the saved snapshots:
+`/aacatalog retry` queues both locally unresolved IDs and candidates still
+missing from the imported realm database. Successful records are kept only in
+their compact export form so large scans do not duplicate SavedVariables data.
+Run `/reload` after the scan finishes to save it for import. Then import the
+saved snapshots:
 
 ```bash
 npm run ingest:addon-catalog -- \
