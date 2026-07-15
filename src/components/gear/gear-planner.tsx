@@ -208,14 +208,14 @@ export function GearPlanner() {
         saveBuildNow();
         return;
       }
-      if (editing || event.ctrlKey || event.metaKey || event.altKey
-        || activeEnchantSlot || activeSlot || importerOpen || selectorOpen) return;
-      if (key === "i") {
+      if (editing || event.ctrlKey || event.metaKey || event.altKey) return;
+      if (key === "i" && !activeEnchantSlot && !activeSlot && !selectorOpen) {
         event.preventDefault();
-        setImporterOpen(true);
-      } else if (key === "c") {
+        setImporterOpen((open) => !open);
+      } else if (key === "c" && !activeEnchantSlot && !activeSlot && !importerOpen) {
         event.preventDefault();
-        setSelectorOpen(true);
+        if (selectorOpen && !selection) return;
+        setSelectorOpen((open) => !open);
       }
     }
 

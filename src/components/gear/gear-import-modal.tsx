@@ -95,7 +95,7 @@ export function GearImportModal({ onImport, onClose }: GearImportModalProps) {
                 event.preventDefault();
                 void importGear();
               }
-            }} placeholder="AA2|60|HEAD=410036:0:0:0...~3~60~55~inv_helmet_30~Item%20Name~ITEM_MOD_STAMINA_SHORT:12..." autoFocus spellCheck={false} />
+            }} placeholder="AA2|60|HEAD=410036:0:0:0...~3~60~55~inv_helmet_30~Item%20Name~ITEM_MOD_STAMINA_SHORT:12..." spellCheck={false} />
           </label>
 
           {error ? <div className="import-message error">{error}</div> : null}
