@@ -69,6 +69,8 @@ export interface GearItem {
   armorType?: string;
   armor?: number;
   weaponDamage?: { min: number; max: number; speed: number; dps: number };
+  weaponType?: string;
+  twoHanded?: boolean;
   icon?: string;
   /** WoW ItemDisplayInfo ID used to dress the 3D character model. */
   displayId?: number;

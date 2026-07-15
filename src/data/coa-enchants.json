@@ -1,0 +1,2440 @@
+{
+  "source": "Current CoA client DBC + installed AtlasLoot",
+  "items": [
+    {
+      "id": "spell:20023",
+      "spellId": 20023,
+      "enchantmentId": 1887,
+      "name": "Enchant Boots - Greater Agility",
+      "description": "+7 Agility",
+      "slots": [
+        "FEET"
+      ],
+      "minimumItemLevel": 30,
+      "stats": {
+        "agility": 7
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:20024",
+      "spellId": 20024,
+      "enchantmentId": 851,
+      "name": "Enchant Boots - Spirit",
+      "description": "+5 Spirit",
+      "slots": [
+        "FEET"
+      ],
+      "minimumItemLevel": 20,
+      "stats": {
+        "spirit": 5
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:20020",
+      "spellId": 20020,
+      "enchantmentId": 929,
+      "name": "Enchant Boots - Greater Stamina",
+      "description": "+7 Stamina",
+      "slots": [
+        "FEET"
+      ],
+      "minimumItemLevel": 30,
+      "stats": {
+        "stamina": 7
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:63746",
+      "spellId": 63746,
+      "enchantmentId": 3858,
+      "name": "Enchant Boots - Lesser Accuracy",
+      "description": "+5 Hit Rating",
+      "slots": [
+        "FEET"
+      ],
+      "minimumItemLevel": 30,
+      "stats": {
+        "hit_rating": 5
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13935",
+      "spellId": 13935,
+      "enchantmentId": 904,
+      "name": "Enchant Boots - Agility",
+      "description": "+5 Agility",
+      "slots": [
+        "FEET"
+      ],
+      "minimumItemLevel": 20,
+      "stats": {
+        "agility": 5
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13890",
+      "spellId": 13890,
+      "enchantmentId": 911,
+      "name": "Enchant Boots - Minor Speed",
+      "description": "Minor Speed Increase",
+      "slots": [
+        "FEET"
+      ],
+      "minimumItemLevel": 30,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13836",
+      "spellId": 13836,
+      "enchantmentId": 852,
+      "name": "Enchant Boots - Stamina",
+      "description": "+5 Stamina",
+      "slots": [
+        "FEET"
+      ],
+      "minimumItemLevel": 20,
+      "stats": {
+        "stamina": 5
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13687",
+      "spellId": 13687,
+      "enchantmentId": 25150,
+      "name": "Enchant Boots - Lesser Spirit",
+      "description": "+3 Spirit",
+      "slots": [
+        "FEET"
+      ],
+      "minimumItemLevel": 20,
+      "stats": {
+        "spirit": 3
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13644",
+      "spellId": 13644,
+      "enchantmentId": 724,
+      "name": "Enchant Boots - Lesser Stamina",
+      "description": "+3 Stamina",
+      "slots": [
+        "FEET"
+      ],
+      "minimumItemLevel": 0,
+      "stats": {
+        "stamina": 3
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13637",
+      "spellId": 13637,
+      "enchantmentId": 849,
+      "name": "Enchant Boots - Lesser Agility",
+      "description": "+3 Agility",
+      "slots": [
+        "FEET"
+      ],
+      "minimumItemLevel": 20,
+      "stats": {
+        "agility": 3
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:7867",
+      "spellId": 7867,
+      "enchantmentId": 247,
+      "name": "Enchant Boots - Minor Agility",
+      "description": "+1 Agility",
+      "slots": [
+        "FEET"
+      ],
+      "minimumItemLevel": 0,
+      "stats": {
+        "agility": 1
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:7863",
+      "spellId": 7863,
+      "enchantmentId": 66,
+      "name": "Enchant Boots - Minor Stamina",
+      "description": "+1 Stamina",
+      "slots": [
+        "FEET"
+      ],
+      "minimumItemLevel": 0,
+      "stats": {
+        "stamina": 1
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:23802",
+      "spellId": 23802,
+      "enchantmentId": 25171,
+      "name": "Enchant Bracers - Healing Power",
+      "description": "+15 Spell Power",
+      "slots": [
+        "WRISTS"
+      ],
+      "minimumItemLevel": 58,
+      "stats": {
+        "spell_power": 15
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:20011",
+      "spellId": 20011,
+      "enchantmentId": 1886,
+      "name": "Enchant Bracers - Superior Stamina",
+      "description": "+9 Stamina",
+      "slots": [
+        "WRISTS"
+      ],
+      "minimumItemLevel": 30,
+      "stats": {
+        "stamina": 9
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:20010",
+      "spellId": 20010,
+      "enchantmentId": 1885,
+      "name": "Enchant Bracers - Superior Strength",
+      "description": "+9 Strength",
+      "slots": [
+        "WRISTS"
+      ],
+      "minimumItemLevel": 30,
+      "stats": {
+        "strength": 9
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:23801",
+      "spellId": 23801,
+      "enchantmentId": 2565,
+      "name": "Enchant Bracers - Mana Regeneration",
+      "description": "Mana Regen 5 per 5 sec.",
+      "slots": [
+        "WRISTS"
+      ],
+      "minimumItemLevel": 58,
+      "stats": {
+        "mp5": 5
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:20009",
+      "spellId": 20009,
+      "enchantmentId": 1884,
+      "name": "Enchant Bracers - Superior Spirit",
+      "description": "+9 Spirit",
+      "slots": [
+        "WRISTS"
+      ],
+      "minimumItemLevel": 30,
+      "stats": {
+        "spirit": 9
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:20008",
+      "spellId": 20008,
+      "enchantmentId": 1883,
+      "name": "Enchant Bracers - Greater Intellect",
+      "description": "+7 Intellect",
+      "slots": [
+        "WRISTS"
+      ],
+      "minimumItemLevel": 30,
+      "stats": {
+        "intellect": 7
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13939",
+      "spellId": 13939,
+      "enchantmentId": 927,
+      "name": "Enchant Bracers - Greater Strength",
+      "description": "+7 Strength",
+      "slots": [
+        "WRISTS"
+      ],
+      "minimumItemLevel": 30,
+      "stats": {
+        "strength": 7
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13945",
+      "spellId": 13945,
+      "enchantmentId": 929,
+      "name": "Enchant Bracers - Greater Stamina",
+      "description": "+7 Stamina",
+      "slots": [
+        "WRISTS"
+      ],
+      "minimumItemLevel": 30,
+      "stats": {
+        "stamina": 7
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13931",
+      "spellId": 13931,
+      "enchantmentId": 923,
+      "name": "Enchant Bracers - Deflection",
+      "description": "+5 Defense Rating",
+      "slots": [
+        "WRISTS"
+      ],
+      "minimumItemLevel": 30,
+      "stats": {
+        "defense_rating": 5
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13846",
+      "spellId": 13846,
+      "enchantmentId": 25158,
+      "name": "Enchant Bracers - Greater Spirit",
+      "description": "+7 Spirit",
+      "slots": [
+        "WRISTS"
+      ],
+      "minimumItemLevel": 20,
+      "stats": {
+        "spirit": 7
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13822",
+      "spellId": 13822,
+      "enchantmentId": 905,
+      "name": "Enchant Bracers - Intellect",
+      "description": "+5 Intellect",
+      "slots": [
+        "WRISTS"
+      ],
+      "minimumItemLevel": 20,
+      "stats": {
+        "intellect": 5
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13661",
+      "spellId": 13661,
+      "enchantmentId": 25156,
+      "name": "Enchant Bracers - Strength",
+      "description": "+5 Strength",
+      "slots": [
+        "WRISTS"
+      ],
+      "minimumItemLevel": 20,
+      "stats": {
+        "strength": 5
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13646",
+      "spellId": 13646,
+      "enchantmentId": 925,
+      "name": "Enchant Bracers - Lesser Deflection",
+      "description": "+3 Defense Rating",
+      "slots": [
+        "WRISTS"
+      ],
+      "minimumItemLevel": 20,
+      "stats": {
+        "defense_rating": 3
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13648",
+      "spellId": 13648,
+      "enchantmentId": 852,
+      "name": "Enchant Bracers - Stamina",
+      "description": "+5 Stamina",
+      "slots": [
+        "WRISTS"
+      ],
+      "minimumItemLevel": 20,
+      "stats": {
+        "stamina": 5
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13642",
+      "spellId": 13642,
+      "enchantmentId": 25155,
+      "name": "Enchant Bracers - Spirit",
+      "description": "+5 Spirit",
+      "slots": [
+        "WRISTS"
+      ],
+      "minimumItemLevel": 20,
+      "stats": {
+        "spirit": 5
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13622",
+      "spellId": 13622,
+      "enchantmentId": 723,
+      "name": "Enchant Bracers - Lesser Intellect",
+      "description": "+3 Intellect",
+      "slots": [
+        "WRISTS"
+      ],
+      "minimumItemLevel": 0,
+      "stats": {
+        "intellect": 3
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13536",
+      "spellId": 13536,
+      "enchantmentId": 823,
+      "name": "Enchant Bracers - Lesser Strength",
+      "description": "+3 Strength",
+      "slots": [
+        "WRISTS"
+      ],
+      "minimumItemLevel": 0,
+      "stats": {
+        "strength": 3
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13501",
+      "spellId": 13501,
+      "enchantmentId": 25153,
+      "name": "Enchant Bracers - Lesser Stamina",
+      "description": "+3 Stamina",
+      "slots": [
+        "WRISTS"
+      ],
+      "minimumItemLevel": 0,
+      "stats": {
+        "stamina": 3
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:7859",
+      "spellId": 7859,
+      "enchantmentId": 255,
+      "name": "Enchant Bracers - Lesser Spirit",
+      "description": "+3 Spirit",
+      "slots": [
+        "WRISTS"
+      ],
+      "minimumItemLevel": 0,
+      "stats": {
+        "spirit": 3
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:7779",
+      "spellId": 7779,
+      "enchantmentId": 247,
+      "name": "Enchant Bracers - Minor Agility",
+      "description": "+1 Agility",
+      "slots": [
+        "WRISTS"
+      ],
+      "minimumItemLevel": 0,
+      "stats": {
+        "agility": 1
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:7782",
+      "spellId": 7782,
+      "enchantmentId": 248,
+      "name": "Enchant Bracers - Minor Strength",
+      "description": "+1 Strength",
+      "slots": [
+        "WRISTS"
+      ],
+      "minimumItemLevel": 0,
+      "stats": {
+        "strength": 1
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:7457",
+      "spellId": 7457,
+      "enchantmentId": 66,
+      "name": "Enchant Bracers - Minor Stamina",
+      "description": "+1 Stamina",
+      "slots": [
+        "WRISTS"
+      ],
+      "minimumItemLevel": 0,
+      "stats": {
+        "stamina": 1
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:7766",
+      "spellId": 7766,
+      "enchantmentId": 243,
+      "name": "Enchant Bracers - Minor Spirit",
+      "description": "+1 Spirit",
+      "slots": [
+        "WRISTS"
+      ],
+      "minimumItemLevel": 0,
+      "stats": {
+        "spirit": 1
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:7418",
+      "spellId": 7418,
+      "enchantmentId": 41,
+      "name": "Enchant Bracers - Minor Health",
+      "description": "+5 Health",
+      "slots": [
+        "WRISTS"
+      ],
+      "minimumItemLevel": 0,
+      "stats": {
+        "health": 5
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:7428",
+      "spellId": 7428,
+      "enchantmentId": 924,
+      "name": "Enchant Bracers - Minor Deflection",
+      "description": "+2 Defense Rating",
+      "slots": [
+        "WRISTS"
+      ],
+      "minimumItemLevel": 0,
+      "stats": {
+        "defense_rating": 2
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:20025",
+      "spellId": 20025,
+      "enchantmentId": 1891,
+      "name": "Enchant Chest - Greater Stats",
+      "description": "+4 All Stats",
+      "slots": [
+        "CHEST"
+      ],
+      "minimumItemLevel": 30,
+      "stats": {
+        "strength": 4,
+        "agility": 4,
+        "stamina": 4,
+        "intellect": 4,
+        "spirit": 4
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:20028",
+      "spellId": 20028,
+      "enchantmentId": 1893,
+      "name": "Enchant Chest - Major Mana",
+      "description": "+100 Mana",
+      "slots": [
+        "CHEST"
+      ],
+      "minimumItemLevel": 30,
+      "stats": {
+        "mana": 100
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:20026",
+      "spellId": 20026,
+      "enchantmentId": 1892,
+      "name": "Enchant Chest - Major Health",
+      "description": "+100 Health",
+      "slots": [
+        "CHEST"
+      ],
+      "minimumItemLevel": 30,
+      "stats": {
+        "health": 100
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13941",
+      "spellId": 13941,
+      "enchantmentId": 928,
+      "name": "Enchant Chest - Stats",
+      "description": "+3 All Stats",
+      "slots": [
+        "CHEST"
+      ],
+      "minimumItemLevel": 30,
+      "stats": {
+        "strength": 3,
+        "agility": 3,
+        "stamina": 3,
+        "intellect": 3,
+        "spirit": 3
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13917",
+      "spellId": 13917,
+      "enchantmentId": 913,
+      "name": "Enchant Chest - Superior Mana",
+      "description": "+65 Mana",
+      "slots": [
+        "CHEST"
+      ],
+      "minimumItemLevel": 30,
+      "stats": {
+        "mana": 65
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13858",
+      "spellId": 13858,
+      "enchantmentId": 908,
+      "name": "Enchant Chest - Superior Health",
+      "description": "+50 Health",
+      "slots": [
+        "CHEST"
+      ],
+      "minimumItemLevel": 20,
+      "stats": {
+        "health": 50
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13700",
+      "spellId": 13700,
+      "enchantmentId": 866,
+      "name": "Enchant Chest - Lesser Stats",
+      "description": "+2 All Stats",
+      "slots": [
+        "CHEST"
+      ],
+      "minimumItemLevel": 20,
+      "stats": {
+        "strength": 2,
+        "agility": 2,
+        "stamina": 2,
+        "intellect": 2,
+        "spirit": 2
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13663",
+      "spellId": 13663,
+      "enchantmentId": 857,
+      "name": "Enchant Chest - Greater Mana",
+      "description": "+50 Mana",
+      "slots": [
+        "CHEST"
+      ],
+      "minimumItemLevel": 20,
+      "stats": {
+        "mana": 50
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13640",
+      "spellId": 13640,
+      "enchantmentId": 850,
+      "name": "Enchant Chest - Greater Health",
+      "description": "+35 Health",
+      "slots": [
+        "CHEST"
+      ],
+      "minimumItemLevel": 20,
+      "stats": {
+        "health": 35
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13626",
+      "spellId": 13626,
+      "enchantmentId": 847,
+      "name": "Enchant Chest - Minor Stats",
+      "description": "+1 All Stats",
+      "slots": [
+        "CHEST"
+      ],
+      "minimumItemLevel": 0,
+      "stats": {
+        "strength": 1,
+        "agility": 1,
+        "stamina": 1,
+        "intellect": 1,
+        "spirit": 1
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13607",
+      "spellId": 13607,
+      "enchantmentId": 843,
+      "name": "Enchant Chest - Mana",
+      "description": "+30 Mana",
+      "slots": [
+        "CHEST"
+      ],
+      "minimumItemLevel": 0,
+      "stats": {
+        "mana": 30
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13538",
+      "spellId": 13538,
+      "enchantmentId": 63,
+      "name": "Enchant Chest - Lesser Absorption",
+      "description": "Absorption (25)",
+      "slots": [
+        "CHEST"
+      ],
+      "minimumItemLevel": 0,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:7857",
+      "spellId": 7857,
+      "enchantmentId": 254,
+      "name": "Enchant Chest - Health",
+      "description": "+25 Health",
+      "slots": [
+        "CHEST"
+      ],
+      "minimumItemLevel": 0,
+      "stats": {
+        "health": 25
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:7776",
+      "spellId": 7776,
+      "enchantmentId": 246,
+      "name": "Enchant Chest - Lesser Mana",
+      "description": "+20 Mana",
+      "slots": [
+        "CHEST"
+      ],
+      "minimumItemLevel": 0,
+      "stats": {
+        "mana": 20
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:7748",
+      "spellId": 7748,
+      "enchantmentId": 242,
+      "name": "Enchant Chest - Lesser Health",
+      "description": "+15 Health",
+      "slots": [
+        "CHEST"
+      ],
+      "minimumItemLevel": 0,
+      "stats": {
+        "health": 15
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:7426",
+      "spellId": 7426,
+      "enchantmentId": 44,
+      "name": "Enchant Chest - Minor Absorption",
+      "description": "Absorption (10)",
+      "slots": [
+        "CHEST"
+      ],
+      "minimumItemLevel": 0,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:7443",
+      "spellId": 7443,
+      "enchantmentId": 24,
+      "name": "Enchant Chest - Minor Mana",
+      "description": "+5 Mana",
+      "slots": [
+        "CHEST"
+      ],
+      "minimumItemLevel": 0,
+      "stats": {
+        "mana": 5
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:7420",
+      "spellId": 7420,
+      "enchantmentId": 41,
+      "name": "Enchant Chest - Minor Health",
+      "description": "+5 Health",
+      "slots": [
+        "CHEST"
+      ],
+      "minimumItemLevel": 0,
+      "stats": {
+        "health": 5
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:25081",
+      "spellId": 25081,
+      "enchantmentId": 2619,
+      "name": "Enchant Cloak - Greater Fire Resistance",
+      "description": "+15 Fire Resistance",
+      "slots": [
+        "BACK"
+      ],
+      "minimumItemLevel": 58,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:20015",
+      "spellId": 20015,
+      "enchantmentId": 1889,
+      "name": "Enchant Cloak - Superior Defense",
+      "description": "+70 Armor",
+      "slots": [
+        "BACK"
+      ],
+      "minimumItemLevel": 30,
+      "stats": {
+        "armor": 70
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:20014",
+      "spellId": 20014,
+      "enchantmentId": 1888,
+      "name": "Enchant Cloak - Greater Resistance",
+      "description": "+5 All Resistances",
+      "slots": [
+        "BACK"
+      ],
+      "minimumItemLevel": 30,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13882",
+      "spellId": 13882,
+      "enchantmentId": 25154,
+      "name": "Enchant Cloak - Lesser Agility",
+      "description": "+3 Agility",
+      "slots": [
+        "BACK"
+      ],
+      "minimumItemLevel": 20,
+      "stats": {
+        "agility": 3
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13746",
+      "spellId": 13746,
+      "enchantmentId": 884,
+      "name": "Enchant Cloak - Greater Defense",
+      "description": "+50 Armor",
+      "slots": [
+        "BACK"
+      ],
+      "minimumItemLevel": 20,
+      "stats": {
+        "armor": 50
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13794",
+      "spellId": 13794,
+      "enchantmentId": 903,
+      "name": "Enchant Cloak - Resistance",
+      "description": "+3 All Resistances",
+      "slots": [
+        "BACK"
+      ],
+      "minimumItemLevel": 20,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13657",
+      "spellId": 13657,
+      "enchantmentId": 2463,
+      "name": "Enchant Cloak - Fire Resistance",
+      "description": "+7 Fire Resistance",
+      "slots": [
+        "BACK"
+      ],
+      "minimumItemLevel": 20,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13635",
+      "spellId": 13635,
+      "enchantmentId": 848,
+      "name": "Enchant Cloak - Defense",
+      "description": "+30 Armor",
+      "slots": [
+        "BACK"
+      ],
+      "minimumItemLevel": 0,
+      "stats": {
+        "armor": 30
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13522",
+      "spellId": 13522,
+      "enchantmentId": 804,
+      "name": "Enchant Cloak - Lesser Shadow Resistance",
+      "description": "+10 Shadow Resistance",
+      "slots": [
+        "BACK"
+      ],
+      "minimumItemLevel": 0,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:7861",
+      "spellId": 7861,
+      "enchantmentId": 256,
+      "name": "Enchant Cloak - Lesser Fire Resistance",
+      "description": "+5 Fire Resistance",
+      "slots": [
+        "BACK"
+      ],
+      "minimumItemLevel": 0,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13419",
+      "spellId": 13419,
+      "enchantmentId": 247,
+      "name": "Enchant Cloak - Minor Agility",
+      "description": "+1 Agility",
+      "slots": [
+        "BACK"
+      ],
+      "minimumItemLevel": 0,
+      "stats": {
+        "agility": 1
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13421",
+      "spellId": 13421,
+      "enchantmentId": 744,
+      "name": "Enchant Cloak - Lesser Protection",
+      "description": "+20 Armor",
+      "slots": [
+        "BACK"
+      ],
+      "minimumItemLevel": 0,
+      "stats": {
+        "armor": 20
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:7771",
+      "spellId": 7771,
+      "enchantmentId": 783,
+      "name": "Enchant Cloak - Minor Protection",
+      "description": "+10 Armor",
+      "slots": [
+        "BACK"
+      ],
+      "minimumItemLevel": 0,
+      "stats": {
+        "armor": 10
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:7454",
+      "spellId": 7454,
+      "enchantmentId": 65,
+      "name": "Enchant Cloak - Minor Resistance",
+      "description": "+1 All Resistances",
+      "slots": [
+        "BACK"
+      ],
+      "minimumItemLevel": 0,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:31150",
+      "spellId": 31150,
+      "enchantmentId": 6020,
+      "name": "Enchant Cloak - Dragon Fire",
+      "description": "+7 Spell Power +7 Fire Resistance",
+      "slots": [
+        "BACK"
+      ],
+      "minimumItemLevel": 35,
+      "stats": {
+        "spell_power": 7
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:31153",
+      "spellId": 31153,
+      "enchantmentId": 6021,
+      "name": "Enchant Cloak - Draconic Might",
+      "description": "+6 Agility",
+      "slots": [
+        "BACK"
+      ],
+      "minimumItemLevel": 35,
+      "stats": {
+        "agility": 6
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:31156",
+      "spellId": 31156,
+      "enchantmentId": 6022,
+      "name": "Enchant Cloak - Blazing",
+      "description": "+5 Strength",
+      "slots": [
+        "BACK"
+      ],
+      "minimumItemLevel": 35,
+      "stats": {
+        "strength": 5
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:25078",
+      "spellId": 25078,
+      "enchantmentId": 2616,
+      "name": "Enchant Gloves - Fire Power",
+      "description": "Increases fire spell power by 20.",
+      "slots": [
+        "HANDS"
+      ],
+      "minimumItemLevel": 58,
+      "stats": {
+        "spell_power": 20
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:25074",
+      "spellId": 25074,
+      "enchantmentId": 2615,
+      "name": "Enchant Gloves - Frost Power",
+      "description": "Increases Frost spell power by 20.",
+      "slots": [
+        "HANDS"
+      ],
+      "minimumItemLevel": 58,
+      "stats": {
+        "spell_power": 20
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:25079",
+      "spellId": 25079,
+      "enchantmentId": 2617,
+      "name": "Enchant Gloves - Healing Power",
+      "description": "+16 Spell Power",
+      "slots": [
+        "HANDS"
+      ],
+      "minimumItemLevel": 58,
+      "stats": {
+        "spell_power": 16
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:25073",
+      "spellId": 25073,
+      "enchantmentId": 2614,
+      "name": "Enchant Gloves - Shadow Power",
+      "description": "Increases shadow spell power by 20.",
+      "slots": [
+        "HANDS"
+      ],
+      "minimumItemLevel": 58,
+      "stats": {
+        "spell_power": 20
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:25080",
+      "spellId": 25080,
+      "enchantmentId": 2564,
+      "name": "Enchant Gloves - Superior Agility",
+      "description": "Agility",
+      "slots": [
+        "HANDS"
+      ],
+      "minimumItemLevel": 50,
+      "stats": {
+        "agility": 9
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:25072",
+      "spellId": 25072,
+      "enchantmentId": 2613,
+      "name": "Enchant Gloves - Threat",
+      "description": "+2% Threat",
+      "slots": [
+        "HANDS"
+      ],
+      "minimumItemLevel": 58,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:20013",
+      "spellId": 20013,
+      "enchantmentId": 927,
+      "name": "Enchant Gloves - Greater Strength",
+      "description": "+7 Strength",
+      "slots": [
+        "HANDS"
+      ],
+      "minimumItemLevel": 30,
+      "stats": {
+        "strength": 7
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:20012",
+      "spellId": 20012,
+      "enchantmentId": 1887,
+      "name": "Enchant Gloves - Greater Agility",
+      "description": "+7 Agility",
+      "slots": [
+        "HANDS"
+      ],
+      "minimumItemLevel": 30,
+      "stats": {
+        "agility": 7
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13948",
+      "spellId": 13948,
+      "enchantmentId": 25159,
+      "name": "Enchant Gloves - Minor Haste",
+      "description": "+10 Haste Rating",
+      "slots": [
+        "HANDS"
+      ],
+      "minimumItemLevel": 30,
+      "stats": {
+        "haste_rating": 10
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13947",
+      "spellId": 13947,
+      "enchantmentId": 930,
+      "name": "Enchant Gloves - Riding Skill",
+      "description": "+2% Mount Speed",
+      "slots": [
+        "HANDS"
+      ],
+      "minimumItemLevel": 30,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13868",
+      "spellId": 13868,
+      "enchantmentId": 909,
+      "name": "Enchant Gloves - Advanced Herbalism",
+      "description": "+5 Herbalism",
+      "slots": [
+        "HANDS"
+      ],
+      "minimumItemLevel": 30,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13887",
+      "spellId": 13887,
+      "enchantmentId": 856,
+      "name": "Enchant Gloves - Strength",
+      "description": "+5 Strength",
+      "slots": [
+        "HANDS"
+      ],
+      "minimumItemLevel": 20,
+      "stats": {
+        "strength": 5
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13841",
+      "spellId": 13841,
+      "enchantmentId": 906,
+      "name": "Enchant Gloves - Advanced Mining",
+      "description": "+5 Mining",
+      "slots": [
+        "HANDS"
+      ],
+      "minimumItemLevel": 20,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13815",
+      "spellId": 13815,
+      "enchantmentId": 25157,
+      "name": "Enchant Gloves - Agility",
+      "description": "+5 Agility",
+      "slots": [
+        "HANDS"
+      ],
+      "minimumItemLevel": 20,
+      "stats": {
+        "agility": 5
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13698",
+      "spellId": 13698,
+      "enchantmentId": 865,
+      "name": "Enchant Gloves - Skinning",
+      "description": "+5 Skinning",
+      "slots": [
+        "HANDS"
+      ],
+      "minimumItemLevel": 20,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13620",
+      "spellId": 13620,
+      "enchantmentId": 2603,
+      "name": "Enchant Gloves - Fishing",
+      "description": "+2 Fishing",
+      "slots": [
+        "HANDS"
+      ],
+      "minimumItemLevel": 0,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13617",
+      "spellId": 13617,
+      "enchantmentId": 845,
+      "name": "Enchant Gloves - Herbalism",
+      "description": "+2 Herbalism",
+      "slots": [
+        "HANDS"
+      ],
+      "minimumItemLevel": 0,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13612",
+      "spellId": 13612,
+      "enchantmentId": 844,
+      "name": "Enchant Gloves - Mining",
+      "description": "+2 Mining",
+      "slots": [
+        "HANDS"
+      ],
+      "minimumItemLevel": 0,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:20016",
+      "spellId": 20016,
+      "enchantmentId": 1890,
+      "name": "Enchant Shield - Superior Spirit",
+      "description": "+4 Mana and Health every 5 sec",
+      "slots": [
+        "OFF_HAND"
+      ],
+      "constraint": "SHIELD",
+      "minimumItemLevel": 30,
+      "stats": {
+        "mp5": 4,
+        "hp5": 4,
+        "mana": 4
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:20017",
+      "spellId": 20017,
+      "enchantmentId": 929,
+      "name": "Enchant Shield - Greater Stamina",
+      "description": "+7 Stamina",
+      "slots": [
+        "OFF_HAND"
+      ],
+      "constraint": "SHIELD",
+      "minimumItemLevel": 30,
+      "stats": {
+        "stamina": 7
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13933",
+      "spellId": 13933,
+      "enchantmentId": 926,
+      "name": "Enchant Shield - Frost Resistance",
+      "description": "+8 Frost Resistance",
+      "slots": [
+        "OFF_HAND"
+      ],
+      "constraint": "SHIELD",
+      "minimumItemLevel": 30,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13905",
+      "spellId": 13905,
+      "enchantmentId": 907,
+      "name": "Enchant Shield - Greater Spirit",
+      "description": "+7 Spirit",
+      "slots": [
+        "OFF_HAND"
+      ],
+      "constraint": "SHIELD",
+      "minimumItemLevel": 20,
+      "stats": {
+        "spirit": 7
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13817",
+      "spellId": 13817,
+      "enchantmentId": 852,
+      "name": "Enchant Shield - Stamina",
+      "description": "+5 Stamina",
+      "slots": [
+        "OFF_HAND"
+      ],
+      "constraint": "SHIELD",
+      "minimumItemLevel": 20,
+      "stats": {
+        "stamina": 5
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13689",
+      "spellId": 13689,
+      "enchantmentId": 863,
+      "name": "Enchant Shield - Lesser Block",
+      "description": "+10 Shield Block Rating",
+      "slots": [
+        "OFF_HAND"
+      ],
+      "constraint": "SHIELD",
+      "minimumItemLevel": 20,
+      "stats": {
+        "block_rating": 10
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13659",
+      "spellId": 13659,
+      "enchantmentId": 25155,
+      "name": "Enchant Shield - Spirit",
+      "description": "+5 Spirit",
+      "slots": [
+        "OFF_HAND"
+      ],
+      "constraint": "SHIELD",
+      "minimumItemLevel": 20,
+      "stats": {
+        "spirit": 5
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13631",
+      "spellId": 13631,
+      "enchantmentId": 724,
+      "name": "Enchant Shield - Lesser Stamina",
+      "description": "+3 Stamina",
+      "slots": [
+        "OFF_HAND"
+      ],
+      "constraint": "SHIELD",
+      "minimumItemLevel": 0,
+      "stats": {
+        "stamina": 3
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13485",
+      "spellId": 13485,
+      "enchantmentId": 255,
+      "name": "Enchant Shield - Lesser Spirit",
+      "description": "+3 Spirit",
+      "slots": [
+        "OFF_HAND"
+      ],
+      "constraint": "SHIELD",
+      "minimumItemLevel": 0,
+      "stats": {
+        "spirit": 3
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13464",
+      "spellId": 13464,
+      "enchantmentId": 848,
+      "name": "Enchant Shield - Lesser Protection",
+      "description": "+30 Armor",
+      "slots": [
+        "OFF_HAND"
+      ],
+      "constraint": "SHIELD",
+      "minimumItemLevel": 0,
+      "stats": {
+        "armor": 30
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13378",
+      "spellId": 13378,
+      "enchantmentId": 66,
+      "name": "Enchant Shield - Minor Stamina",
+      "description": "+1 Stamina",
+      "slots": [
+        "OFF_HAND"
+      ],
+      "constraint": "SHIELD",
+      "minimumItemLevel": 0,
+      "stats": {
+        "stamina": 1
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:20036",
+      "spellId": 20036,
+      "enchantmentId": 1904,
+      "name": "Enchant 2H Weapon - Major Intellect",
+      "description": "+9 Intellect",
+      "slots": [
+        "MAIN_HAND"
+      ],
+      "constraint": "TWO_HANDED",
+      "minimumItemLevel": 30,
+      "stats": {
+        "intellect": 9
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:20035",
+      "spellId": 20035,
+      "enchantmentId": 1903,
+      "name": "Enchant 2H Weapon - Major Spirit",
+      "description": "+9 Spirit",
+      "slots": [
+        "MAIN_HAND"
+      ],
+      "constraint": "TWO_HANDED",
+      "minimumItemLevel": 30,
+      "stats": {
+        "spirit": 9
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:20030",
+      "spellId": 20030,
+      "enchantmentId": 1896,
+      "name": "Enchant 2H Weapon - Superior Impact",
+      "description": "+9 Weapon Damage",
+      "slots": [
+        "MAIN_HAND"
+      ],
+      "constraint": "TWO_HANDED",
+      "minimumItemLevel": 30,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:27837",
+      "spellId": 27837,
+      "enchantmentId": 2646,
+      "name": "Enchant 2H Weapon - Agility",
+      "description": "+25 Agility",
+      "slots": [
+        "MAIN_HAND"
+      ],
+      "constraint": "TWO_HANDED",
+      "minimumItemLevel": 50,
+      "stats": {
+        "agility": 25
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13937",
+      "spellId": 13937,
+      "enchantmentId": 963,
+      "name": "Enchant 2H Weapon - Greater Impact",
+      "description": "Major Striking",
+      "slots": [
+        "MAIN_HAND"
+      ],
+      "constraint": "TWO_HANDED",
+      "minimumItemLevel": 30,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13695",
+      "spellId": 13695,
+      "enchantmentId": 1897,
+      "name": "Enchant 2H Weapon - Impact",
+      "description": "Superior Striking",
+      "slots": [
+        "MAIN_HAND"
+      ],
+      "constraint": "TWO_HANDED",
+      "minimumItemLevel": 30,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13529",
+      "spellId": 13529,
+      "enchantmentId": 943,
+      "name": "Enchant 2H Weapon - Lesser Impact",
+      "description": "Striking",
+      "slots": [
+        "MAIN_HAND"
+      ],
+      "constraint": "TWO_HANDED",
+      "minimumItemLevel": 0,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13380",
+      "spellId": 13380,
+      "enchantmentId": 255,
+      "name": "Enchant 2H Weapon - Lesser Spirit",
+      "description": "+3 Spirit",
+      "slots": [
+        "MAIN_HAND"
+      ],
+      "constraint": "TWO_HANDED",
+      "minimumItemLevel": 0,
+      "stats": {
+        "spirit": 3
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:7793",
+      "spellId": 7793,
+      "enchantmentId": 723,
+      "name": "Enchant 2H Weapon - Lesser Intellect",
+      "description": "+3 Intellect",
+      "slots": [
+        "MAIN_HAND"
+      ],
+      "constraint": "TWO_HANDED",
+      "minimumItemLevel": 0,
+      "stats": {
+        "intellect": 3
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:7745",
+      "spellId": 7745,
+      "enchantmentId": 241,
+      "name": "Enchant 2H Weapon - Minor Impact",
+      "description": "Lesser Striking",
+      "slots": [
+        "MAIN_HAND"
+      ],
+      "constraint": "TWO_HANDED",
+      "minimumItemLevel": 0,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:20034",
+      "spellId": 20034,
+      "enchantmentId": 1900,
+      "name": "Enchant Weapon - Crusader",
+      "description": "Crusader",
+      "slots": [
+        "MAIN_HAND",
+        "OFF_HAND"
+      ],
+      "constraint": "WEAPON",
+      "minimumItemLevel": 30,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:22750",
+      "spellId": 22750,
+      "enchantmentId": 2505,
+      "name": "Enchant Weapon - Healing Power",
+      "description": "Spell Power",
+      "slots": [
+        "MAIN_HAND",
+        "OFF_HAND"
+      ],
+      "constraint": "WEAPON",
+      "minimumItemLevel": 58,
+      "stats": {
+        "spell_power": 30
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:20032",
+      "spellId": 20032,
+      "enchantmentId": 1898,
+      "name": "Enchant Weapon - Lifestealing",
+      "description": "Lifestealing",
+      "slots": [
+        "MAIN_HAND",
+        "OFF_HAND"
+      ],
+      "constraint": "WEAPON",
+      "minimumItemLevel": 30,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:23804",
+      "spellId": 23804,
+      "enchantmentId": 2568,
+      "name": "Enchant Weapon - Mighty Intellect",
+      "description": "Mighty Intellect",
+      "slots": [
+        "MAIN_HAND",
+        "OFF_HAND"
+      ],
+      "constraint": "WEAPON",
+      "minimumItemLevel": 58,
+      "stats": {
+        "intellect": 22
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:23803",
+      "spellId": 23803,
+      "enchantmentId": 2567,
+      "name": "Enchant Weapon - Mighty Spirit",
+      "description": "Mighty Spirit",
+      "slots": [
+        "MAIN_HAND",
+        "OFF_HAND"
+      ],
+      "constraint": "WEAPON",
+      "minimumItemLevel": 58,
+      "stats": {
+        "spirit": 20
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:22749",
+      "spellId": 22749,
+      "enchantmentId": 2504,
+      "name": "Enchant Weapon - Spell Power",
+      "description": "Spell Power",
+      "slots": [
+        "MAIN_HAND",
+        "OFF_HAND"
+      ],
+      "constraint": "WEAPON",
+      "minimumItemLevel": 58,
+      "stats": {
+        "spell_power": 30
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:20031",
+      "spellId": 20031,
+      "enchantmentId": 1897,
+      "name": "Enchant Weapon - Superior Striking",
+      "description": "Superior Striking",
+      "slots": [
+        "MAIN_HAND",
+        "OFF_HAND"
+      ],
+      "constraint": "WEAPON",
+      "minimumItemLevel": 30,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:20033",
+      "spellId": 20033,
+      "enchantmentId": 1899,
+      "name": "Enchant Weapon - Unholy Weapon",
+      "description": "Unholy Weapon",
+      "slots": [
+        "MAIN_HAND",
+        "OFF_HAND"
+      ],
+      "constraint": "WEAPON",
+      "minimumItemLevel": 30,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:23800",
+      "spellId": 23800,
+      "enchantmentId": 2564,
+      "name": "Enchant Weapon - Agility",
+      "description": "Agility",
+      "slots": [
+        "MAIN_HAND",
+        "OFF_HAND"
+      ],
+      "constraint": "WEAPON",
+      "minimumItemLevel": 50,
+      "stats": {
+        "agility": 9
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:23799",
+      "spellId": 23799,
+      "enchantmentId": 2563,
+      "name": "Enchant Weapon - Strength",
+      "description": "Strength",
+      "slots": [
+        "MAIN_HAND",
+        "OFF_HAND"
+      ],
+      "constraint": "WEAPON",
+      "minimumItemLevel": 50,
+      "stats": {
+        "strength": 9
+      },
+      "modeled": true,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:20029",
+      "spellId": 20029,
+      "enchantmentId": 1894,
+      "name": "Enchant Weapon - Icy Chill",
+      "description": "Icy Chill",
+      "slots": [
+        "MAIN_HAND",
+        "OFF_HAND"
+      ],
+      "constraint": "WEAPON",
+      "minimumItemLevel": 30,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13898",
+      "spellId": 13898,
+      "enchantmentId": 803,
+      "name": "Enchant Weapon - Fiery Weapon",
+      "description": "Fiery Weapon",
+      "slots": [
+        "MAIN_HAND",
+        "OFF_HAND"
+      ],
+      "constraint": "WEAPON",
+      "minimumItemLevel": 30,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13943",
+      "spellId": 13943,
+      "enchantmentId": 805,
+      "name": "Enchant Weapon - Greater Striking",
+      "description": "Greater Striking",
+      "slots": [
+        "MAIN_HAND",
+        "OFF_HAND"
+      ],
+      "constraint": "WEAPON",
+      "minimumItemLevel": 30,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13915",
+      "spellId": 13915,
+      "enchantmentId": 912,
+      "name": "Enchant Weapon - Demonslaying",
+      "description": "Demonslaying",
+      "slots": [
+        "MAIN_HAND",
+        "OFF_HAND"
+      ],
+      "constraint": "WEAPON",
+      "minimumItemLevel": 30,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13693",
+      "spellId": 13693,
+      "enchantmentId": 943,
+      "name": "Enchant Weapon - Striking",
+      "description": "Striking",
+      "slots": [
+        "MAIN_HAND",
+        "OFF_HAND"
+      ],
+      "constraint": "WEAPON",
+      "minimumItemLevel": 0,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:21931",
+      "spellId": 21931,
+      "enchantmentId": 2443,
+      "name": "Enchant Weapon - Winter's Might",
+      "description": "Winter's Might",
+      "slots": [
+        "MAIN_HAND",
+        "OFF_HAND"
+      ],
+      "constraint": "WEAPON",
+      "minimumItemLevel": 20,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13655",
+      "spellId": 13655,
+      "enchantmentId": 854,
+      "name": "Enchant Weapon - Lesser Elemental Slayer",
+      "description": "Lesser Elemental Slayer",
+      "slots": [
+        "MAIN_HAND",
+        "OFF_HAND"
+      ],
+      "constraint": "WEAPON",
+      "minimumItemLevel": 20,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13653",
+      "spellId": 13653,
+      "enchantmentId": 853,
+      "name": "Enchant Weapon - Lesser Beastslayer",
+      "description": "Lesser Beastslayer",
+      "slots": [
+        "MAIN_HAND",
+        "OFF_HAND"
+      ],
+      "constraint": "WEAPON",
+      "minimumItemLevel": 20,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:13503",
+      "spellId": 13503,
+      "enchantmentId": 241,
+      "name": "Enchant Weapon - Lesser Striking",
+      "description": "Lesser Striking",
+      "slots": [
+        "MAIN_HAND",
+        "OFF_HAND"
+      ],
+      "constraint": "WEAPON",
+      "minimumItemLevel": 0,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:7786",
+      "spellId": 7786,
+      "enchantmentId": 249,
+      "name": "Enchant Weapon - Minor Beastslayer",
+      "description": "Minor Beastslayer",
+      "slots": [
+        "MAIN_HAND",
+        "OFF_HAND"
+      ],
+      "constraint": "WEAPON",
+      "minimumItemLevel": 0,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:7788",
+      "spellId": 7788,
+      "enchantmentId": 250,
+      "name": "Enchant Weapon - Minor Striking",
+      "description": "Minor Striking",
+      "slots": [
+        "MAIN_HAND",
+        "OFF_HAND"
+      ],
+      "constraint": "WEAPON",
+      "minimumItemLevel": 0,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:968677",
+      "spellId": 968677,
+      "enchantmentId": 5105,
+      "name": "Enchant Weapon - Unstoppable Assault",
+      "description": "Equip: Unstoppable Assault",
+      "slots": [
+        "MAIN_HAND",
+        "OFF_HAND"
+      ],
+      "constraint": "WEAPON",
+      "minimumItemLevel": 58,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:968680",
+      "spellId": 968680,
+      "enchantmentId": 5109,
+      "name": "Enchant Weapon - Lucid Assault",
+      "description": "Equip: Lucid Assault",
+      "slots": [
+        "MAIN_HAND",
+        "OFF_HAND"
+      ],
+      "constraint": "WEAPON",
+      "minimumItemLevel": 58,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:968683",
+      "spellId": 968683,
+      "enchantmentId": 5112,
+      "name": "Enchant Weapon - Spellbinder's Rage",
+      "description": "Equip: Spellbinder's Rage",
+      "slots": [
+        "MAIN_HAND",
+        "OFF_HAND"
+      ],
+      "constraint": "WEAPON",
+      "minimumItemLevel": 58,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:968686",
+      "spellId": 968686,
+      "enchantmentId": 5115,
+      "name": "Enchant Weapon - Ninja's Focus",
+      "description": "Equip: Ninja's Focus",
+      "slots": [
+        "MAIN_HAND",
+        "OFF_HAND"
+      ],
+      "constraint": "WEAPON",
+      "minimumItemLevel": 58,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:968689",
+      "spellId": 968689,
+      "enchantmentId": 5118,
+      "name": "Enchant Weapon - Grovewarden's Blessing",
+      "description": "Equip: Grovewarden's Blessing",
+      "slots": [
+        "MAIN_HAND",
+        "OFF_HAND"
+      ],
+      "constraint": "WEAPON",
+      "minimumItemLevel": 58,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:968692",
+      "spellId": 968692,
+      "enchantmentId": 5121,
+      "name": "Enchant Weapon - Viscious Assault",
+      "description": "Equip: Viscious Assault II",
+      "slots": [
+        "MAIN_HAND",
+        "OFF_HAND"
+      ],
+      "constraint": "WEAPON",
+      "minimumItemLevel": 58,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:968695",
+      "spellId": 968695,
+      "enchantmentId": 5124,
+      "name": "Enchant Weapon - Arcane Dexterity",
+      "description": "Equip: Arcane Dexterity II",
+      "slots": [
+        "MAIN_HAND",
+        "OFF_HAND"
+      ],
+      "constraint": "WEAPON",
+      "minimumItemLevel": 58,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:968698",
+      "spellId": 968698,
+      "enchantmentId": 5127,
+      "name": "Enchant Weapon - Arcane Artillery",
+      "description": "Equip: Arcane Artillery",
+      "slots": [
+        "MAIN_HAND",
+        "OFF_HAND"
+      ],
+      "constraint": "WEAPON",
+      "minimumItemLevel": 58,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:968701",
+      "spellId": 968701,
+      "enchantmentId": 5130,
+      "name": "Enchant Weapon - Arcane Precision",
+      "description": "Equip: Arcane Precision II",
+      "slots": [
+        "MAIN_HAND",
+        "OFF_HAND"
+      ],
+      "constraint": "WEAPON",
+      "minimumItemLevel": 58,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:968770",
+      "spellId": 968770,
+      "enchantmentId": 5132,
+      "name": "Enchant Weapon - Crusader II",
+      "description": "Brutal Crusader",
+      "slots": [
+        "MAIN_HAND",
+        "OFF_HAND"
+      ],
+      "constraint": "WEAPON",
+      "minimumItemLevel": 58,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:968678",
+      "spellId": 968678,
+      "enchantmentId": 5107,
+      "name": "Enchant Weapon - Greater Unstoppable Assault",
+      "description": "Equip: Unstoppable Assault",
+      "slots": [
+        "MAIN_HAND",
+        "OFF_HAND"
+      ],
+      "constraint": "WEAPON",
+      "minimumItemLevel": 58,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:968681",
+      "spellId": 968681,
+      "enchantmentId": 5110,
+      "name": "Enchant Weapon - Greater Lucid Assualt",
+      "description": "Equip: Lucid Assault",
+      "slots": [
+        "MAIN_HAND",
+        "OFF_HAND"
+      ],
+      "constraint": "WEAPON",
+      "minimumItemLevel": 58,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:968684",
+      "spellId": 968684,
+      "enchantmentId": 5113,
+      "name": "Enchant Weapon - Greater Spellbinder's Rage",
+      "description": "Equip: Spellbinder's Rage III",
+      "slots": [
+        "MAIN_HAND",
+        "OFF_HAND"
+      ],
+      "constraint": "WEAPON",
+      "minimumItemLevel": 58,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:968687",
+      "spellId": 968687,
+      "enchantmentId": 5116,
+      "name": "Enchant Weapon - Greater Ninja's Focus",
+      "description": "Equip: Ninja's Focus III",
+      "slots": [
+        "MAIN_HAND",
+        "OFF_HAND"
+      ],
+      "constraint": "WEAPON",
+      "minimumItemLevel": 58,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:968690",
+      "spellId": 968690,
+      "enchantmentId": 5119,
+      "name": "Enchant Weapon - Greater Grovewarden's Blessing",
+      "description": "Equip: Grovewarden's Blessing III",
+      "slots": [
+        "MAIN_HAND",
+        "OFF_HAND"
+      ],
+      "constraint": "WEAPON",
+      "minimumItemLevel": 58,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:968693",
+      "spellId": 968693,
+      "enchantmentId": 5122,
+      "name": "Enchant Weapon - Greater Viscious Assault",
+      "description": "Equip: Viscious Assault III",
+      "slots": [
+        "MAIN_HAND",
+        "OFF_HAND"
+      ],
+      "constraint": "WEAPON",
+      "minimumItemLevel": 30,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:968696",
+      "spellId": 968696,
+      "enchantmentId": 5125,
+      "name": "Enchant Weapon - Greater Arcane Dexterity",
+      "description": "Equip: Arcane Dexterity III",
+      "slots": [
+        "MAIN_HAND",
+        "OFF_HAND"
+      ],
+      "constraint": "WEAPON",
+      "minimumItemLevel": 58,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:968699",
+      "spellId": 968699,
+      "enchantmentId": 5128,
+      "name": "Enchant Weapon - Greater Arcane Artillery",
+      "description": "Equip: Arcane Artillery III",
+      "slots": [
+        "MAIN_HAND",
+        "OFF_HAND"
+      ],
+      "constraint": "WEAPON",
+      "minimumItemLevel": 58,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:968702",
+      "spellId": 968702,
+      "enchantmentId": 5131,
+      "name": "Enchant Weapon - Greater Arcane Precision",
+      "description": "Equip: Arcane Precision III",
+      "slots": [
+        "MAIN_HAND",
+        "OFF_HAND"
+      ],
+      "constraint": "WEAPON",
+      "minimumItemLevel": 58,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    },
+    {
+      "id": "spell:968771",
+      "spellId": 968771,
+      "enchantmentId": 5133,
+      "name": "Enchant Weapon - Crusader III",
+      "description": "Equip: Overpowering Crusader",
+      "slots": [
+        "MAIN_HAND",
+        "OFF_HAND"
+      ],
+      "constraint": "WEAPON",
+      "minimumItemLevel": 58,
+      "stats": {},
+      "modeled": false,
+      "source": "COA_CLIENT_DBC_ATLASLOOT"
+    }
+  ]
+}

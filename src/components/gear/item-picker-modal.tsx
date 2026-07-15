@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { ArrowRight, Check, EyeOff, Gem, MapPin, Search, Sparkles, TrendingUp, X } from "lucide-react";
 import { canEquipItemAtLevel, compareScoredItems, contextualPower, isSystemPowerKey, scoreItem, statDelta, type WeightProfile } from "@/lib/ep";
+import { applyRecommendedEnchant } from "@/lib/enchants";
 import type { GearContext } from "@/types/coa";
 import { STAT_LABELS, type EquipmentSlot, type GearItem, type ScoredItem, type StatKey } from "@/types/gear";
 import { GameItemIcon } from "./game-item-icon";
@@ -96,7 +97,6 @@ function StatLines({ item, compareTo, level, context }: { item: ScoredItem; comp
 export function ItemPickerModal({ slot, equipped, candidates, loading = false, level, profile, context, profileLabel, onEquip, onClose }: ItemPickerModalProps) {
   const [search, setSearch] = useState("");
   const equippedScore = equipped ? scoreItem(equipped, level, profile) : undefined;
-  const slotEnchant = equipped?.enhancements?.find((enhancement) => enhancement.kind === "ENCHANT");
   const powerMode = level >= 60 && Boolean(context);
   const equippedPower = equippedScore ? contextualPower(equippedScore.resolvedStats, level, context) : 0;
   const ranked = useMemo(() => {
@@ -106,13 +106,10 @@ export function ItemPickerModal({ slot, equipped, candidates, loading = false, l
       && equipped.name.toLowerCase().includes(search.toLowerCase())
       && !matchingCandidates.some((item) => item.id === equipped.id);
     return [...matchingCandidates, ...(includeEquipped ? [equipped] : [])]
-      .map((item) => slotEnchant ? {
-        ...item,
-        enhancements: [...(item.enhancements ?? []).filter((enhancement) => enhancement.kind !== "ENCHANT"), slotEnchant],
-      } : item)
+      .map((item) => applyRecommendedEnchant(item, profile))
       .map((item) => scoreItem(item, level, profile))
       .sort((a, b) => compareScoredItems(a, b, level, context));
-  }, [candidates, context, equipped, level, profile, search, slotEnchant]);
+  }, [candidates, context, equipped, level, profile, search]);
   const [selectedId, setSelectedId] = useState<string | undefined>(equipped?.id ?? ranked[0]?.id);
   const selected = ranked.find((item) => item.id === selectedId) ?? ranked[0];
   const selectedPowerDelta = selected ? contextualPower(selected.resolvedStats, level, context) - equippedPower : 0;

@@ -22,6 +22,7 @@
     "sync:sidekick-gear": "tsx scripts/sync-sidekick-gear.ts",
     "import:worldforged": "tsx scripts/import-lootcollector-worldforged.ts",
     "extract:atlasloot": "tsx scripts/extract-atlasloot-coa-items.ts",
+    "extract:coa-enchants": "uv run --with mpyq python scripts/extract-coa-enchants.py",
     "generate:dungeon-variants": "tsx scripts/generate-dungeon-variants.ts",
     "generate:scaling-candidates": "tsx scripts/generate-scaling-candidates.ts",
     "generate:addon-candidates": "tsx scripts/generate-addon-candidates.ts",

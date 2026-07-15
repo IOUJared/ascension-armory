@@ -158,6 +158,8 @@ function sanitizeItem(value: unknown, slot: EquipmentSlot): GearItem | undefined
     ...(typeof value.armorType === "string" ? { armorType: value.armorType } : {}),
     ...(finiteNumber(value.armor) ? { armor: value.armor } : {}),
     ...(weapon ? { weaponDamage: weapon } : {}),
+    ...(typeof value.weaponType === "string" ? { weaponType: value.weaponType } : {}),
+    ...(value.twoHanded === true ? { twoHanded: true } : {}),
     ...(typeof value.icon === "string" ? { icon: value.icon } : {}),
     ...(finiteNumber(value.displayId) ? { displayId: value.displayId } : {}),
     ...(effects ? { effects } : {}),

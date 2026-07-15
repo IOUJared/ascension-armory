@@ -1,12 +1,12 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Plus, Sparkles, Trash2, X } from "lucide-react";
-import { calculateEp, isSystemPowerKey, type WeightProfile } from "@/lib/ep";
-import { STAT_LABELS, type EquipmentSlot, type GearEnhancement, type GearItem, type StatKey, type StatMap } from "@/types/gear";
+import { Check, Search, Sparkles, Trash2, X } from "lucide-react";
+import { enchantEnhancement, enchantEp, findEnchantsForItem, recommendEnchant, type CoAEnchant } from "@/lib/enchants";
+import type { GearEnhancement, GearItem } from "@/types/gear";
+import type { WeightProfile } from "@/lib/ep";
 
 interface EnchantEditorModalProps {
-  slot: EquipmentSlot;
   item: GearItem;
   profile: WeightProfile;
   onApply: (enchant: GearEnhancement) => void;
@@ -14,68 +14,60 @@ interface EnchantEditorModalProps {
   onClose: () => void;
 }
 
-interface StatRow {
-  key: StatKey;
-  value: number;
+function EnchantStats({ enchant }: { enchant: CoAEnchant }) {
+  return <span>{enchant.description}{enchant.minimumItemLevel > 0 ? ` · Requires item level ${enchant.minimumItemLevel}` : ""}</span>;
 }
 
-const statKeys = (Object.keys(STAT_LABELS) as StatKey[]).filter((key) => !isSystemPowerKey(key));
-
-function nextUnusedStat(rows: StatRow[]): StatKey {
-  const used = new Set(rows.map((row) => row.key));
-  return statKeys.find((key) => !used.has(key)) ?? "custom_power";
-}
-
-export function EnchantEditorModal({ slot, item, profile, onApply, onRemove, onClose }: EnchantEditorModalProps) {
+export function EnchantEditorModal({ item, profile, onApply, onRemove, onClose }: EnchantEditorModalProps) {
   const current = item.enhancements?.find((enhancement) => enhancement.kind === "ENCHANT");
-  const [name, setName] = useState(current?.name ?? "");
-  const [rows, setRows] = useState<StatRow[]>(() => {
-    const saved = Object.entries(current?.stats ?? {}) as Array<[StatKey, number]>;
-    return saved.length ? saved.map(([key, value]) => ({ key, value })) : [{ key: "stamina", value: 0 }];
-  });
-  const stats = useMemo(() => Object.fromEntries(rows
-    .filter((row) => Number.isFinite(row.value) && row.value !== 0)
-    .map((row) => [row.key, row.value])) as StatMap, [rows]);
-  const enchantEp = calculateEp(stats, profile);
+  const recommendation = useMemo(() => recommendEnchant(item, profile), [item, profile]);
+  const available = useMemo(() => findEnchantsForItem(item), [item]);
+  const [search, setSearch] = useState("");
+  const [selectedId, setSelectedId] = useState(current?.id ?? recommendation?.id ?? available[0]?.id);
+  const ranked = useMemo(() => available
+    .filter((enchant) => `${enchant.name} ${enchant.description}`.toLowerCase().includes(search.toLowerCase()))
+    .map((enchant) => ({ enchant, ep: enchantEp(enchant, profile) }))
+    .sort((left, right) => Number(right.enchant.id === recommendation?.id) - Number(left.enchant.id === recommendation?.id)
+      || right.ep - left.ep
+      || right.enchant.minimumItemLevel - left.enchant.minimumItemLevel), [available, profile, recommendation?.id, search]);
+  const selected = available.find((enchant) => enchant.id === selectedId) ?? recommendation ?? available[0];
 
-  function updateRow(index: number, update: Partial<StatRow>): void {
-    setRows((currentRows) => currentRows.map((row, rowIndex) => rowIndex === index ? { ...row, ...update } : row));
-  }
-
-  function apply(): void {
-    const cleanName = name.trim();
-    if (!cleanName) return;
-    onApply({ id: `gear-enchant:${slot.toLowerCase()}`, name: cleanName, kind: "ENCHANT", stats });
+  function apply(enchant = selected): void {
+    if (!enchant) return;
+    onApply(enchantEnhancement(enchant));
     onClose();
   }
 
   return (
     <div className="modal-backdrop" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && onClose()}>
-      <section className="enchant-panel" role="dialog" aria-modal="true" aria-label={`Edit enchant for ${item.name}`}>
+      <section className="enchant-panel" role="dialog" aria-modal="true" aria-label={`Choose enchant for ${item.name}`}>
         <header className="import-header">
-          <div><p className="eyebrow">Gear enhancement</p><h2>{current ? "Edit enchant" : "Add enchant"}</h2><p>{item.name} · {slot.replaceAll("_", " ").toLowerCase()}</p></div>
-          <button className="icon-button" onClick={onClose} aria-label="Close enchant editor"><X size={18} /></button>
+          <div><p className="eyebrow">In-game enchanting</p><h2>Choose an enchant</h2><p>{item.name} · Item level {item.itemLevel}</p></div>
+          <button className="icon-button" onClick={onClose} aria-label="Close enchant picker"><X size={18} /></button>
         </header>
 
-        <div className="enchant-content">
-          <label className="enchant-name-field"><span>Enchant name</span><input value={name} onChange={(event) => setName(event.target.value)} placeholder="Example: Greater Intellect" autoFocus /></label>
-          <div className="enchant-stat-heading"><div><span>Stat bonuses</span><small>Add every stat shown by the in-game enchant tooltip.</small></div><strong>{enchantEp >= 0 ? "+" : ""}{enchantEp.toFixed(1)} EP</strong></div>
-          <div className="enchant-stat-list">
-            {rows.map((row, index) => <div className="enchant-stat-row" key={`${index}-${row.key}`}>
-              <select value={row.key} onChange={(event) => updateRow(index, { key: event.target.value as StatKey })}>
-                {statKeys.map((key) => <option key={key} value={key}>{STAT_LABELS[key]}</option>)}
-              </select>
-              <input type="number" step="1" value={row.value} onChange={(event) => updateRow(index, { value: Number(event.target.value) })} aria-label={`${STAT_LABELS[row.key]} amount`} />
-              <button type="button" onClick={() => setRows((currentRows) => currentRows.filter((_, rowIndex) => rowIndex !== index))} disabled={rows.length === 1} aria-label={`Remove ${STAT_LABELS[row.key]}`}><X size={14} /></button>
-            </div>)}
-          </div>
-          <button type="button" className="add-enchant-stat" onClick={() => setRows((currentRows) => [...currentRows, { key: nextUnusedStat(currentRows), value: 0 }])}><Plus size={13} /> Add another stat</button>
-          <div className="enchant-help"><Sparkles size={16} /><p>This enchant is attached to this equipped item. Its bonuses immediately affect loadout totals, EP scoring, comparisons, and the locally saved build.</p></div>
+        {recommendation ? <button type="button" className="recommended-enchant" onClick={() => apply(recommendation)}>
+          <span className="recommended-enchant-icon"><Sparkles size={17} /></span>
+          <span><small>Recommended for your EP weights</small><strong>{recommendation.name}</strong><EnchantStats enchant={recommendation} /></span>
+          <b>Apply <em>{enchantEp(recommendation, profile).toFixed(1)} EP</em></b>
+        </button> : null}
+
+        <div className="enchant-search"><Search size={14} /><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search in-game enchants…" autoFocus /></div>
+        <div className="enchant-catalog custom-scrollbar">
+          {ranked.map(({ enchant, ep }) => <button type="button" key={enchant.id} className={`enchant-option ${selected?.id === enchant.id ? "selected" : ""}`} onClick={() => setSelectedId(enchant.id)}>
+            <span className="enchant-option-check">{selected?.id === enchant.id ? <Check size={13} /> : null}</span>
+            <span><strong>{enchant.name}</strong><EnchantStats enchant={enchant} /></span>
+            <span className="enchant-option-score">{enchant.modeled ? <><b>{ep.toFixed(1)}</b><small>EP</small></> : <small>Effect not EP-modeled</small>}</span>
+            {recommendation?.id === enchant.id ? <i>Recommended</i> : null}
+          </button>)}
+          {!ranked.length ? <div className="enchant-empty">No compatible in-game enchants match that search.</div> : null}
         </div>
+
+        <div className="enchant-help"><Sparkles size={16} /><p>Names, effects, compatibility, and item-level requirements come from the installed CoA AtlasLoot module and current client DBC files. Proc-only effects remain selectable but are not assigned a guessed EP value.</p></div>
 
         <footer className="import-footer">
           <div>{current ? <button className="remove-enchant-button" onClick={() => { onRemove(); onClose(); }}><Trash2 size={14} /> Remove enchant</button> : <small>No enchant currently applied</small>}</div>
-          <div><button className="secondary-button" onClick={onClose}>Cancel</button><button className="primary-button" disabled={!name.trim()} onClick={apply}><Sparkles size={14} /> Apply enchant</button></div>
+          <div><button className="secondary-button" onClick={onClose}>Cancel</button><button className="primary-button" disabled={!selected} onClick={() => apply()}><Sparkles size={14} /> Apply selected</button></div>
         </footer>
       </section>
     </div>

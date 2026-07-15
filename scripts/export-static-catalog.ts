@@ -62,8 +62,18 @@ async function main(): Promise<void> {
         : item.sourceUrl.startsWith("realm-cache://")
           ? "COA_REALM_CACHE"
           : "PLAYER_IMPORT";
-    const payload = item.rawPayload as { item?: { displayId?: unknown }; scalingStatDistribution?: unknown } | null;
+    const payload = item.rawPayload as {
+      item?: { displayId?: unknown; inventoryType?: unknown };
+      scalingStatDistribution?: unknown;
+      equipLocation?: unknown;
+      inventoryType?: unknown;
+      itemSubType?: unknown;
+      sheath?: unknown;
+    } | null;
     const displayId = Number(payload?.item?.displayId);
+    const inventoryType = Number(payload?.inventoryType ?? payload?.item?.inventoryType);
+    const sheath = Number(payload?.sheath);
+    const twoHanded = payload?.equipLocation === "INVTYPE_2HWEAPON" || inventoryType === 17 || sheath === 1 || sheath === 2;
     // Armor and weapon DPS are represented by dedicated GearItem fields and
     // resolveItemStats adds them to the EP map. Keeping them here too would
     // score those values twice.
@@ -107,6 +117,8 @@ async function main(): Promise<void> {
       ...(item.weaponMinDamage !== null && item.weaponMaxDamage !== null && item.weaponSpeed !== null
         ? { weaponDamage: { min: item.weaponMinDamage, max: item.weaponMaxDamage, speed: item.weaponSpeed, dps: item.weaponDps ?? 0 } }
         : {}),
+      ...(item.weaponMinDamage !== null && typeof payload?.itemSubType === "string" ? { weaponType: payload.itemSubType } : {}),
+      ...(twoHanded ? { twoHanded: true } : {}),
       ...(item.icon ? { icon: item.icon } : {}),
       ...(Number.isInteger(displayId) && displayId > 0 ? { displayId } : {}),
       ...(item.effects.length ? { effects: item.effects.map((effect) => ({ kind: effect.kind, description: effect.description })) } : {}),

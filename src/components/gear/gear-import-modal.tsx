@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Check, ClipboardPaste, Download, LoaderCircle, Upload, X } from "lucide-react";
 import { parseGearImport } from "@/lib/gear-import";
 import { findStaticItemsById } from "@/lib/items/static-catalog";
+import { enchantEnhancement, findEnchantByEnchantmentId } from "@/lib/enchants";
 import type { GearItem } from "@/types/gear";
 
 interface GearImportModalProps {
@@ -36,8 +37,9 @@ export function GearImportModal({ onImport, onClose }: GearImportModalProps) {
       const missing: ImportResult["missing"] = [];
       for (const entry of parsed.gear) {
         const catalogItem = matches.get(entry.itemId);
+        let importedItem: GearItem | undefined;
         if (entry.snapshot) {
-          loadout[entry.slot] = {
+          importedItem = {
             ...(catalogItem ?? {}),
             id: entry.itemId,
             slot: entry.slot,
@@ -53,8 +55,14 @@ export function GearImportModal({ onImport, onClose }: GearImportModalProps) {
             enhancements: undefined,
             source: "In-game AA2 character export",
           };
-        } else if (catalogItem) loadout[entry.slot] = { ...catalogItem, slot: entry.slot };
+        } else if (catalogItem) importedItem = { ...catalogItem, slot: entry.slot };
         else missing.push({ slot: entry.slot, itemId: entry.itemId });
+        if (importedItem) {
+          const enchant = findEnchantByEnchantmentId(importedItem, entry.enchantmentId);
+          loadout[entry.slot] = enchant
+            ? { ...importedItem, enhancements: [enchantEnhancement(enchant)] }
+            : importedItem;
+        }
       }
       onImport(parsed.level, loadout);
       setResult({ imported: Object.keys(loadout).length, requested: parsed.gear.length, missing });

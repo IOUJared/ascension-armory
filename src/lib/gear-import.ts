@@ -13,6 +13,7 @@ export interface ImportedGearEntry {
   slot: EquipmentSlot;
   itemId: string;
   itemString: string;
+  enchantmentId?: number;
   snapshot?: ImportedItemSnapshot;
 }
 
@@ -87,10 +88,16 @@ export function parseGearImport(raw: string): ParsedGearImport {
     const slotName = pair.slice(0, separator);
     const itemFields = pair.slice(separator + 1).split("~");
     const itemString = itemFields[0];
-    const itemId = itemString.split(":", 1)[0];
+    const linkFields = itemString.split(":");
+    const itemId = linkFields[0];
+    const enchantmentId = Number(linkFields[1]);
     if (!validSlots.has(slotName) || !/^\d+$/.test(itemId)) throw new Error("The export contains an invalid equipment slot or item ID.");
     const slot = slotName as EquipmentSlot;
-    bySlot.set(slot, { slot, itemId, itemString, ...(format === "AA2" ? { snapshot: parseSnapshot(itemFields) } : {}) });
+    bySlot.set(slot, {
+      slot, itemId, itemString,
+      ...(Number.isInteger(enchantmentId) && enchantmentId > 0 ? { enchantmentId } : {}),
+      ...(format === "AA2" ? { snapshot: parseSnapshot(itemFields) } : {}),
+    });
   }
 
   return { version: format === "AA2" ? 2 : 1, level, gear: [...bySlot.values()] };
