@@ -90,3 +90,26 @@ test("ID lookup uses the compact index and fetches only required shards", async 
     "/armory/data/catalog/slots/finger-1.json",
   ]);
 });
+
+test("catalog lookup falls back to the canonical document when shard delivery fails", async () => {
+  const requested: string[] = [];
+  const documents: Record<string, unknown> = {
+    "/armory/data/catalog/manifest.json": manifest,
+    "/armory/data/coa-items.json": { generatedAt, items: [helm, ring] },
+  };
+  const fetcher = async (url: string) => {
+    requested.push(url);
+    const document = documents[url];
+    return { ok: document !== undefined, status: document === undefined ? 404 : 200, json: async () => document };
+  };
+  const catalog = new StaticCatalogRepository("/armory", fetcher);
+
+  assert.deepEqual((await catalog.findForSlot("HEAD", 60)).map((item) => item.id), ["100"]);
+  assert.equal((await catalog.findByIds(["200"])).get("200")?.name, ring.name);
+  assert.deepEqual(requested, [
+    "/armory/data/catalog/manifest.json",
+    "/armory/data/catalog/slots/head.json",
+    "/armory/data/coa-items.json",
+    "/armory/data/catalog/item-index.json",
+  ]);
+});
