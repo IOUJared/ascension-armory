@@ -7,6 +7,7 @@ import {
   type GearEffect,
   type GearEnhancement,
   type GearItem,
+  type GearScaleSnapshot,
   type HybridScalingRule,
   type StatKey,
   type StatMap,
@@ -96,6 +97,23 @@ function sanitizeEnhancements(value: unknown): GearEnhancement[] | undefined {
   return enhancements.length ? enhancements : undefined;
 }
 
+function sanitizeScaleSnapshots(value: unknown): GearScaleSnapshot[] | undefined {
+  if (!Array.isArray(value)) return undefined;
+  const snapshots = value.flatMap((entry): GearScaleSnapshot[] => {
+    if (!isRecord(entry) || !finiteNumber(entry.effectiveLevel) || !finiteNumber(entry.itemLevel)
+      || !finiteNumber(entry.requiredLevel) || !isRecord(entry.stats)) return [];
+    return [{
+      effectiveLevel: Math.max(1, Math.min(60, Math.round(entry.effectiveLevel))),
+      itemLevel: Math.max(0, Math.round(entry.itemLevel)),
+      requiredLevel: Math.max(1, Math.min(60, Math.round(entry.requiredLevel))),
+      stats: sanitizeStats(entry.stats),
+      ...(finiteNumber(entry.armor) ? { armor: entry.armor } : {}),
+      ...(finiteNumber(entry.weaponDps) ? { weaponDps: entry.weaponDps } : {}),
+    }];
+  });
+  return snapshots.length ? snapshots : undefined;
+}
+
 function sanitizeItem(value: unknown, slot: EquipmentSlot): GearItem | undefined {
   if (!isRecord(value) || typeof value.id !== "string" || typeof value.name !== "string"
     || !qualities.has(value.quality as GearItem["quality"]) || !finiteNumber(value.itemLevel)
@@ -107,6 +125,7 @@ function sanitizeItem(value: unknown, slot: EquipmentSlot): GearItem | undefined
     : undefined;
   const effects = sanitizeEffects(value.effects);
   const enhancements = sanitizeEnhancements(value.enhancements);
+  const scaleSnapshots = sanitizeScaleSnapshots(value.scaleSnapshots);
 
   return {
     id: value.id,
@@ -123,6 +142,7 @@ function sanitizeItem(value: unknown, slot: EquipmentSlot): GearItem | undefined
     ...(finiteNumber(value.displayId) ? { displayId: value.displayId } : {}),
     ...(effects ? { effects } : {}),
     ...(enhancements ? { enhancements } : {}),
+    ...(scaleSnapshots ? { scaleSnapshots } : {}),
     ...(finiteNumber(value.socketCount) ? { socketCount: value.socketCount } : {}),
     ...(typeof value.source === "string" ? { source: value.source } : {}),
   };

@@ -103,6 +103,24 @@ The generated JSON records the exact AtlasLoot commit, source file and line.
 Atlas-only IDs already present in the current-realm catalog are skipped, and
 new IDs still require a successful `/aacatalog` response before publication.
 
+### Exact level-scaling calibration
+
+The addon can capture the same item link at every effective level without
+assuming a generic item-budget formula. Run `/aascale test` to compare a fixed
+dungeon base (Embalmed Shroud) with a true scaling item, then `/reload` and
+import the saved snapshots:
+
+```bash
+npm run ingest:addon-scaling -- \
+  --file "/path/to/WTF/Account/ACCOUNT/SavedVariables/AscensionArmoryExporter.lua"
+npm run export:catalog
+```
+
+Use `/aascale ITEM_ID [MIN_LEVEL] [MAX_LEVEL]` for another item, and
+`/aascale status` or `/aascale stop` while it runs. The planner selects an
+exact captured snapshot for its current character level and labels it as
+scaled; it never interpolates missing levels.
+
 ## Legacy and client-wide sources
 
 Ascension DB does not expose a documented item JSON API. Its public item pages contain an embedded AoWoW metadata object and tooltip payload. The importer retains this adapter for explicitly requested fallback records, but these records are not exported into the current CoA catalog unless current-realm or player-import evidence also exists.

@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { ArrowRight, Check, EyeOff, Gem, Search, Sparkles, X } from "lucide-react";
+import { ArrowRight, Check, EyeOff, Gem, Search, Sparkles, TrendingUp, X } from "lucide-react";
 import { compareScoredItems, contextualPower, isSystemPowerKey, scoreItem, statDelta, type WeightProfile } from "@/lib/ep";
 import type { GearContext } from "@/types/coa";
 import { STAT_LABELS, type EquipmentSlot, type GearItem, type ScoredItem, type StatKey } from "@/types/gear";
@@ -110,6 +110,7 @@ export function ItemPickerModal({ slot, equipped, candidates, loading = false, l
               const delta = item.ep - (equippedScore?.ep ?? 0);
               const power = contextualPower(item.resolvedStats, level, context);
               const powerDelta = power - equippedPower;
+              const hasExactScale = item.scaleSnapshots?.some((snapshot) => snapshot.effectiveLevel === level);
               return (
                 <button className={`result-row ${selected?.id === item.id ? "selected" : ""}`} key={item.id} onClick={() => setSelectedId(item.id)}>
                   <span className="rank">{String(index + 1).padStart(2, "0")}</span>
@@ -118,6 +119,7 @@ export function ItemPickerModal({ slot, equipped, candidates, loading = false, l
                     <span className={`block truncate text-sm font-semibold ${qualityClass[item.quality]}`}>{item.name}</span>
                     <span className="mt-1 flex flex-wrap items-center gap-1.5 text-xs text-stone-500">
                       <span>iLvl {item.itemLevel}</span>
+                      {hasExactScale ? <span className="scaled-badge">Scaled L{level}</span> : null}
                       {item.worldforged ? <span className="worldforged-badge">Worldforged</span> : null}
                       <SourceBadge item={item} />
                     </span>
@@ -155,6 +157,9 @@ export function ItemPickerModal({ slot, equipped, candidates, loading = false, l
 
               <div className="mt-4 grid gap-3 sm:grid-cols-2">
                 <div className="mechanic-tile"><Sparkles size={16} /><div><p>Mystic Enchant</p><span>{selected.enhancements?.[0]?.name ?? "No RE inserted"}</span></div></div>
+                {selected.scaleSnapshots?.some((snapshot) => snapshot.effectiveLevel === level)
+                  ? <div className="mechanic-tile scaled-tile"><TrendingUp size={16} /><div><p>Exact level scaling</p><span>Stats and item level were captured from the current CoA client at effective level {level}.</span></div></div>
+                  : null}
                 {selected.worldforged
                   ? <div className="mechanic-tile worldforged-tile"><Sparkles size={16} /><div><p>Worldforged upgrade path</p><span>Level 60 · Dungeon · ZG · T1 · T2 · AQ · T3. Score shown uses verified current-tier stats.</span></div></div>
                   : <div className="mechanic-tile"><Gem size={16} /><div><p>Custom sockets</p><span>{selected.socketCount ? `${selected.socketCount} socket available` : "No sockets"}</span></div></div>}

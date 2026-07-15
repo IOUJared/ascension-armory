@@ -27,7 +27,7 @@ async function main(): Promise<void> {
         { id: { in: addedIds } },
       ],
     },
-    include: { stats: true, effects: true, sockets: true },
+    include: { stats: true, effects: true, sockets: true, scaleSnapshots: { orderBy: { effectiveLevel: "asc" } } },
     orderBy: [{ slot: "asc" }, { itemLevel: "desc" }, { name: "asc" }],
   });
 
@@ -67,6 +67,14 @@ async function main(): Promise<void> {
       ...(Number.isInteger(displayId) && displayId > 0 ? { displayId } : {}),
       ...(item.effects.length ? { effects: item.effects.map((effect) => ({ kind: effect.kind, description: effect.description })) } : {}),
       ...(item.sockets.length ? { socketCount: item.sockets.length } : {}),
+      ...(item.scaleSnapshots.length ? { scaleSnapshots: item.scaleSnapshots.map((snapshot) => ({
+        effectiveLevel: snapshot.effectiveLevel,
+        itemLevel: snapshot.itemLevel,
+        requiredLevel: snapshot.requiredLevel,
+        stats: snapshot.stats as StatMap,
+        ...(snapshot.armor ? { armor: snapshot.armor } : {}),
+        ...(snapshot.weaponDps !== null ? { weaponDps: snapshot.weaponDps } : {}),
+      })) } : {}),
       source: upgradeBase.has(item.id.toString())
         ? `${dataSource === "COA_INGAME_SCAN" ? "Current in-game scan" : "CoA realm cache"} · Worldforged upgrade of ${upgradeBase.get(item.id.toString())}`
         : worldforgedIds.has(item.id.toString())

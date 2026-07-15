@@ -90,10 +90,32 @@ model Item {
   stats            ItemStat[]
   sockets          ItemSocket[]
   effects          ItemEffect[]
+  scaleSnapshots   ItemScaleSnapshot[]
   equippedIn       EquippedItem[]
 
   @@index([slot, requiredLevel, itemLevel])
   @@index([name])
+}
+
+model ItemScaleSnapshot {
+  id                  BigInt   @id @default(autoincrement())
+  itemId              BigInt
+  effectiveLevel      Int
+  itemLevel           Int
+  requiredLevel       Int
+  stats               Json     @db.JsonB
+  armor               Float    @default(0)
+  weaponDps           Float?
+  sourceLink          String
+  capturedPlayerLevel Int
+  sourceRealm         String?
+  rawStats            Json     @db.JsonB
+  contentHash         String
+  capturedAt          DateTime @default(now())
+  item                Item     @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  @@unique([itemId, effectiveLevel])
+  @@index([effectiveLevel, itemLevel])
 }
 
 model StatDefinition {

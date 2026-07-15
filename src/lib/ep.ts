@@ -18,9 +18,12 @@ function addStats(target: StatMap, source: StatMap, multiplier = 1): void {
 }
 
 export function resolveItemStats(item: GearItem, level: number, profileRules: HybridScalingRule[] = []): StatMap {
-  const resolved: StatMap = { ...item.stats };
-  if (item.armor) resolved.armor = (resolved.armor ?? 0) + item.armor;
-  if (item.weaponDamage) resolved.weapon_dps = (resolved.weapon_dps ?? 0) + item.weaponDamage.dps;
+  const scale = item.scaleSnapshots?.find((snapshot) => snapshot.effectiveLevel === level);
+  const resolved: StatMap = { ...(scale?.stats ?? item.stats) };
+  const armor = scale ? scale.armor : item.armor;
+  const weaponDps = scale ? scale.weaponDps : item.weaponDamage?.dps;
+  if (armor) resolved.armor = (resolved.armor ?? 0) + armor;
+  if (weaponDps) resolved.weapon_dps = (resolved.weapon_dps ?? 0) + weaponDps;
   for (const effect of item.effects ?? []) if (effect.estimatedStats) addStats(resolved, effect.estimatedStats);
   for (const enhancement of item.enhancements ?? []) {
     addStats(resolved, enhancement.stats);
@@ -83,7 +86,13 @@ export function compareScoredItems(a: ScoredItem, b: ScoredItem, level: number, 
 
 export function scoreItem(item: GearItem, level: number, profile: WeightProfile): ScoredItem {
   const resolvedStats = resolveItemStats(item, level, profile.hybridRules);
-  return { ...item, resolvedStats, ep: calculateEp(resolvedStats, profile) };
+  const scale = item.scaleSnapshots?.find((snapshot) => snapshot.effectiveLevel === level);
+  return {
+    ...item,
+    ...(scale ? { itemLevel: scale.itemLevel, requiredLevel: scale.requiredLevel, armor: scale.armor } : {}),
+    resolvedStats,
+    ep: calculateEp(resolvedStats, profile),
+  };
 }
 
 export function statDelta(candidate: ScoredItem, equipped?: ScoredItem): StatMap {

@@ -31,7 +31,10 @@ function matchesSlot(itemSlot: EquipmentSlot, requestedSlot: EquipmentSlot): boo
 export async function findStaticItemsForSlot(slot: EquipmentSlot, level: number): Promise<GearItem[]> {
   const catalog = await loadCatalog();
   return catalog.items
-    .filter((item) => matchesSlot(item.slot, slot) && item.requiredLevel <= level)
+    .filter((item) => {
+      const scaled = item.scaleSnapshots?.find((snapshot) => snapshot.effectiveLevel === level);
+      return matchesSlot(item.slot, slot) && (scaled?.requiredLevel ?? item.requiredLevel) <= level;
+    })
     .map((item) => item.slot === slot ? item : { ...item, slot });
 }
 

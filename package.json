@@ -17,6 +17,7 @@
     "ingest:client-items": "tsx scripts/import-client-items.ts",
     "ingest:realm-cache": "tsx scripts/import-realm-item-cache.ts",
     "ingest:addon-catalog": "tsx scripts/import-addon-catalog.ts",
+    "ingest:addon-scaling": "tsx scripts/import-addon-scaling.ts",
     "sync:coa-classes": "node scripts/sync-coa-classes.mjs",
     "sync:sidekick-gear": "tsx scripts/sync-sidekick-gear.ts",
     "import:worldforged": "tsx scripts/import-lootcollector-worldforged.ts",

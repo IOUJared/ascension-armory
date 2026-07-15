@@ -39,6 +39,15 @@ export interface HybridScalingRule {
   cap?: number;
 }
 
+export interface GearScaleSnapshot {
+  effectiveLevel: number;
+  itemLevel: number;
+  requiredLevel: number;
+  stats: StatMap;
+  armor?: number;
+  weaponDps?: number;
+}
+
 export interface GearItem {
   id: string;
   name: string;
@@ -63,6 +72,8 @@ export interface GearItem {
   worldforged?: boolean;
   /** Base discovery item for a server-verified Worldforged upgrade record. */
   worldforgedBaseId?: string;
+  /** Exact current-client snapshots keyed by the item link's effective level. */
+  scaleSnapshots?: GearScaleSnapshot[];
 }
 
 export interface ScoredItem extends GearItem {
