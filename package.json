@@ -13,10 +13,14 @@
     "db:seed": "tsx prisma/seed.ts",
     "ingest:items": "tsx scripts/ingest-items.ts",
     "extract:client-items": "uv run --with mpyq python scripts/extract-client-items.py",
+    "extract:realm-cache": "python3 scripts/extract-realm-item-cache.py",
     "ingest:client-items": "tsx scripts/import-client-items.ts",
+    "ingest:realm-cache": "tsx scripts/import-realm-item-cache.ts",
+    "ingest:addon-catalog": "tsx scripts/import-addon-catalog.ts",
     "sync:coa-classes": "node scripts/sync-coa-classes.mjs",
     "sync:sidekick-gear": "tsx scripts/sync-sidekick-gear.ts",
     "import:worldforged": "tsx scripts/import-lootcollector-worldforged.ts",
+    "generate:addon-candidates": "tsx scripts/generate-addon-candidates.ts",
     "export:catalog": "tsx scripts/export-static-catalog.ts"
   },
   "prisma": {

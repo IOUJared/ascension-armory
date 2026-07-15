@@ -9,10 +9,20 @@ const outputPath = resolve(process.cwd(), process.argv[2] ?? "public/data/coa-it
 
 async function main(): Promise<void> {
   const worldforgedIds = new Set(worldforgedItems.itemIds);
-  const addedIds = [...catalogAdditions.items.map((item) => item.id), ...worldforgedItems.itemIds].map((id) => BigInt(id));
+  // LootCollector identifies discovery candidates, including non-gear
+  // Worldforged scrolls. It must not make a stale all-realms DBC row eligible
+  // for export by itself; current realm data or a verified source must do that.
+  const addedIds = catalogAdditions.items.map((item) => BigInt(item.id));
   const overrides = new Map(catalogAdditions.items.map((item) => [item.id, item.overrides]));
   const rows = await prisma.item.findMany({
-    where: { slot: { not: null }, OR: [{ sourceUpdatedAt: { not: null } }, { id: { in: addedIds } }] },
+    where: {
+      slot: { not: null },
+      OR: [
+        { sourceUrl: { startsWith: "realm-cache://" } },
+        { sourceUrl: { startsWith: "ingame-scan://" } },
+        { id: { in: addedIds } },
+      ],
+    },
     include: { stats: true, effects: true, sockets: true },
     orderBy: [{ slot: "asc" }, { itemLevel: "desc" }, { name: "asc" }],
   });
@@ -20,9 +30,21 @@ async function main(): Promise<void> {
   const items: GearItem[] = rows.flatMap((item): GearItem[] => {
     if (!item.slot) return [];
     const override = overrides.get(item.id.toString());
+    const dataSource = override
+      ? "USER_VERIFIED"
+      : item.sourceUrl.startsWith("ingame-scan://")
+        ? "COA_INGAME_SCAN"
+        : item.sourceUrl.startsWith("realm-cache://")
+          ? "COA_REALM_CACHE"
+          : "PLAYER_IMPORT";
     const payload = item.rawPayload as { item?: { displayId?: unknown } } | null;
     const displayId = Number(payload?.item?.displayId);
-    const stats = Object.fromEntries(item.stats.map((stat) => [stat.statKey, stat.value])) as StatMap;
+    // Armor and weapon DPS are represented by dedicated GearItem fields and
+    // resolveItemStats adds them to the EP map. Keeping them here too would
+    // score those values twice.
+    const stats = Object.fromEntries(item.stats
+      .filter((stat) => stat.statKey !== "armor" && stat.statKey !== "weapon_dps")
+      .map((stat) => [stat.statKey, stat.value])) as StatMap;
     Object.assign(stats, override?.stats ?? {});
     return [{
       id: item.id.toString(),
@@ -41,7 +63,10 @@ async function main(): Promise<void> {
       ...(Number.isInteger(displayId) && displayId > 0 ? { displayId } : {}),
       ...(item.effects.length ? { effects: item.effects.map((effect) => ({ kind: effect.kind, description: effect.description })) } : {}),
       ...(item.sockets.length ? { socketCount: item.sockets.length } : {}),
-      source: worldforgedIds.has(item.id.toString()) ? "LootCollector · Worldforged" : item.sourceUrl,
+      source: worldforgedIds.has(item.id.toString())
+        ? `${dataSource === "COA_INGAME_SCAN" ? "Current in-game scan" : "CoA realm cache"} · LootCollector discovery`
+        : item.sourceUrl,
+      dataSource,
       ...(worldforgedIds.has(item.id.toString()) ? { worldforged: true } : {}),
     }];
   });

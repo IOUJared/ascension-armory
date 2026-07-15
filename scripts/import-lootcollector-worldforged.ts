@@ -7,6 +7,7 @@ interface WorldforgedCatalogSource {
   generatedAt: string;
   discoveryCount: number;
   itemIds: string[];
+  items: Array<{ id: string; link?: string }>;
 }
 
 function option(name: string): string | undefined {
@@ -29,16 +30,21 @@ async function main(): Promise<void> {
 
   const itemIds = [...new Set(matches.map((match) => match[1]))]
     .sort((left, right) => Number(left) - Number(right));
+  const links = new Map<string, string>();
+  for (const match of savedVariables.matchAll(/\["dt"\]\s*=\s*1,\s*\["i"\]\s*=\s*(\d+),[\s\S]{0,2400}?\["il"\]\s*=\s*"([^"]+)"/g)) {
+    if (!links.has(match[1])) links.set(match[1], match[2]);
+  }
   const payload: WorldforgedCatalogSource = {
     source: "LootCollector",
     generatedAt: new Date().toISOString(),
     discoveryCount: matches.length,
     itemIds,
+    items: itemIds.map((id) => ({ id, ...(links.get(id) ? { link: links.get(id) } : {}) })),
   };
 
   await mkdir(dirname(outputPath), { recursive: true });
   await writeFile(outputPath, `${JSON.stringify(payload, null, 2)}\n`);
-  console.log(JSON.stringify({ source: sourcePath, output: outputPath, discoveries: matches.length, uniqueItems: itemIds.length }));
+  console.log(JSON.stringify({ source: sourcePath, output: outputPath, discoveries: matches.length, uniqueItems: itemIds.length, links: links.size }));
 }
 
 main().catch((error: unknown) => {

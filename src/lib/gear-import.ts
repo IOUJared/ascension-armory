@@ -24,7 +24,7 @@ export interface ParsedGearImport {
 
 const validSlots = new Set<string>(EQUIPMENT_SLOTS);
 const qualities: GearItem["quality"][] = ["POOR", "COMMON", "UNCOMMON", "RARE", "EPIC", "LEGENDARY", "ARTIFACT", "HEIRLOOM"];
-const apiStatKeys: Record<string, StatKey> = {
+export const API_STAT_KEYS: Record<string, StatKey> = {
   ITEM_MOD_STRENGTH_SHORT: "strength", ITEM_MOD_AGILITY_SHORT: "agility", ITEM_MOD_STAMINA_SHORT: "stamina",
   ITEM_MOD_INTELLECT_SHORT: "intellect", ITEM_MOD_SPIRIT_SHORT: "spirit", ITEM_MOD_ARMOR_SHORT: "armor",
   ITEM_MOD_ATTACK_POWER_SHORT: "attack_power", ITEM_MOD_RANGED_ATTACK_POWER_SHORT: "attack_power",
@@ -52,7 +52,7 @@ function parseSnapshot(fields: string[]): ImportedItemSnapshot {
   for (const pair of fields[6].split(",")) {
     if (!pair) continue;
     const separator = pair.lastIndexOf(":");
-    const key = apiStatKeys[pair.slice(0, separator)];
+    const key = API_STAT_KEYS[pair.slice(0, separator)];
     const amount = Number(pair.slice(separator + 1));
     if (separator > 0 && key && Number.isFinite(amount)) stats[key] = (stats[key] ?? 0) + amount;
   }

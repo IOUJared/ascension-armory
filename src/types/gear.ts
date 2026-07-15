@@ -7,7 +7,7 @@ export const EQUIPMENT_SLOTS = [
 export type EquipmentSlot = (typeof EQUIPMENT_SLOTS)[number];
 
 export type StatKey =
-  | "strength" | "agility" | "stamina" | "intellect" | "spirit" | "armor"
+  | "strength" | "agility" | "stamina" | "intellect" | "spirit" | "health" | "mana" | "armor"
   | "attack_power" | "spell_power" | "healing_power" | "crit_rating" | "haste_rating"
   | "hit_rating" | "expertise_rating" | "defense_rating" | "dodge_rating"
   | "parry_rating" | "block_rating" | "block_value" | "armor_penetration"
@@ -57,6 +57,8 @@ export interface GearItem {
   enhancements?: GearEnhancement[];
   socketCount?: number;
   source?: string;
+  /** Provenance used to distinguish current CoA data from imported fallbacks. */
+  dataSource?: "COA_INGAME_SCAN" | "COA_REALM_CACHE" | "USER_VERIFIED" | "PLAYER_IMPORT";
   /** Identified by LootCollector as an upgradeable Worldforged item. */
   worldforged?: boolean;
 }
@@ -72,6 +74,8 @@ export const STAT_LABELS: Record<StatKey, string> = {
   stamina: "Stamina",
   intellect: "Intellect",
   spirit: "Spirit",
+  health: "Health",
+  mana: "Mana",
   armor: "Armor",
   attack_power: "Attack Power",
   spell_power: "Spell Power",

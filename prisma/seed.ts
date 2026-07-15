@@ -3,7 +3,8 @@ import { prisma } from "../src/lib/db";
 const definitions = [
   ["strength", "Strength", "PRIMARY"], ["agility", "Agility", "PRIMARY"],
   ["stamina", "Stamina", "PRIMARY"], ["intellect", "Intellect", "PRIMARY"],
-  ["spirit", "Spirit", "PRIMARY"], ["armor", "Armor", "DEFENSE"],
+  ["spirit", "Spirit", "PRIMARY"], ["health", "Health", "RESOURCE"],
+  ["mana", "Mana", "RESOURCE"], ["armor", "Armor", "DEFENSE"],
   ["attack_power", "Attack Power", "OFFENSE"], ["spell_power", "Spell Power", "OFFENSE"],
   ["healing_power", "Healing Power", "OFFENSE"], ["crit_rating", "Critical Strike Rating", "RATING"],
   ["haste_rating", "Haste Rating", "RATING"], ["hit_rating", "Hit Rating", "RATING"],

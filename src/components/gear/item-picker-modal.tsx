@@ -27,6 +27,14 @@ function ItemIcon({ item, size = "md" }: { item?: GearItem; size?: "md" | "lg" }
   return <GameItemIcon item={item} className={`item-icon ${size === "lg" ? "h-16 w-16 text-3xl" : "h-12 w-12 text-xl"} ${item?.quality === "LEGENDARY" ? "legendary" : ""}`} />;
 }
 
+function SourceBadge({ item }: { item: GearItem }) {
+  const label = item.dataSource === "COA_INGAME_SCAN" ? "In-game verified"
+    : item.dataSource === "USER_VERIFIED" ? "Tooltip verified"
+      : item.dataSource === "PLAYER_IMPORT" ? "Player import"
+        : "CoA base template";
+  return <span className={`source-badge ${item.dataSource === "COA_INGAME_SCAN" || item.dataSource === "USER_VERIFIED" ? "verified" : ""}`}>{label}</span>;
+}
+
 function StatLines({ item, compareTo }: { item: ScoredItem; compareTo?: ScoredItem }) {
   const delta = compareTo ? statDelta(item, compareTo) : {};
   return (
@@ -88,7 +96,8 @@ export function ItemPickerModal({ slot, equipped, candidates, loading = false, l
                     <span className={`block truncate text-sm font-semibold ${qualityClass[item.quality]}`}>{item.name}</span>
                     <span className="mt-1 flex flex-wrap items-center gap-1.5 text-xs text-stone-500">
                       <span>iLvl {item.itemLevel}</span>
-                      {item.worldforged ? <span className="worldforged-badge">Worldforged</span> : <span>· {item.source}</span>}
+                      {item.worldforged ? <span className="worldforged-badge">Worldforged</span> : null}
+                      <SourceBadge item={item} />
                     </span>
                   </span>
                   <span className="text-right">
@@ -115,7 +124,7 @@ export function ItemPickerModal({ slot, equipped, candidates, loading = false, l
                 <div className="hidden pt-16 text-amber-500 sm:block"><ArrowRight size={20} /></div>
                 <article className="compare-card candidate-card">
                   <p className="eyebrow text-amber-400">Potential upgrade</p>
-                  <div className="mt-4 flex items-center gap-3"><ItemIcon item={selected} size="lg" /><div><h3 className={`font-semibold ${qualityClass[selected.quality]}`}>{selected.name}</h3><p className="flex flex-wrap items-center gap-2 text-xs text-stone-500">Item level {selected.itemLevel}{selected.worldforged ? <span className="worldforged-badge">Worldforged</span> : null}</p></div></div>
+                  <div className="mt-4 flex items-center gap-3"><ItemIcon item={selected} size="lg" /><div><h3 className={`font-semibold ${qualityClass[selected.quality]}`}>{selected.name}</h3><p className="flex flex-wrap items-center gap-2 text-xs text-stone-500">Item level {selected.itemLevel}{selected.worldforged ? <span className="worldforged-badge">Worldforged</span> : null}<SourceBadge item={selected} /></p></div></div>
                   <div className="my-4 h-px bg-white/7" /><StatLines item={selected} compareTo={equippedScore} />
                 </article>
               </div>

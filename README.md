@@ -40,20 +40,50 @@ SavedVariables database before exporting the catalog:
 
 ```bash
 npm run import:worldforged -- --file "/path/to/WTF/Account/YOUR_ACCOUNT/SavedVariables/LootCollector.lua"
+npm run generate:addon-candidates
 npm run export:catalog
 ```
 
 The importer reads discovery type `1` (Worldforged) as data without executing
-the Lua file. Equippable matches are published with a Worldforged badge and
-their verified base stats. Upgrade tiers are identified in the UI, but the
-planner does not fabricate scaled tier stats that only the running game client
-can resolve.
+the Lua file. LootCollector is used as discovery metadata only: CoA's current
+realm response must identify an item as equippable before it enters the gear
+catalog. This avoids treating Worldforged scroll IDs as gear because an old
+all-realms DBC reused the same numeric ID.
 
 Commit the regenerated `public/data/coa-items.json` file so GitHub Pages can serve it without database access.
 
-## Item ingestion
+## Current CoA item ingestion
 
-Ascension DB does not expose a documented item JSON API. Its public item pages contain an embedded AoWoW metadata object and tooltip payload. The importer keeps that source detail inside `src/lib/ascension`, parses the payload, retains the original HTML and JSON for future reparsing, then transactionally upserts normalized stats, sockets, effects, armor and weapon damage.
+The public Ascension database is an older fallback, not the catalog authority.
+The primary extractor decodes the Rexxar `itemcache.wdb` written from current
+server item-query responses. It rejects partial records and verifies that the
+entire packet payload was understood.
+
+```bash
+npm run extract:realm-cache -- \
+  --cache "/path/to/Cache/WDB/enUS/Rexxar - Conquest of Azeroth/itemcache.wdb" \
+  --output ./data/coa-realm-items.ndjson.gz \
+  --equippable-only
+npm run ingest:realm-cache -- --file ./data/coa-realm-items.ndjson.gz
+npm run export:catalog
+```
+
+Base realm templates do not contain every level-scaled Worldforged result. The
+included addon can query LootCollector candidates through the current realm and
+capture `GetItemStats`, the rendered tooltip, PvE/PvP power, inventory type and
+the player level used for the snapshot. In game, run `/aacatalog`; use
+`/aacatalog status` or `/aacatalog stop` as needed, and `/reload` after it
+finishes. Then import the saved snapshots:
+
+```bash
+npm run ingest:addon-catalog -- \
+  --file "/path/to/WTF/Account/ACCOUNT/SavedVariables/AscensionArmoryExporter.lua"
+npm run export:catalog
+```
+
+## Legacy and client-wide sources
+
+Ascension DB does not expose a documented item JSON API. Its public item pages contain an embedded AoWoW metadata object and tooltip payload. The importer retains this adapter for explicitly requested fallback records, but these records are not exported into the current CoA catalog unless current-realm or player-import evidence also exists.
 
 ```bash
 npm run ingest:items -- --ids 40188,40200

@@ -4,5 +4,8 @@
 ## Author: Ascension Armory
 ## Version: 1.1.0
 ## X-Flavor: 3.3.5
+## SavedVariables: AscensionArmoryCatalogDB
 
+WorldforgedCandidates.lua
 AscensionArmoryExporter.lua
+CatalogScanner.lua
