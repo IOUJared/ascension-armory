@@ -97,6 +97,11 @@ export function GearPlanner() {
     .filter(([key, value]) => value > 0 && !isSystemPowerKey(key))
     .sort((a, b) => b[1] - a[1])
     .map(([key]) => key), [weights]);
+  const editableWeightKeys = useMemo(() => {
+    const profileKeys = Object.keys(selectedProfile?.weights ?? fallbackWeights) as StatKey[];
+    const savedKeys = Object.keys(weights) as StatKey[];
+    return [...new Set([...profileKeys, ...savedKeys])].filter((key) => !isSystemPowerKey(key));
+  }, [selectedProfile, weights]);
   const totalEp = useMemo(() => Object.values(loadout).reduce((sum, item) => sum + calculateEp(resolveItemStats(item, level, profile.hybridRules), profile), 0), [level, loadout, profile]);
   const allStats = useMemo(() => Object.values(loadout).reduce<StatMap>((sum, item) => {
     for (const [key, value] of Object.entries(resolveItemStats(item, level, profile.hybridRules)) as Array<[StatKey, number]>) sum[key] = (sum[key] ?? 0) + value;
@@ -253,7 +258,7 @@ export function GearPlanner() {
             {selectedProfile ? <div className="stat-priority-card"><span>{selectedProfile.context.toUpperCase()} stat priority</span><p>{selectedProfile.priority}</p><small>{selectedProfile.spec.weapon.style} · {selectedProfile.spec.primaryStats.join(" / ") || "Flexible primary stat"}</small></div> : null}
             <div className="weight-table">
               <div className="weight-header"><span>Attribute</span><span>Weight</span></div>
-              {activeWeightKeys.map((key) => <label className="weight-row" key={key}><span>{STAT_LABELS[key]}</span><input type="number" step="0.01" value={weights[key] ?? 0} onChange={(event) => setWeights((current) => ({ ...current, [key]: Number(event.target.value) }))} /></label>)}
+              {editableWeightKeys.map((key) => <label className="weight-row" key={key}><span>{STAT_LABELS[key]}</span><input type="number" step="0.01" value={weights[key] ?? 0} onChange={(event) => setWeights((current) => ({ ...current, [key]: Number(event.target.value) }))} /></label>)}
             </div>
             <button className="reset-button" onClick={() => setWeights(selectedProfile?.weights ?? fallbackWeights)}><RotateCcw size={14} /> Reset class priority</button>
             <div className="hybrid-callout"><Sparkles size={18} /><div><p>Class priority active</p><span>Gear results are ranked automatically using the selected specialization’s ordered {selectedProfile?.context.toUpperCase() ?? "PvE"} stats.</span></div></div>
