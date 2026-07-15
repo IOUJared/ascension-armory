@@ -1,0 +1,12 @@
+node_modules
+.next
+out
+*.tsbuildinfo
+.env
+.env.local
+coverage
+*.log
+prisma/dev.db
+data/*.ndjson
+data/*.ndjson.gz
+data/*.tsv

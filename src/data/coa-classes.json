@@ -1,0 +1,2110 @@
+{
+  "source": "https://ascensionsidekick.com/data.js",
+  "sourceBuild": "coa-live-2026-07-06",
+  "sourceDate": "2026-07-06",
+  "disclaimer": "Community-maintained planning heuristic; verify against your current in-game tooltips and character sheet.",
+  "classes": [
+    {
+      "id": 12,
+      "name": "Barbarian",
+      "slug": "barbarian",
+      "summary": "The barbarian is a brutal warrior, often hailing from a tribal background, with elite barbarians often linked by ancestry to the Vrykul of Northrend. Generally simple of mind and with no magic of their own, barbarians rely on their weapons to earn their place in the world.",
+      "theme": "Savage warrior",
+      "faction": "Both",
+      "icon": "classicon_barbarian",
+      "color": "#8A3303",
+      "specs": [
+        {
+          "name": "Brutality",
+          "description": "The core offensive tree — raw strength, fury and execute power.",
+          "icon": "_orc_06",
+          "role": "Melee DPS",
+          "roles": [
+            "Melee DPS"
+          ],
+          "complexity": "Normal",
+          "primaryStats": [
+            "Agility"
+          ],
+          "resource": "ENERGY",
+          "playstyle": "The core Barbarian damage tree: build Carnage stacks on enemies with relentless Physical attacks, then consume them for Strength-scaled burst. You set up your kill windows in advance — stack, then decapitate. Almost pure Physical damage; simple, fast and forgiving.",
+          "statPriority": {
+            "pve": "Hit (until your specials stop missing a +3-level target) > Expertise (until your attacks stop being dodged/parried) > Agility > Critical Strike > Armor Penetration > Haste",
+            "pvp": "Resilience > Stamina > Agility > Hit (to cap) > Critical Strike > Expertise > Haste",
+            "note": "Pure Physical builder-spender, but Agility (not Strength) is the primary attribute: Ancestral Might turns Agility straight into attack power and Body Builder converts 3 Agility into 1 Strength (which Ogre's Strength then re-converts to AP), so Agility scales AP through two paths while Strength only helps as an Agi sink. After the Hit/Expertise caps, stack Agility, then Crit (Brutal Strikes amplifies physical crit damage and Battle Rhythm/Blood Pact chain off critical strikes) over Armor Pen and Haste."
+          },
+          "weapon": {
+            "style": "Two-handed",
+            "main": "Two-hand weapon",
+            "off": "—",
+            "note": "Two-handed — Battering Ram requires a two-hander."
+          }
+        },
+        {
+          "name": "Headhunting",
+          "description": "Berserker rushes, impaling spears and bleed/puncture pressure.",
+          "icon": "inv_axe_2h_artifactmaw_d_01",
+          "role": "Ranged DPS",
+          "roles": [
+            "Ranged DPS"
+          ],
+          "complexity": "Intermediate",
+          "primaryStats": [
+            "Agility"
+          ],
+          "resource": "ENERGY",
+          "playstyle": "A spear-thrower's tree layered on the melee core: Impaling Spear and Berserker Rush let you open at range, close hard, and finish in melee. Plays as momentum DPS — you commit to a target and ride the rush window.",
+          "statPriority": {
+            "pve": "Hit (until your specials stop missing a +3-level target) > Expertise (until your attacks stop being dodged/parried) > Agility > Critical Strike > Armor Penetration > Haste",
+            "pvp": "Resilience > Stamina > Agility > Hit (to cap) > Critical Strike > Expertise > Haste",
+            "note": "Thrown/burst physical spec whose primary stat is Agility, not Strength: Power Tosser makes Throw Weapon scale off Agility and the shared Ancestral Might (Agi->AP) plus Body Builder (Agi->Str->AP) conversions make Agility the top scaler. Land the opener (Hit/Expertise) first, then Agility, then Crit (Frothing and the crit-payoff finishers reward it) over Armor Pen and Haste."
+          },
+          "weapon": {
+            "style": "Melee weapon",
+            "main": "Melee weapon",
+            "off": "—",
+            "note": "Melee — abilities accept any melee weapon; no specific type is required."
+          }
+        },
+        {
+          "name": "Ancestry",
+          "description": "Vrykul/frost-themed shouts, totems and party support.",
+          "icon": "spell_brew_wheat",
+          "role": "Melee DPS",
+          "roles": [
+            "Melee DPS",
+            "Support"
+          ],
+          "complexity": "Intermediate",
+          "primaryStats": [
+            "Agility"
+          ],
+          "resource": "ENERGY",
+          "playstyle": "Supportive shouts and Vrykul ancestor magic: Frost Giant themes, Clanlord's Totem, rally effects and morale debuffs. You keep group-wide buffs rolling ahead of the fight rather than reacting to it, with enough toughness to off-tank in a pinch.",
+          "statPriority": {
+            "pve": "Hit (until your specials stop missing a +3-level target) > Agility > Haste > Armor Penetration > Critical Strike > Spirit",
+            "pvp": "Resilience > Stamina > Agility > Hit (to cap) > Haste",
+            "note": "Sustained physical support spec built on Agility, not Strength: Ancestral Might converts Agility to attack power, Deadly Duo scales off Agility, and Body Builder turns Agility into Strength - so Agility is the primary attribute. Still pure physical (Splash Zone's spell-power line is a Spirit-scaled ally buff, not the Barbarian casting). After Hit and Agility, Haste is valued to refresh procs/totem uptime, with a touch of Spirit for Splash Zone magnitude and Ancestral Roar self-healing."
+          },
+          "weapon": {
+            "style": "1H + Shield",
+            "main": "One-hand melee",
+            "off": "Shield",
+            "note": "Sword-and-board — Thane's Guard requires a shield."
+          }
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "name": "Witch Doctor",
+      "slug": "witch-doctor",
+      "summary": "The Witch Doctor is an ancient, deep-seated aspect of troll culture in Azeroth, using terrible voodoo magic, wards and potions in their vile rituals. A Horde-only class, the Darkspear trolls have recently shared their voodoo tradition with the Orcs of the Horde to better combat the Alliance.",
+      "theme": "Troll witch doctor",
+      "faction": "Horde",
+      "icon": "classicon_witchdoctor",
+      "color": "#F500FF",
+      "specs": [
+        {
+          "name": "Voodoo",
+          "description": "Curse your enemies with shadowy hexes and invoke the dark Loa Spirits.",
+          "icon": "trade_archaeology_troll_voodoodoll",
+          "role": "Ranged DPS",
+          "roles": [
+            "Ranged DPS"
+          ],
+          "complexity": "Intermediate",
+          "primaryStats": [
+            "Intellect",
+            "Spirit"
+          ],
+          "resource": "MANA",
+          "playstyle": "Curse-slinging shadow caster: hexes, Voodoo zones and dark Loa invocations. Heavy crowd-control signature (5 CC effects in the kit) — you shape the fight with hexes and zones laid down early, then let the curses do the work. Stack a Loa's buff to 5 for the strong payoff.",
+          "statPriority": {
+            "pve": "Spell Hit (until your spells stop missing a +3-level target) > Spirit > Spell Power > Haste > Critical Strike > Intellect",
+            "pvp": "Resilience > Stamina > Spirit > Spell Hit (cap) > Spell Power > Haste > Critical Strike",
+            "note": "This is a Spirit-scaling caster, not a plain Intellect/SP caster. Voodoo Power converts Spirit into both spell damage AND spell hit rating, and the core nukes carry huge flat Spirit coefficients (Bad Juju Spirit, Hexfire Spirit); Staff of the Coven and The Price of Power stack more Spirit%. So Spirit is the top scaling attribute (it even helps reach the hit cap) and belongs near the front, not buried behind Intellect/MP5. Intellect takes the caster badge only because Spirit isn't a badge option. Haste still valued for extra DoT/hex ticks (Quickened Curses, Juju, Alchemical Enhancement), Crit behind it via De Other Side/Juju Spirits."
+          },
+          "weapon": {
+            "style": "Caster weapon",
+            "main": "Caster weapon (staff or 1H + off-hand)",
+            "off": "Held off-hand",
+            "note": "Caster — no weapon-damage abilities in the kit; itemize spell power (a staff or 1H + off-hand)."
+          }
+        },
+        {
+          "name": "Brewing",
+          "description": "Brew potions and poisons to heal and protect allies, destroy enemies, and invoke benevolent Loa Spirits.",
+          "icon": "inv_misc_cauldron_nature",
+          "role": "Healer",
+          "roles": [
+            "Healer"
+          ],
+          "complexity": "Normal",
+          "primaryStats": [
+            "Spirit"
+          ],
+          "resource": "MANA",
+          "playstyle": "A prep-and-pour healer: brew potions and protective concoctions before the pull, then dispense them as shields and restorative brews (shield-heavy kit: 5 ward effects vs 2 direct heals). The proactive healer archetype — your strength is what you bottled in advance, not panic buttons. The Cauldron system is literal: prepare Ingredients into a Cauldron and nearby allies drink the buff.",
+          "statPriority": {
+            "pve": "Spirit > Spell Power > Critical Strike > Haste > Intellect",
+            "pvp": "Resilience > Stamina > Spirit > Spell Power > Critical Strike > Haste",
+            "note": "Spirit is the true heal-scaling attribute here, not a bottom-of-list regen stat: Spirit Healer converts Spirit into both healing power and spell-crit chance, and the actual heals/shields carry direct Spirit coefficients (Frog Bones absorb Spirit, Healing Ward/Potion Toss/Splash all add SPI). So Spirit leads alongside Spell Power rather than trailing Intellect. Pure healer so spell-hit is correctly omitted; Crit stays a strong secondary for ward/brew payoff (Serpent's Guile, A Price To Pay), Haste mainly speeds Loa's Brew and periodic ticks. Intellect takes the badge only because Spirit isn't a badge option."
+          },
+          "weapon": {
+            "style": "Caster weapon",
+            "main": "Caster weapon (staff or 1H + off-hand)",
+            "off": "Held off-hand",
+            "note": "Caster — no weapon-damage abilities in the kit; itemize spell power (a staff or 1H + off-hand)."
+          }
+        },
+        {
+          "name": "Shadowhunting",
+          "description": "Vol'jin's legacy: stalk in the shadows and engage with glaive-and-hex melee, weaving Shadow magic (11 shadow-school abilities) between Physical strikes. Plays like a skirmisher — dip in, burst, slip out.",
+          "icon": "shadowhunter",
+          "role": "Ranged DPS",
+          "roles": [
+            "Ranged DPS"
+          ],
+          "complexity": "Normal",
+          "primaryStats": [
+            "Agility"
+          ],
+          "resource": "MANA",
+          "playstyle": "Vol'jin's legacy: stalk in the shadows and engage with glaive-and-hex melee, weaving Shadow magic (11 shadow-school abilities) between Physical strikes. Plays like a skirmisher — dip in, burst, slip out.",
+          "statPriority": {
+            "pve": "Attack Power > Critical Strike > Agility > Intellect/Spirit > Spell Power > Ranged Hit (only until your specials stop missing a +3-level target) > Haste (lowest — it comes from Shadow Avatar/buffs, not gear)",
+            "pvp": "Resilience > Stamina > Attack Power > Critical Strike > Agility > Ranged Hit (cap) > Haste",
+            "note": "Gears like a hunter: this is a ranged-weapon build (the Shadowhunter passive grants the ranged auto-shot) whose core abilities — Reclamation, Malefic Arrow, Spirit Glaive, Spirit Eclipse — all read ranged attack power, and Sen'jin's Apprentice pours your Intellect and Agility into ranged attack power on top, so raw Attack Power and Critical Strike (Eye of Kimbul applies on crit) lead. Ranged shots can't be dodged/parried, so no Expertise and only enough Hit to stop your specials missing; Haste is the lowest gear stat since it comes from Shadow Avatar and buffs, not gear."
+          },
+          "weapon": {
+            "style": "Ranged",
+            "main": "Ranged weapon",
+            "off": "—",
+            "note": "Ranged weapon — Reclamation requires one."
+          }
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "name": "Felsworn",
+      "slug": "felsworn",
+      "summary": "All Demon Hunters were once students under Illidan Stormrage, The Betrayer, and after his defeat at the Black Temple many abandoned his ways and rejoined the Horde and Alliance. Masters of glaive combat, anti-magic, and Fel power, they are an Alliance-only class until The Burning Crusade, when…",
+      "theme": "Fel-corrupted (the COA 'Demon Hunter')",
+      "faction": "Both",
+      "icon": "classicon_demonhunter",
+      "color": "#75FA00",
+      "specs": [
+        {
+          "name": "Slayer",
+          "description": "Warglaive artistry: fast Physical strikes that feed Demonic Rage toward Demon Form. The bread-and-butter Felsworn DPS line — build rage, transform, shred. Fel shields in the kit give it surprising self-sufficiency.",
+          "icon": "inv_sword_1h_artifactfelomelorn_d_03dual",
+          "role": "Melee DPS",
+          "roles": [
+            "Melee DPS"
+          ],
+          "complexity": "Normal",
+          "primaryStats": [
+            "Agility"
+          ],
+          "resource": "ENERGY",
+          "playstyle": "Warglaive artistry: fast Physical strikes that feed Demonic Rage toward Demon Form. The bread-and-butter Felsworn DPS line — build rage, transform, shred. Fel shields in the kit give it surprising self-sufficiency.",
+          "statPriority": {
+            "pve": "Hit (until dual-wield white/special swings stop missing) > Expertise (until attacks stop being dodged/parried) > Agility > Critical Strike > Haste > Armor Penetration",
+            "pvp": "Resilience > Stamina > Hit (dual-wield cap) > Expertise (until attacks stop being dodged/parried) > Agility > Critical Strike > Haste > Armor Penetration",
+            "note": "Physical DW spec scaling off AP-from-Agility (Azzinoth's Assault attack power, Oblivion attack power+Agility, Felspill attack power; Felcaked Blades/Spite add Agi). The kit is heavily crit-proc-driven — Dancing Blades (crit → off-hand AoE), Twin Fury (crit → Felfury), Chaotic (crit → Energy refund), You Cheat Gul'dan (crit-dmg) — so Crit must sit above Haste and Armor Pen, not below ArmPen as previously listed. PvP order re-fronted with Resilience > Stamina."
+          },
+          "weapon": {
+            "style": "One-hand melee",
+            "main": "One-hand melee",
+            "off": "Off-hand weapon",
+            "note": "One-hand melee — Annihilan Strike requires a one-hander (dual-wield or 1H + off-hand)."
+          }
+        },
+        {
+          "name": "Infernal",
+          "description": "Fel magic annihilation — the caster-leaning Felsworn line (Fire 13 / Shadow 15 school mix). Built around Felstrike procs and fel eruptions; a pure ranged Felfury builder-spender whose Fel Fireball filler auto-procs Felstrikes — you react to what the fel gives you.",
+          "icon": "_auracloak_felfire",
+          "role": "Ranged DPS",
+          "roles": [
+            "Ranged DPS"
+          ],
+          "complexity": "Intermediate",
+          "primaryStats": [
+            "Intellect",
+            "Spirit"
+          ],
+          "resource": "ENERGY",
+          "playstyle": "Fel magic annihilation — the caster-leaning Felsworn line (Fire 13 / Shadow 15 school mix). Built around Felstrike procs and fel eruptions; a pure ranged Felfury builder-spender whose Fel Fireball filler auto-procs Felstrikes — you react to what the fel gives you.",
+          "statPriority": {
+            "pve": "Spirit > Intellect > Critical Strike > Haste",
+            "pvp": "Resilience > Stamina > Spirit > Intellect > Critical Strike > Haste",
+            "note": "Now a pure ranged Felfury builder-spender — no manual melee; Felstrikes proc automatically off your Fel Fireball casts. Spirit leads because it scales spell damage (Hidden Power converts Intellect AND Spirit into spell damage) and crit (Nether Spirit), so it's a true throughput stat here, not just regen — keep Spell Hit capped, then Spirit > Intellect > Critical Strike > Haste."
+          },
+          "weapon": {
+            "style": "Caster weapon",
+            "main": "Caster weapon (staff or 1H + off-hand)",
+            "off": "Held off-hand",
+            "note": "Caster — no weapon-damage abilities in the kit; itemize spell power (a staff or 1H + off-hand)."
+          }
+        },
+        {
+          "name": "Tyrant",
+          "description": "Bolster your physical form with demonic power: the Tyrant line leans hardest into Demon Form itself (Shadow-dominant kit), turning transformation windows into tanky, sustained-burst phases. You plan around your form uptime.",
+          "icon": "ability_demonhunter_demonictrample",
+          "role": "Tank",
+          "roles": [
+            "Tank"
+          ],
+          "complexity": "Normal",
+          "primaryStats": [
+            "Agility",
+            "Stamina"
+          ],
+          "resource": "ENERGY",
+          "playstyle": "Bolster your physical form with demonic power: the Tyrant line leans hardest into Demon Form itself (Shadow-dominant kit), turning transformation windows into tanky, sustained-burst phases. You plan around your form uptime.",
+          "statPriority": {
+            "pve": "Hit (until your specials stop missing a +3-level target) > Expertise (until your attacks stop being dodged/parried) > Agility > Armor Penetration > Critical Strike > Haste > Dodge Rating (fuels self-buff scaling)",
+            "pvp": "Hit (cap) > Expertise (cap) > Resilience > Stamina > Agility > Dodge Rating (Fel Quickness/Demonscale/Infernal Alacrity mitigation+scaling) > Critical Strike > Haste",
+            "note": "Damage still comes from Physical/Shadowflame melee hits (Stomp, Vengeance, Crashing Shadows scale off AP/SP) so Agility leads for AP+crit+innate dodge, but the whole self-bolster kit (Demonic Fortitude, Fel Quickness, Trickery, Demonscale) explicitly multiplies off Dodge Rating, making it worth valuing above pure Crit/Haste, more so in PvP where the extra avoidance also keeps this bruiser alive."
+          },
+          "weapon": {
+            "style": "Two-handed",
+            "main": "Two-hand weapon",
+            "off": "—",
+            "note": "Two-handed — Carve requires a two-hander."
+          }
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "name": "Witch Hunter",
+      "slug": "witch-hunter",
+      "summary": "Witch Hunters use a deadly combination of shadow magic and weapons to vanquish evil, often living in solitude and only roused to action when times are dire. Switching between dual crossbows and a flaming blade, they are the ultimate monster killers, sought after across the world for their prowess.",
+      "theme": "Inquisitor with firearms",
+      "faction": "Both",
+      "icon": "classicon_witchhunter",
+      "color": "#5433CF",
+      "specs": [
+        {
+          "name": "Boltslinger",
+          "description": "Dual-crossbow skirmishing: near-pure Physical sustained fire while you maneuver the battlefield. The class's Weapon Swapping feature means you flow between bolts and blades — Boltslinger is the ranged stance perfected.",
+          "icon": "inv_weapon_crossbow_21",
+          "role": "Ranged DPS",
+          "roles": [
+            "Ranged DPS"
+          ],
+          "complexity": "Normal",
+          "primaryStats": [
+            "Agility",
+            "Intellect"
+          ],
+          "resource": "RAGE",
+          "playstyle": "Dual-crossbow skirmishing: near-pure Physical sustained fire while you maneuver the battlefield. The class's Weapon Swapping feature means you flow between bolts and blades — Boltslinger is the ranged stance perfected.",
+          "statPriority": {
+            "pve": "Hit (ranged special-attack cap (until your specials stop missing a +3-level target), per Brimming Hatred's own +3% hit) > Expertise (until your attacks stop being dodged/parried, Brimming Hatred also grants +10) > Agility (RAP/crit/dodge; Silverhead Bolts additionally converts Agility into spell damage for the Twilight-school bolts) > Armor Penetration (stacks with Lucky Shot's built-in 25% armor ignore) > Critical Strike (Brimming Hatred/Lucky Shot both key off crits for rage and armor-shred) > Haste",
+            "pvp": "Resilience/Stamina (squishy kiter with no baked-in mitigation) > Hit > Expertise > Agility > Critical Strike > Haste (mobility/burst windows, backed by Swoop/Vault/Daring Escape kiting kit)",
+            "note": "Near-pure Physical dual-crossbow sustained fire built around bolts and crits generating Rage, so the ranged special-attack hit/expertise caps (explicitly buffed by Brimming Hatred) come before Agility's RAP/crit payoff."
+          },
+          "weapon": {
+            "style": "Ranged",
+            "main": "Ranged weapon",
+            "off": "—",
+            "note": "Ranged weapon — Damnation requires one."
+          }
+        },
+        {
+          "name": "Houndmaster",
+          "description": "The dark-utility line (DB line name: Darkness): shadow tools, hunt marks and hound-handling that aid the whole party's damage. Plays as a pressure-support — you mark, harry and let the pack feast.",
+          "icon": "custom_14_summon_dogs_border",
+          "role": "Ranged DPS",
+          "roles": [
+            "Ranged DPS"
+          ],
+          "complexity": "Normal",
+          "primaryStats": [
+            "Agility",
+            "Intellect"
+          ],
+          "resource": "RAGE",
+          "playstyle": "The dark-utility line (DB line name: Darkness): shadow tools, hunt marks and hound-handling that aid the whole party's damage. Plays as a pressure-support — you mark, harry and let the pack feast.",
+          "statPriority": {
+            "pve": "Hit (ranged special-attack cap, until your specials stop missing a +3-level target) > Expertise (until your attacks stop being dodged/parried) > Agility (base RAP + crit that the whole ranged attack power kit scales on) > Intellect (Shadewalker converts Int into AP and Dark Mind converts Int into crit rating) > Spell Power (feeds the minor Shadow portions of Darkflock/Feast of Talons) > Critical Strike > Haste",
+            "pvp": "Resilience/Stamina (squishy pet-support ranged with no baked-in mitigation) > Hit > Expertise > Agility > Intellect > Critical Strike > Haste",
+            "note": "Ranged-weapon spec: 9 of its abilities scale on ranged attack power/attack power with only Darkflock (spell power) and Feast (spell power) leaning on Spell Power, so Agility (native ranged AP) is the primary damage stat. Intellect is a strong secondary because Shadewalker (AP = % of Intellect) and Dark Mind (crit rating = % of Intellect) convert it, but it does not leapfrog the Agility that supplies base AP."
+          },
+          "weapon": {
+            "style": "Ranged",
+            "main": "Ranged weapon",
+            "off": "—",
+            "note": "Ranged weapon — Quickdraw requires one."
+          }
+        },
+        {
+          "name": "Black Knight",
+          "description": "The dark knight, read from its full builder tree: two-handed strikes that scale with your parry rating, Noctis Blade healing you for 150% of its damage, doubled armor and Shadow Brands on everything you hit. A self-healing duelist that turns defense into offense — comfortably flexes toward tanking.",
+          "icon": "novart_physical_ability_(49)_border",
+          "role": "Tank",
+          "roles": [
+            "Tank"
+          ],
+          "complexity": "Intermediate",
+          "primaryStats": [
+            "Agility",
+            "Stamina"
+          ],
+          "resource": "MANA",
+          "playstyle": "The dark knight, read from its full builder tree: two-handed strikes that scale with your parry rating, Noctis Blade healing you for 150% of its damage, doubled armor and Shadow Brands on everything you hit. A self-healing duelist that turns defense into offense — comfortably flexes toward tanking.",
+          "statPriority": {
+            "pve": "Hit (melee special-attack cap (until your specials stop missing a +3-level target), keeps Slash/Pommel Smash/Noctis Blade connecting) > Expertise (until your attacks stop being dodged/parried) > Agility (AP, crit, and passive dodge) > Parry Rating (scales Noctis Blade's damage AND its 150%-of-damage self-heal - it's an active strike, not an avoidance proc - and Witchmail/Enchanted Armor double armor-from-items, so parry doubles as offense, sustain and mitigation) > Armor Penetration > Critical Strike > Haste",
+            "pvp": "Resilience/Stamina (a squishy duelist with no baked-in damage mitigation) > Hit > Expertise > Parry Rating (sustains the Noctis Blade lifesteal loop that lets it out-trade) > Agility > Critical Strike",
+            "note": "Kit is explicitly parry-scaling - Noctis Blade is an active strike whose damage and big self-heal both scale with your parry RATING (not gated on dodging/parrying), and Witchmail/Enchanted Armor stack armor-from-items - so parry sits alongside the usual melee hit/expertise/Agility order instead of being pure DPS-only stacking."
+          },
+          "weapon": {
+            "style": "Ranged",
+            "main": "Ranged weapon",
+            "off": "—",
+            "note": "Ranged weapon — Burrow Bolt requires one."
+          }
+        },
+        {
+          "name": "Inquisition",
+          "description": "Use a flaming blade to purge evil from the world.",
+          "icon": "spell_shadow_shadowandflame",
+          "role": "Melee DPS",
+          "roles": [
+            "Melee DPS"
+          ],
+          "complexity": "Normal",
+          "primaryStats": [
+            "Agility",
+            "Intellect"
+          ],
+          "resource": "RAGE",
+          "playstyle": "Purge evil with a flaming blade: melee strikes that layer Fire burns (11 fire-school abilities) over Physical damage. An ignite-and-execute rhythm — brand the target, then cut it down while it burns.",
+          "statPriority": {
+            "pve": "Hit (both the melee special-attack hit cap and the spell hit cap both matter - Smite Evil/Flourish are Physical while Fiery Judgment, Dawn Blade, Searing Blade, Burning Light, and Interrogate are Fire/Shadow casts) > Expertise (until your attacks stop being dodged/parried) > Spell Power (Fiery Judgment, Dawn Blade, Searing Blade, Burning Light and Interrogate all carry an SP coefficient equal to or larger than their AP coefficient) > Agility (weapon damage, crit, dodge) > Critical Strike > Haste (extra swings plus faster Flourish/Searing Blade bleed ticks)",
+            "pvp": "Resilience/Stamina (squishy melee) > Hit > Spell Power > Expertise > Agility > Critical Strike",
+            "note": "A true dot-weave hybrid - flaming-blade Fire/Shadow burns layered on Physical weapon swings - so it uniquely needs both hit pools capped before Spell Power, which out-scales Agility across its own ability coefficients, takes over as the main damage stat."
+          },
+          "weapon": {
+            "style": "Ranged",
+            "main": "Ranged weapon",
+            "off": "—",
+            "note": "Ranged weapon — Burrow Bolt requires one."
+          }
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "name": "Stormbringer",
+      "slug": "stormbringer",
+      "summary": "Young magi that lust for power and have little patience for study are often drawn to the path of the Stormbringer, though that power comes with volatility. Harnessing lightning in an arcane fashion distinct from shamans, these magi are explosively powerful and take command of storms for their own…",
+      "theme": "Storm elementalist",
+      "faction": "Both",
+      "icon": "classicon_stormbringer",
+      "color": "#007DED",
+      "specs": [
+        {
+          "name": "Lightning",
+          "description": "Summon destructive lightning and electrical energy to obliterate enemies.",
+          "icon": "nhi_frozenlightning_border",
+          "role": "Ranged DPS",
+          "roles": [
+            "Ranged DPS"
+          ],
+          "complexity": "Normal",
+          "primaryStats": [
+            "Intellect"
+          ],
+          "resource": "MANA",
+          "playstyle": "Destructive lightning built around the class's Static gamble — damage bonuses ramp at 70%/85% Static, but hitting 100% costs you 90% of your health and a stun. You ride the edge: the best Lightning players react to procs while managing how close to the line they dare sit.",
+          "statPriority": {
+            "pve": "Spell Hit Rating (until your spells stop missing a +3-level target) > Spell Power > Critical Strike Rating > Haste Rating > Intellect > Spirit/MP5",
+            "pvp": "Spell Hit Rating (to cap) > Resilience > Stamina > Spell Power > Critical Strike Rating > Haste Rating",
+            "note": "Lightning's damage is almost entirely Nature/Arcane spellcasting off Spell Power (Arm of Thorim SP, Volt, Fluxblast), and its Static/Crackle proc engine is explicitly crit-fed (Destructive Force: crits generate Static; Crackling Surge/Voltaic Bursts add crit), so Hit-to-cap then Spell Power then Crit outrank Haste in this proc-driven single-target nuker."
+          },
+          "weapon": {
+            "style": "Caster weapon",
+            "main": "Caster weapon (staff or 1H + off-hand)",
+            "off": "Held off-hand",
+            "note": "Caster — no weapon-damage abilities in the kit; itemize spell power (a staff or 1H + off-hand)."
+          }
+        },
+        {
+          "name": "Wind",
+          "description": "Use gale winds to disable and control enemies.",
+          "icon": "ability_druid_galewinds",
+          "role": "Ranged DPS",
+          "roles": [
+            "Ranged DPS",
+            "Support"
+          ],
+          "complexity": "Advanced",
+          "primaryStats": [
+            "Intellect"
+          ],
+          "resource": "MANA",
+          "playstyle": "Gale-force control: knockbacks, slows and wind walls that disable and reposition enemies. You win by denying the enemy's plan — a control-support that shapes the battlefield before damage ever lands.",
+          "statPriority": {
+            "pve": "Spell Hit Rating (to cap) > Spell Power > Intellect > Haste Rating > Critical Strike Rating > Spirit/MP5",
+            "pvp": "Spell Hit Rating (to cap) > Resilience > Stamina > Spell Power > Intellect > Haste Rating > Critical Strike Rating",
+            "note": "Wind is an Intellect spell-power caster (spell power on Aeroblast/Gale/Updraft/Surge of Might, spell power on Skyfall; Kiss of the Clouds shield scales off Intellect). Spell Power then Intellect must come before Haste; this proactive control/support kit barely invests in Crit (only ~5 crit passives), so Haste (more control/utility casts + extra Updraft ticks) ranks above Crit but below the primary attribute."
+          },
+          "weapon": {
+            "style": "Caster weapon",
+            "main": "Caster weapon (staff or 1H + off-hand)",
+            "off": "Held off-hand",
+            "note": "Caster — no weapon-damage abilities in the kit; itemize spell power (a staff or 1H + off-hand)."
+          }
+        },
+        {
+          "name": "Maelstrom",
+          "description": "The storm unleashed: the kit is the class's AoE heart (15 storm/field effects — DB line name: Thunder), laced with Titan-gift empowerments from its alpha 'Gifts' ancestry. Drop storms, empower allies inside them, drown packs in rolling AoE.",
+          "icon": "achievement_boss_leishen",
+          "role": "Ranged DPS",
+          "roles": [
+            "Ranged DPS"
+          ],
+          "complexity": "Intermediate",
+          "primaryStats": [
+            "Intellect"
+          ],
+          "resource": "MANA",
+          "playstyle": "The storm unleashed: the kit is the class's AoE heart (15 storm/field effects — DB line name: Thunder), laced with Titan-gift empowerments from its alpha 'Gifts' ancestry. Drop storms, empower allies inside them, drown packs in rolling AoE.",
+          "statPriority": {
+            "pve": "Spell Hit Rating (until your spells stop missing a +3-level target) > Spell Power > Intellect > Haste Rating > Critical Strike Rating > Spirit/MP5",
+            "pvp": "Spell Hit Rating (to cap) > Resilience > Stamina > Spell Power > Intellect > Haste Rating > Critical Strike Rating",
+            "note": "Maelstrom is an Intellect spell-power AoE caster (spell power/spell power on Brine, Deluge, Drown, Eye of the Storm, Torrential Wrath, Stormfury), with Intellect explicitly converted into spell power (Tempest Aegis), haste (Whirling Maelstrom) and armor (Storm Channeling). Spell Power then Intellect lead; because the kit is channeled/ticking storm fields, Haste (faster ticks, and it scales Int→haste) ranks above Crit but still below the primary attribute."
+          },
+          "weapon": {
+            "style": "Caster weapon",
+            "main": "Caster weapon (staff or 1H + off-hand)",
+            "off": "Held off-hand",
+            "note": "Caster — no weapon-damage abilities in the kit; itemize spell power (a staff or 1H + off-hand)."
+          }
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "name": "Knight of Xoroth",
+      "slug": "knight-of-xoroth",
+      "summary": "Knights of Xoroth are dark experiments created by powerful Xorothian sorcerers, who possessed Azeroth's mightiest warriors with demonic spirits to forge a hellfire-wreathed legion. Warlocks later freed some of these Knights, who rejoined the Horde and Alliance; a Horde-only class until The Burning…",
+      "theme": "Death-knight of Xoroth",
+      "faction": "Both",
+      "icon": "_enslavespell_fire",
+      "color": "#FC0005",
+      "specs": [
+        {
+          "name": "War",
+          "description": "Tear your enemies apart with a weapon, siphoning Deathfire Orbs from them to empower your attacks.",
+          "icon": "warrior_skullbanner",
+          "role": "Melee DPS",
+          "roles": [
+            "Melee DPS"
+          ],
+          "complexity": "Normal",
+          "primaryStats": [
+            "Strength"
+          ],
+          "resource": "RAGE",
+          "playstyle": "Tear enemies apart and siphon Deathfire Orbs from their wounds (6 bleed/burn effects). The orb economy is the spec: wounds generate orbs, orbs fuel your strongest hits. Methodical, wound-stacking melee.",
+          "statPriority": {
+            "pve": "Hit (until your specials stop missing a +3-level target) > Expertise (until your attacks stop being dodged/parried) > Strength > Armor Penetration > Critical Strike > Haste",
+            "pvp": "Resilience > Stamina > Strength > Hit (to cap) > Armor Penetration > Critical Strike",
+            "note": "2H %-weapon/attack power striker (Skulltaker/Gore/Meatsaw/Consuming Blade) with Str->ArPen and Str->haste conversions (Superheated Blade, Render) and heavy crit talents, so Str/AP/ArPen behind the melee hit/expertise caps in PvE. PvP unchanged in scaling; only reordered so survivability (Resilience > Stamina) leads."
+          },
+          "weapon": {
+            "style": "Melee weapon",
+            "main": "Melee weapon",
+            "off": "—",
+            "note": "Melee — abilities accept any melee weapon; no specific type is required."
+          }
+        },
+        {
+          "name": "Hellfire",
+          "description": "Take full command over Hellish, fiery demonic powers to burn enemies alive.",
+          "icon": "5_sumimparmy_border",
+          "role": "Melee DPS",
+          "roles": [
+            "Melee DPS"
+          ],
+          "complexity": "Intermediate",
+          "primaryStats": [
+            "Strength",
+            "Intellect"
+          ],
+          "resource": "RAGE",
+          "playstyle": "Full command of hellish fire: burn-heavy casting (6 DoT effects, Fire-leaning school mix) from a knight's chassis. Ignite everything, keep the burns rolling, and detonate orb-fueled payoffs.",
+          "statPriority": {
+            "pve": "Spell Hit (until your spells stop missing a +3-level target) > Spell Power > Strength > Critical Strike > Haste > Intellect",
+            "pvp": "Resilience > Stamina > Spell Power > Strength > Spell Hit (to cap) > Critical Strike",
+            "note": "Fire/Shadowflame DoT-weave caster (Seeking Flame, Hellmaw, Calamity all spell power/spell power scaling), but Burning Power converts Strength into spell damage and Rage Demon converts Strength into spell hit, while Cinderblade turns Intellect into crit/AP. So Strength is the primary attribute behind Spell Power and the spell-hit cap. (Prior note cited a nonexistent 'Battle Warlock'; the actual passives are Burning Power/Rage Demon/Cinderblade.) PvP reordered to lead with Resilience > Stamina."
+          },
+          "weapon": {
+            "style": "Melee weapon",
+            "main": "Melee weapon",
+            "off": "—",
+            "note": "Melee — abilities accept any melee weapon; no specific type is required."
+          }
+        },
+        {
+          "name": "Defiance",
+          "description": "Use demonic influence to bolster your resolve in order to defend yourself and your allies.",
+          "icon": "ability_warlock_improveddemonictactics",
+          "role": "Tank",
+          "roles": [
+            "Tank"
+          ],
+          "complexity": "Advanced",
+          "primaryStats": [
+            "Strength",
+            "Stamina"
+          ],
+          "resource": "RAGE",
+          "playstyle": "Demonic influence as armor: the kit is the class's defensive wall — 8 shield/ward effects layered over fire-and-shadow retaliation. An absorb-tank that answers spikes with fel barriers and burns attackers back.",
+          "statPriority": {
+            "pve": "Defense rating (to crit-immunity) > Stamina > Dodge > Parry > Block > Strength > Armor",
+            "pvp": "Resilience > Stamina > Defense > Dodge/Parry > Strength > Block",
+            "note": "A block/absorb shield-tank whose threat, block value, and self-heals scale off Strength and Stamina (Oath of Defiance, Defiance Stats, Shieldgore, Suffuse), so crit immunity via Defense and a deep Stamina pool come first, then avoidance and block, with Strength for threat/mitigation."
+          },
+          "weapon": {
+            "style": "Flexible",
+            "main": "Any allowed weapon",
+            "off": "—",
+            "note": "The game defines no weapon requirement for this spec, so we don’t guess a weapon type."
+          }
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "name": "Guardian",
+      "slug": "guardian",
+      "summary": "The guardian is a valiant warrior, often of noble background, who is non-magical but aims to put themselves on the front line and defend the weak from evil. They are a tanking-focused warrior class with the best damage mitigation in the game.",
+      "theme": "Martial protector + Bard",
+      "faction": "Both",
+      "icon": "classicon_guardian",
+      "color": "#9C9482",
+      "specs": [
+        {
+          "name": "Vanguard",
+          "description": "The realm's most classical tank: 7 shield effects, 6 mitigation cooldowns, double taunt. Nearly pure Physical — you stand in front, rotate defensives against what the boss just did, and simply do not move. The safest tank pick in COA. Formations are the identity — Tower/Line Formation cuts your damage taken 10% while held.",
+          "icon": "_human_06",
+          "role": "Tank",
+          "roles": [
+            "Tank"
+          ],
+          "complexity": "Normal",
+          "primaryStats": [
+            "Strength",
+            "Stamina"
+          ],
+          "resource": "ENERGY",
+          "playstyle": "The realm's most classical tank: 7 shield effects, 6 mitigation cooldowns, double taunt. Nearly pure Physical — you stand in front, rotate defensives against what the boss just did, and simply do not move. The safest tank pick in COA. Formations are the identity — Tower/Line Formation cuts your damage taken 10% while held.",
+          "statPriority": {
+            "pve": "Defense (to crit-immunity) > Expertise (until your attacks stop being dodged/parried, prevents dodge parry-haste) > Stamina (Bulwark converts Stamina into hit rating; Iron Guardian scales max HP) > Block Rating/Value > Strength (native Attack Power for threat) > Dodge/Parry > Armor",
+            "pvp": "Resilience > Stamina > Defense/Block > Strength > Armor",
+            "note": "Vanguard is an AP-scaled tank: every hit (attack power) plus a fat block/mitigation tree. Its only stat-conversion is Bulwark turning STAMINA into hit rating (the prior note's 'Defender of the Meek converts Strength into block+hit' is a misread — no such ability exists and hit comes from Stamina). So it's a Defense-cap-then-Stamina/Block tank whose Strength is just raw threat AP, not a hit source."
+          },
+          "weapon": {
+            "style": "1H + Shield",
+            "main": "One-hand melee",
+            "off": "Shield",
+            "note": "Sword-and-board — Bastion requires a shield."
+          }
+        },
+        {
+          "name": "Inspiration",
+          "description": "Support your allies by inspiring them in battle or throwing down banners.",
+          "icon": "inv_misc_drum_01",
+          "role": "Melee DPS",
+          "roles": [
+            "Melee DPS",
+            "Support"
+          ],
+          "complexity": "Normal",
+          "primaryStats": [
+            "Strength"
+          ],
+          "resource": "ENERGY",
+          "playstyle": "The class feature made into a spec: generate Inspiration that passively reduces your allies' damage taken, and spend it on banners and rally effects (11 buff abilities — the biggest support kit in the game). You are the reason the party's health bars move slower.",
+          "statPriority": {
+            "pve": "Hit (until your specials stop missing a +3-level target) > Expertise (until your attacks stop being dodged/parried, avoid dodges) > Strength (Attack Power for Ballad/Sunder/Song of Battle weapon-damage scaling) > Spirit (uniquely powers Soldier's/Spellcaster's/Hero's Decrees, Feats of Strength/Honor/Glory, and Song of Steel) > Critical Strike (Tempo/Powerful Voice stacking) > Haste > Stamina",
+            "pvp": "Resilience > Stamina > Strength > Spirit > Haste",
+            "note": "Inspiration still swings a weapon and scales its nukes (Ballad of the Conqueror/Dragonslayer, Song of Battle) off Attack Power like any melee, but its entire class-defining support kit explicitly reads Spirit for buff/heal magnitude, making Spirit a genuinely valuable pick unique to this spec instead of dead weight."
+          },
+          "weapon": {
+            "style": "1H + Shield",
+            "main": "One-hand melee",
+            "off": "Shield",
+            "note": "Sword-and-board — Press the Attack requires a shield."
+          }
+        },
+        {
+          "name": "Gladiator",
+          "description": "Slay with a great weapon from a tank's frame: heavy Physical swings with enough residual shields to shrug off mistakes. A bruiser — bring it when you want DPS that can eat a frontal and keep swinging.",
+          "icon": "epic_rpg_icon_pack_brutal_icon_0001s_0000_warrior_border",
+          "role": "Melee DPS",
+          "roles": [
+            "Melee DPS"
+          ],
+          "complexity": "Intermediate",
+          "primaryStats": [
+            "Strength"
+          ],
+          "resource": "ENERGY",
+          "playstyle": "Slay with a great weapon from a tank's frame: heavy Physical swings with enough residual shields to shrug off mistakes. A bruiser — bring it when you want DPS that can eat a frontal and keep swinging.",
+          "statPriority": {
+            "pve": "Hit (until your specials stop missing a +3-level target) > Expertise (until your attacks stop being dodged/parried) > Strength (native Attack Power + Duty/One True Champion/Shield Training convert it into block rating) > Agility (Duty converts Agility into bonus Attack Power) > Armor Penetration (Dirty Tactics baseline +5%) > Critical Strike > Haste",
+            "pvp": "Resilience > Stamina > Strength > Agility > Armor Penetration",
+            "note": "Every big Gladiator hit (Grand Entrance, Pulverize, Sever, Centurion Strike, Ram) is a flat attack power-scaled Physical nuke. The only offensive stat conversion is Duty turning AGILITY into Attack Power; every Strength passive (Shield Training, One True Champion, Vigilant Reflexes, Duty's) converts Strength into BLOCK RATING. The prior note's 'Guardian passive turns Strength into Critical Strike Rating' is a misread — no Str->crit conversion exists. Strength stays primary as native Attack Power (plus block), Agility is the secondary AP source, and Armor Pen (primed by Dirty Tactics) pays off once melee hit/expertise caps are met."
+          },
+          "weapon": {
+            "style": "1H + Shield",
+            "main": "One-hand melee",
+            "off": "Shield",
+            "note": "Sword-and-board — Press the Attack requires a shield."
+          }
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "name": "Templar",
+      "slug": "templar",
+      "summary": "Monks are holy warriors that often specialize in using their bare hands in the stead of any kind of traditional weapon. Today's monks are a mixture of Scarlet Crusade techniques and ancient teachings from long-forgotten civilizations.",
+      "theme": "Holy martial artist (renamed from Monk)",
+      "faction": "Both",
+      "icon": "classicon_monk",
+      "color": "#FFFAB2",
+      "specs": [
+        {
+          "name": "Zealot",
+          "description": "Bare-handed holy combat: fast strikes build the class's 10-Rune meter, inscribing a Rune that empowers your next 10 autos — unarmed play grants attack speed and Holy damage. A combo-flow melee where your damage comes in inscribed waves.",
+          "icon": "custom_paladinskill_24_border",
+          "role": "Melee DPS",
+          "roles": [
+            "Melee DPS"
+          ],
+          "complexity": "Normal",
+          "primaryStats": [
+            "Agility"
+          ],
+          "resource": "ENERGY",
+          "playstyle": "Bare-handed holy combat: fast strikes build the class's 10-Rune meter, inscribing a Rune that empowers your next 10 autos — unarmed play grants attack speed and Holy damage. A combo-flow melee where your damage comes in inscribed waves.",
+          "statPriority": {
+            "pve": "Attack Power (Calm Combatant scales Holy damage off AP; AP also drives the weapon damage Zealotry & Righteous Upheaval read) ≈ Agility (AP + crit) > Critical Strike > Spell Power > Haste — all after Hit Rating & Expertise to cap",
+            "pvp": "Resilience > Stamina > Hit Rating / Expertise (to cap) > Attack Power / Agility > Critical Strike > Haste",
+            "note": "Dual-wield Oath builder-spender: Calm Combatant converts your Holy damage to scale off attack power, and AP also drives the weapon damage your Zealotry procs, Righteous Upheaval and auto attacks read — so you gear full AP (Agility first for the extra crit, then flat Attack Power). Spell Power is the hybrid half of most coefficients; take only enough Hit/Expertise to keep Oath builders from missing, since a miss stalls the whole rotation."
+          },
+          "weapon": {
+            "style": "One-hand melee",
+            "main": "One-hand melee",
+            "off": "Off-hand weapon",
+            "note": "One-hand melee — Righteous Upheaval requires a one-hander (dual-wield or 1H + off-hand)."
+          }
+        },
+        {
+          "name": "Oathkeeper",
+          "description": "Holy power channelled into allies from melee range: ward-and-empower healing (3 shields, 5 defensives, Holy-heavy mix) rather than big direct heals. A frontline support-healer — you keep oaths, and oaths keep the party standing. Its signature staggers you: 40% of direct damage taken is delayed over 8 seconds — a monk-style smoothing layer under the wards.",
+          "icon": "inv_staff_2h_nazmirraid_d_01",
+          "role": "Tank",
+          "roles": [
+            "Tank"
+          ],
+          "complexity": "Advanced",
+          "primaryStats": [
+            "Agility",
+            "Stamina"
+          ],
+          "resource": "ENERGY",
+          "playstyle": "Holy power channelled into allies from melee range: ward-and-empower healing (3 shields, 5 defensives, Holy-heavy mix) rather than big direct heals. A frontline support-healer — you keep oaths, and oaths keep the party standing. Its signature staggers you: 40% of direct damage taken is delayed over 8 seconds — a monk-style smoothing layer under the wards.",
+          "statPriority": {
+            "pve": "Hit Rating (until your specials stop missing a +3-level target) > Expertise Rating (until your attacks stop being dodged/parried) > Agility > Stamina > Critical Strike > Haste > Spirit/MP5",
+            "pvp": "Resilience > Stamina > Agility > Hit Rating (to cap) > Critical Strike > Expertise > Haste",
+            "note": "Oathkeeper is a weapon-swinging staff bruiser/off-healer whose damage rides Attack Power (Testament of Faith attack power, Temple Guardian attack power, Reckoning/Armor of Faith attack power) and whose Agility is the stacked/converted attribute (Bells of Light +Agi, Paragon Sta+Agi%, Consecrated Armor armor=%Agi, Graceful Fighter parry=%Agi), so it's a Physical/Agility spec — not the Intellect/Spell-Power caster the old data claimed. Hit/Expertise to land the OathBreakers, then Agility-derived AP, with Stamina weighted high because Benediction/Reckoning heals scale off Stamina."
+          },
+          "weapon": {
+            "style": "Two-handed",
+            "main": "Two-hand weapon",
+            "off": "—",
+            "note": "Two-handed — Reckoning requires a two-hander."
+          }
+        },
+        {
+          "name": "Crusader",
+          "description": "Runes inscribed onto steel: weapon-armed Templar play that trades Zealot's speed for heavier, rune-empowered strikes with Holy after-shocks and modest self-healing. Steady, durable crusading melee.",
+          "icon": "nhi_firesword_border",
+          "role": "Melee DPS",
+          "roles": [
+            "Melee DPS"
+          ],
+          "complexity": "Intermediate",
+          "primaryStats": [
+            "Agility"
+          ],
+          "resource": "ENERGY",
+          "playstyle": "Runes inscribed onto steel: weapon-armed Templar play that trades Zealot's speed for heavier, rune-empowered strikes with Holy after-shocks and modest self-healing. Steady, durable crusading melee.",
+          "statPriority": {
+            "pve": "Hit Rating (until your specials stop missing a +3-level target) > Expertise Rating (until your attacks stop being dodged/parried) > Agility > Critical Strike > Haste > Armor Penetration > Spell Power",
+            "pvp": "Resilience > Stamina > Hit Rating (to cap) > Agility > Critical Strike > Expertise > Haste",
+            "note": "Crusader trades Zealot's speed for heavier weapon-based rune strikes (Tyr's Hammer, Vindication, Titanstrike) that still hinge on Hit/Expertise to connect and scale primarily off Agility-derived AP with a Holy SP kicker, and its dense crit-synergy talents (Scarlet Champion, Powerful Strikes, One with Light) favor Crit over Haste for its slower, bigger-hit rhythm."
+          },
+          "weapon": {
+            "style": "Two-handed",
+            "main": "Two-hand weapon",
+            "off": "—",
+            "note": "Two-handed — Argent Blade requires a two-hander."
+          }
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "name": "Bloodmage",
+      "slug": "bloodmage",
+      "summary": "The Sons of Arugal are past minions of Archmage Arugal, afflicted with the Curse of the Worgen. The Sons that have returned to the Horde and the Alliance have gained some level of control over their curse, and can hold back from feasting on the flesh of their allies. (Alliance-only class.)",
+      "theme": "Blood mage (worgen-tied 'Son of Arugal' lineage)",
+      "faction": "Alliance",
+      "icon": "classicon_sonofarugal",
+      "color": "#A30000",
+      "specs": [
+        {
+          "name": "Sanguine",
+          "description": "Nightmare and Blood magic (Fire 17/Shadow 22 school mix): drain-style health-cost casting that builds Rage and Thirst while sustaining yourself off your own damage. The caster face of the Bloodmage — proactive drains, self-fueling.",
+          "icon": "spell_shadow_possession",
+          "role": "Ranged DPS",
+          "roles": [
+            "Ranged DPS"
+          ],
+          "complexity": "Advanced",
+          "primaryStats": [
+            "Spirit",
+            "Stamina"
+          ],
+          "resource": "RAGE",
+          "playstyle": "Nightmare and Blood magic (Fire 17/Shadow 22 school mix): drain-style health-cost casting that builds Rage and Thirst while sustaining yourself off your own damage. The caster face of the Bloodmage — proactive drains, self-fueling.",
+          "statPriority": {
+            "pve": "Spell Hit (until your spells stop missing a +3-level target, hit-reliant Shadow/Fire dot-weave) > Spell Power > Haste (faster Hematophage/Sanguine Rupture ticks and Thirst-reduced Valanar's Vengeance casts) > Critical Strike (Blood Parasites/Atherann's Wickedness/A Pointed Death all pay off crit) > Spirit/Stamina (fuel Cunning of Atherann's Stam+Spi spell-damage conversion and pay the health costs on Valanar's Vengeance/Keleseth's Calamity/Sanguine Rupture) > Intellect (only matters via Cunning of Atherann's 15%-of-Int crit conversion — no mana pool is spent)",
+            "pvp": "Resilience > Stamina (drain-tank kit spends its own health on casts, needs the buffer) > Spell Hit (cap) > Spell Power > Spirit > Critical Strike",
+            "note": "Every core nuke (Hematophage, Vampiric Fang, Valanar's Vengeance, Keleseth's Calamity) scales off Spell Power and costs Rage or raw health rather than mana, so hit-to-land and SP lead while Intellect's usual mana-pool role is moot."
+          },
+          "weapon": {
+            "style": "Caster weapon",
+            "main": "Caster weapon (staff or 1H + off-hand)",
+            "off": "Held off-hand",
+            "note": "Caster — no weapon-damage abilities in the kit; itemize spell power (a staff or 1H + off-hand)."
+          }
+        },
+        {
+          "name": "Accursed",
+          "description": "The curse embraced: lurk, transform, and tear targets to shreds in Accursed Form (heavy Physical kit built around bleeds). You build Rage with human-form bolts and spend it in transformed windows — build human, spend wolf.",
+          "icon": "nhi_foreshadowblood_border",
+          "role": "Melee DPS",
+          "roles": [
+            "Melee DPS",
+            "Ranged DPS"
+          ],
+          "complexity": "Advanced",
+          "primaryStats": [
+            "Agility"
+          ],
+          "resource": "RAGE",
+          "playstyle": "The curse embraced: lurk, transform, and tear targets to shreds in Accursed Form (heavy Physical kit built around bleeds). You build Rage with human-form bolts and spend it in transformed windows — build human, spend wolf.",
+          "statPriority": {
+            "pve": "Hit (until your specials stop missing a +3-level target, direct-hit strikes like Reave/Ravenous Strike/Puncturing Fangs must land) > Expertise (until your attacks stop being dodged/parried for your Accursed Form burst windows) > Agility (Accursed Form literally converts 50% of Agility into AP) > Armor Penetration > Critical Strike (Killer Instinct/Ultra Instinct/Darkcasting are all crit-fed) > Haste",
+            "pvp": "Resilience > Stamina > Hit/Expertise (still must connect to open Accursed Form windows) > Agility > Critical Strike",
+            "note": "A builder-spender kit (build Rage with your bolts, spend it in Accursed Form's free melee windows, with bleed effects layered throughout) whose form explicitly converts 50% of Agility into AP, so Agility plus reliable direct-hit connection (Hit/Expertise) outrank the crit chain it's built around."
+          },
+          "weapon": {
+            "style": "Melee weapon",
+            "main": "Melee weapon",
+            "off": "—",
+            "note": "Melee — abilities accept any melee weapon; no specific type is required."
+          }
+        },
+        {
+          "name": "Eternal",
+          "description": "Use the Worgen curse to your advantage: a self-healing tank line (heal + HoT + defensives) that bolsters packmates while it holds the line. Less about flat mitigation, more about regenerating through damage and making the pack tougher around you.",
+          "icon": "inv_expulsom",
+          "role": "Tank",
+          "roles": [
+            "Tank"
+          ],
+          "complexity": "Normal",
+          "primaryStats": [
+            "Agility",
+            "Stamina"
+          ],
+          "resource": "RAGE",
+          "playstyle": "Use the Worgen curse to your advantage: a self-healing tank line (heal + HoT + defensives) that bolsters packmates while it holds the line. Less about flat mitigation, more about regenerating through damage and making the pack tougher around you.",
+          "statPriority": {
+            "pve": "Defense (to the crit-immunity cap, non-negotiable floor) > Stamina (Eternal Curse grants +25% total Stamina and +200% armor-from-items, so Stamina is doubly amplified) > Hit/Expertise (Bare Fangs/Blood Howl taunts and Bloodfang Bite/Rotclaw threat abilities must land) > Armor > Agility (drives AP for the threat-generating Ravenous Bite/Claw Sweep kit) > Critical Strike/Haste",
+            "pvp": "Resilience > Stamina > Defense > Armor > Hit/Expertise",
+            "note": "This is a self-healing 'curse-tank' (Ravenous Bite heals, Ironhide delays damage, Eternal Curse pumps armor and Stamina) rather than a pure-avoidance tank, so after the mandatory Defense floor it leans hardest into the Stamina/armor multipliers its own transformation grants, with landed taunts/threat abilities next."
+          },
+          "weapon": {
+            "style": "Flexible",
+            "main": "Any allowed weapon",
+            "off": "—",
+            "note": "The game defines no weapon requirement for this spec, so we don’t guess a weapon type."
+          }
+        },
+        {
+          "name": "Fleshweaver",
+          "description": "The sacrifice healer, confirmed by its full tree: spells that cost your own health build Pooled Vitality stacks, Vampyr's Kiss bleeds feed the engine, and Lana'thel's vampiric blessings convert Spirit into power. You literally spend yourself to keep others alive — the highest-skill-ceiling healer in COA.",
+          "icon": "inv_misc_food_legion_gooamber_pool",
+          "role": "Ranged DPS",
+          "roles": [
+            "Ranged DPS",
+            "Support"
+          ],
+          "complexity": "Intermediate",
+          "primaryStats": [
+            "Spirit"
+          ],
+          "resource": "RAGE",
+          "playstyle": "The sacrifice healer, confirmed by its full tree: spells that cost your own health build Pooled Vitality stacks, Vampyr's Kiss bleeds feed the engine, and Lana'thel's vampiric blessings convert Spirit into power. You literally spend yourself to keep others alive — the highest-skill-ceiling healer in COA.",
+          "statPriority": {
+            "pve": "Spell Power (every heal — Hemoglobe, Sanguine Mend, Dark Liturgy, Crimson Tide — scales directly off SP) > Spirit (Teachings of Lana'thel converts Spirit straight into spell hit and spell crit rating, on top of Hemoglobe/Aortic Aegis's own Spi coefficients) > Stamina (pays for the health-cost casts — Gorge, Suture, Vampyr's Kiss, Dark Liturgy — and co-scales Hemoglobe) > Haste (more frequent Hemoglobe pulses/Crimson Tide windows in a dot-transmute healing style) > Critical Strike > Intellect (no mana is ever spent, so Int's only value is incidental)",
+            "pvp": "Resilience > Stamina > Spell Power > Spirit > Critical Strike",
+            "note": "A pure sacrifice-healer whose costs are Rage and raw health rather than mana, so Spell Power and the Spirit that both fuels its Sta/Spi healing coefficients and converts into hit/crit rating outrank Intellect entirely."
+          },
+          "weapon": {
+            "style": "Caster weapon",
+            "main": "Caster weapon (staff or 1H + off-hand)",
+            "off": "Held off-hand",
+            "note": "Caster — no weapon-damage abilities in the kit; itemize spell power (a staff or 1H + off-hand)."
+          }
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "name": "Ranger",
+      "slug": "ranger",
+      "summary": "Rangers are a basic group of people who make use of simple weapons, either dual one-handed weapons or a ranged weapon, using them to their maximum capacity in place of where others may use magic. Rangers specialize in being highly skilled archers or assassins, and some, depending on their…",
+      "theme": "Scout-outlaw",
+      "faction": "Both",
+      "icon": "classicon_ranger",
+      "color": "#BFF06B",
+      "specs": [
+        {
+          "name": "Archery",
+          "description": "Use a bow or crossbow to rapid fire shots from afar.",
+          "icon": "inv_archaeology_70_tauren_stonewoodbow",
+          "role": "Ranged DPS",
+          "roles": [
+            "Ranged DPS"
+          ],
+          "complexity": "Normal",
+          "primaryStats": [
+            "Agility"
+          ],
+          "resource": "FOCUS",
+          "playstyle": "Rapid fire from afar, run on Combo Points (the class's Archer style): build with quick shots, spend on aimed payoffs. Clean, methodical ranged play with Hide-crafted buffs from the class kit smoothing the downtime.",
+          "statPriority": {
+            "pve": "Hit Rating (until your specials stop missing a +3-level target) > Agility > Critical Strike > Armor Penetration > Haste",
+            "pvp": "Resilience > Stamina > Hit Rating (to cap) > Agility > Critical Strike",
+            "note": "Pure-Physical bow builder-spender: crits fund the Advantage loop (Archery Master generates an extra stack on Quick Shot crits; Double The Pace/Devastating Shots grant crit), so Crit sits above ArP/Haste. Hit lands the shots that start the loop. Expertise omitted (doesn't apply to ranged). PvP order corrected to lead with Resilience > Stamina per survivability-first ordering."
+          },
+          "weapon": {
+            "style": "Ranged",
+            "main": "Ranged weapon",
+            "off": "—",
+            "note": "Ranged weapon — Brutal Shot requires one."
+          }
+        },
+        {
+          "name": "Brigand",
+          "description": "Dual-weapon close-quarters fighting — the Ranger who'd rather duel than snipe. Almost pure Physical with light poison accents; combo-driven melee tempo with a skirmisher's escape tools.",
+          "icon": "ability_rogue_energeticrecovery",
+          "role": "Melee DPS",
+          "roles": [
+            "Melee DPS"
+          ],
+          "complexity": "Normal",
+          "primaryStats": [
+            "Agility"
+          ],
+          "resource": "FOCUS",
+          "playstyle": "Dual-weapon close-quarters fighting — the Ranger who'd rather duel than snipe. Almost pure Physical with light poison accents; combo-driven melee tempo with a skirmisher's escape tools.",
+          "statPriority": {
+            "pve": "Hit Rating (dual-wield white hit (until swings land), specials to the special-attack hit cap) > Expertise Rating (until your attacks stop being dodged/parried) > Agility > Armor Penetration > Critical Strike > Haste",
+            "pvp": "Resilience > Stamina > Hit/Expertise (to caps) > Agility > Critical Strike",
+            "note": "Dual-wield duelist whose attack power finishers (Assault, Ravage, Viper's Bite) rely on landed Physical hits and whose passives punish being dodged/parried (Beatdown, Blade Twisting), so both hit caps precede Agility scaling. PvP order corrected to lead with Resilience > Stamina per survivability-first ordering."
+          },
+          "weapon": {
+            "style": "Ranged",
+            "main": "Ranged weapon",
+            "off": "—",
+            "note": "Ranged weapon — Cutthroat requires one."
+          }
+        },
+        {
+          "name": "Farstrider",
+          "description": "Knowledge of the wilds turned into party value: traps, trail-craft, protective tonics and mobility for the whole group. The utility Ranger — you make every route safer and every pull start on your terms.",
+          "icon": "inv_legion_faction_dreamweavers",
+          "role": "Ranged DPS",
+          "roles": [
+            "Ranged DPS",
+            "Support"
+          ],
+          "complexity": "Intermediate",
+          "primaryStats": [
+            "Agility"
+          ],
+          "resource": "FOCUS",
+          "playstyle": "Knowledge of the wilds turned into party value: traps, trail-craft, protective tonics and mobility for the whole group. The utility Ranger — you make every route safer and every pull start on your terms.",
+          "statPriority": {
+            "pve": "Hit Rating (to land proc/utility triggers) > Agility > Critical Strike > Haste > Armor Penetration",
+            "pvp": "Resilience > Stamina > Hit Rating > Agility > Critical Strike",
+            "note": "Party value comes from Physical/Nature abilities whose crits spawn Dream Flowers and whose Agility scaling directly buffs allies (Rally The Archers, Whipping Pressure, Affinity), so Hit and Agility/Crit drive both personal throughput and group buffs. PvP order corrected to lead with Resilience > Stamina per survivability-first ordering."
+          },
+          "weapon": {
+            "style": "Ranged",
+            "main": "Ranged weapon",
+            "off": "—",
+            "note": "Ranged weapon — Emerald Arrow requires one."
+          }
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "name": "Chronomancer",
+      "slug": "chronomancer",
+      "summary": "Chronomancers are magi with a mastery over the manipulation of time and the nature of the universe. They are highly intellectual and very uncommon, descended from the ancient Order of the Chronomagi who once studied under the Bronze Dragonflight.",
+      "theme": "Bronze-flight time mage",
+      "faction": "Both",
+      "icon": "classicon_chronomancer",
+      "color": "#FFED4A",
+      "specs": [
+        {
+          "name": "Infinite",
+          "description": "Chaotic time magic as a weapon (Arcane-heavy, the class's biggest kit): spend the class's 4 Order/Chaos Charges on combination payoffs and ride what the timeline gives you. Reactive, proc-chasing caster DPS with echoes of every school.",
+          "icon": "achievement_boss_infinitecorruptor",
+          "role": "Ranged DPS",
+          "roles": [
+            "Ranged DPS"
+          ],
+          "complexity": "Advanced",
+          "primaryStats": [
+            "Spirit"
+          ],
+          "resource": "MANA",
+          "playstyle": "Chaotic time magic as a weapon (Arcane-heavy, the class's biggest kit): spend the class's 4 Order/Chaos Charges on combination payoffs and ride what the timeline gives you. Reactive, proc-chasing caster DPS with echoes of every school.",
+          "statPriority": {
+            "pve": "Spell Hit (until your spells stop missing a +3-level target) > Spell Power > Intellect > Critical Strike > Spirit > Haste",
+            "pvp": "Resilience > Stamina > Spell Hit (to cap) > Spell Power > Intellect > Critical Strike > Spirit > Haste",
+            "note": "Arcane/chromatic caster: every hit scales off Spell Power, so Hit-to-cap then Spell Power lead. Intellect is a real throughput stat (Chrono Sorcery converts it to spell damage). Crit multiplies the Order/Chaos-charge finishers, and Spirit is NOT dead weight here -- Gift of the Infinite Dragonflight converts Spirit into both spell damage and spell hit (Temporal Swiftness also converts it to haste), so it belongs in the priority above Haste rather than being omitted."
+          },
+          "weapon": {
+            "style": "Caster weapon",
+            "main": "Caster weapon (staff or 1H + off-hand)",
+            "off": "Held off-hand",
+            "note": "Caster — no weapon-damage abilities in the kit; itemize spell power (a staff or 1H + off-hand)."
+          }
+        },
+        {
+          "name": "Time",
+          "description": "Rule-bending utility and support abilities that can empower you or your allies.",
+          "icon": "inv_trinket_80_kultiras02a",
+          "role": "Healer",
+          "roles": [
+            "Healer"
+          ],
+          "complexity": "Intermediate",
+          "primaryStats": [
+            "Spirit"
+          ],
+          "resource": "MANA",
+          "playstyle": "The rewind healer: restore order by turning wounds back along their own timeline (3 heals, 4 shields, Holy-leaning mix). The most reactive healer in COA — damage happens, and you make it not have happened. Bring it when spike damage is the problem.",
+          "statPriority": {
+            "pve": "Spirit > Spell Power > Haste > Intellect > Critical Strike > MP5",
+            "pvp": "Resilience > Stamina > Spirit > Spell Power > Haste > Intellect > Critical Strike",
+            "note": "Rewind healer: heal/shield formulas scale off Spell Power, but Sands of Life converts Spirit DIRECTLY into healing power (Rippling Power and Temporal Restoration reinforce it), so Spirit is the top throughput stat, not just sustain. Haste compresses spike-coverage casts; Intellect and Crit are close and can be swapped to taste (Crit shaves Ripple's cooldown via A Ripple In Time and feeds Cadence of Time). Pure healing — no spell-hit line, so Hit/Expertise are not itemized."
+          },
+          "weapon": {
+            "style": "Caster weapon",
+            "main": "Caster weapon (staff or 1H + off-hand)",
+            "off": "Held off-hand",
+            "note": "Caster — no weapon-damage abilities in the kit; itemize spell power (a staff or 1H + off-hand)."
+          }
+        },
+        {
+          "name": "Artificer",
+          "description": "Clockwork support: deploy Bronze and Infinite Protector constructs and run a 7-buff empowerment engine for the party. You build your value before the pull — constructs out, buffs rolling — then maintain the machine.",
+          "icon": "achievement_guildperk_workingovertime",
+          "role": "Ranged DPS",
+          "roles": [
+            "Ranged DPS"
+          ],
+          "complexity": "Intermediate",
+          "primaryStats": [
+            "Spirit"
+          ],
+          "resource": "MANA",
+          "playstyle": "Clockwork support: deploy Bronze and Infinite Protector constructs and run a 7-buff empowerment engine for the party. You build your value before the pull — constructs out, buffs rolling — then maintain the machine.",
+          "statPriority": {
+            "pve": "Spell Hit (to cap) > Spell Penetration (to cap) > Spirit > Critical Strike > Haste > Spell Power > Intellect",
+            "pvp": "Resilience > Stamina > Spirit > Spell Hit (to cap) > Critical Strike > Haste > Spell Power > Intellect",
+            "note": "Hit is the scarcest, highest-value stat — there are no hit talents in the tree and it's thin on Spirit-itemized gear — so cap it first; spell penetration is worth capping so your Arcane portions (Shatter Echo, Singularity Core, Decomposition) land on higher-level targets. Spirit is the throughput backbone (Wand Expert converts it to ranged attack power; Artificer's Empowerment raises it). Spell Power is overrated — only a few abilities scale it and weakly — so treat ~100-200 as a floor, not a priority. Reflects the Jul 2026 expert audit (data/coa_player_reports.json pr-0019/pr-0020)."
+          },
+          "weapon": {
+            "style": "Wand + main-hand",
+            "main": "Main-hand weapon — bug-dependent (see note)",
+            "off": "—",
+            "note": "Wand-primary ranged DPS, not a spell-power caster: Artificer's Wand, Singularity Core and Shatter Echo all scale off Ranged Weapon damage, so your wand's listed damage range is a core stat. Artificer's Wand has a static cast speed, so wand speed/DPS are irrelevant — take the highest flat damage range, which means a slow wand. Main-hand slot is unsettled: Singularity Core is currently bugged to pull from your melee main-hand's damage, so a high-damage two-hander is temporarily best there; players expect a fix reverting it to ranged-weapon scaling, after which a fast dagger is favored over a slow two-hander. Treat the main-hand pick as in flux until that resolves (as of 2026-07)."
+          }
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "name": "Necromancer",
+      "slug": "necromancer",
+      "summary": "The Necromancer is a form of mage specialising in the dark arts. Many tend toward a less-than-good alignment and most served the Lich King before his fall; now rejoining the Horde and Alliance, they spread terrible plagues, conjure icy magic, and summon legions of undead to overwhelm their enemies.",
+      "theme": "Undeath summoner",
+      "faction": "Both",
+      "icon": "classicon_necromancer",
+      "color": "#45DB9C",
+      "specs": [
+        {
+          "name": "Death",
+          "description": "Afflict your foes with terrible plagues and destroy them with shadow magics. Most Death abilities do not consume Runic Power.",
+          "icon": "spell_shadow_plaguecloud",
+          "role": "Ranged DPS",
+          "roles": [
+            "Ranged DPS"
+          ],
+          "complexity": "Intermediate",
+          "primaryStats": [
+            "Intellect"
+          ],
+          "resource": "RUNIC_POWER",
+          "playstyle": "The plague spec — 17 distinct rot/plague/decay effects, the densest DoT kit in COA. Load every plague you own onto the target and watch the attrition math win. Maximum proactive: your damage was decided 10 seconds ago.",
+          "statPriority": {
+            "pve": "Spell Hit (until your spells stop missing a +3-level target) > Haste Rating > Spell Power > Critical Strike > Intellect > Spirit/MP5",
+            "pvp": "Resilience > Stamina > Spell Hit (cap) > Haste Rating > Spell Power > Critical Strike > Intellect",
+            "note": "17 stacking plagues/DoTs whose damage was 'decided 10 seconds ago' need Hit to actually land, and the spec's own passive (\"periodic damage spells now benefit from spell haste\") plus a wall of haste-proc talents (Angel of Death, Blightweaver, Mutation's faster ticks) make Haste an unusually strong secondary for squeezing extra plague ticks ahead of raw Spell Power and Crit."
+          },
+          "weapon": {
+            "style": "Caster weapon",
+            "main": "Caster weapon (staff or 1H + off-hand)",
+            "off": "Held off-hand",
+            "note": "Caster — no weapon-damage abilities in the kit; itemize spell power (a staff or 1H + off-hand)."
+          }
+        },
+        {
+          "name": "Rime",
+          "description": "Killing cold: direct Frost nukes with freeze/CC setups (3 control effects) and AoE shatters. The immediate-gratification Necromancer — cast it, it dies now, and packs get frozen before they reach you.",
+          "icon": "wc3lichoriginal",
+          "role": "Ranged DPS",
+          "roles": [
+            "Ranged DPS"
+          ],
+          "complexity": "Normal",
+          "primaryStats": [
+            "Intellect"
+          ],
+          "resource": "RUNIC_POWER",
+          "playstyle": "Killing cold: direct Frost nukes with freeze/CC setups (3 control effects) and AoE shatters. The immediate-gratification Necromancer — cast it, it dies now, and packs get frozen before they reach you.",
+          "statPriority": {
+            "pve": "Spell Hit (until your spells stop missing a +3-level target) > Spell Power > Critical Strike > Haste Rating > Intellect > Spirit/MP5",
+            "pvp": "Resilience > Stamina > Spell Hit (cap) > Spell Power > Critical Strike > Haste Rating > Intellect",
+            "note": "A burst-cooldown direct-nuke spec built around Deathchill/shatter payoffs, capped by Glacial Impact explicitly scaling with 'critical strike rating' and being guaranteed to crit, so Crit is prioritized right behind Spell Power once Hit is capped for the big single-target hits."
+          },
+          "weapon": {
+            "style": "Caster weapon",
+            "main": "Caster weapon (staff or 1H + off-hand)",
+            "off": "Held off-hand",
+            "note": "Caster — no weapon-damage abilities in the kit; itemize spell power (a staff or 1H + off-hand)."
+          }
+        },
+        {
+          "name": "Animation",
+          "description": "The summoner: 15 raise/animate effects command an undead retinue that protects you and feasts on your enemies. Army management is the gameplay — position, sacrifice, resummon. Your damage walks on its own legs.",
+          "icon": "_undead_03",
+          "role": "Ranged DPS",
+          "roles": [
+            "Ranged DPS"
+          ],
+          "complexity": "Advanced",
+          "primaryStats": [
+            "Intellect"
+          ],
+          "resource": "RUNIC_POWER",
+          "playstyle": "The summoner: 15 raise/animate effects command an undead retinue that protects you and feasts on your enemies. Army management is the gameplay — position, sacrifice, resummon. Your damage walks on its own legs.",
+          "statPriority": {
+            "pve": "Spell Hit (until your spells stop missing a +3-level target, for self-cast Crypt Swarm/Ghoulify) > Spell Power > Haste Rating > Intellect > Critical Strike",
+            "pvp": "Resilience > Stamina > Spell Hit (cap) > Spell Power > Haste Rating > Intellect > Critical Strike",
+            "note": "Nearly every minion tooltip (Bone Wraith, Abomination, Ghoul, Rotling) is written as SP*X (often plus Int*X), so Spell Power is the master damage multiplier for the whole army, while Haste shortens the Animate/Raise cast times and speeds Crypt Swarm ticks to keep the summon rotation and army uptime high — Crit has comparatively little kit support and sits last."
+          },
+          "weapon": {
+            "style": "Caster weapon",
+            "main": "Caster weapon (staff or 1H + off-hand)",
+            "off": "Held off-hand",
+            "note": "Caster — no weapon-damage abilities in the kit; itemize spell power (a staff or 1H + off-hand)."
+          }
+        }
+      ]
+    },
+    {
+      "id": 24,
+      "name": "Pyromancer",
+      "slug": "pyromancer",
+      "summary": "Pyromancers are mages that have devoted their studies to the school of Fire. Some have a draconic lineage that allows them to harness the power of the dragonflights in battle; others are simple fire magi who use their power to incinerate foes. (Class Leader: Kael'thas Sunstrider.)",
+      "theme": "Fire mage / dragon",
+      "faction": "Both",
+      "icon": "classicon_pyromancer",
+      "color": "#FF6112",
+      "specs": [
+        {
+          "name": "Incineration",
+          "description": "Turn single enemies to ash in an instant with super-heated fire attacks and damage-over-time.",
+          "icon": "inv_offhand_1h_artifactdoomhammer_d_01",
+          "role": "Ranged DPS",
+          "roles": [
+            "Ranged DPS"
+          ],
+          "complexity": "Intermediate",
+          "primaryStats": [
+            "Intellect"
+          ],
+          "resource": "MANA",
+          "playstyle": "Turn one enemy to ash: super-heated single-target casting that stacks heat into ignition windows. The boss-killer Pyromancer — plant your feet, ramp the burn, melt the target.",
+          "statPriority": {
+            "pve": "Spell Hit (until spells stop missing a +3-level target) > Intellect > Critical Strike > Haste > Spell Power > Spirit/MP5",
+            "pvp": "Resilience > Stamina > Spell Hit (cap) > Intellect > Critical Strike > Haste > Spell Power",
+            "note": "Fire-SP caster whose L15/L30 passives convert Intellect straight into spell damage, spell haste, and spell crit, so Intellect (the primary attribute) leads the secondaries right after the spell-hit cap; Volcanic Flames + Flamecasting make Crit/Haste snowball, hence Crit ahead of Haste. PvP fronts Resilience > Stamina."
+          },
+          "weapon": {
+            "style": "Caster weapon",
+            "main": "Caster weapon (staff or 1H + off-hand)",
+            "off": "Held off-hand",
+            "note": "Caster — no weapon-damage abilities in the kit; itemize spell power (a staff or 1H + off-hand)."
+          }
+        },
+        {
+          "name": "Flameweaving",
+          "description": "Weaving fire through the class's combo system (Flame Orb, Path of Flames): DoT-laced AoE that rewards routing flames through as many targets as possible — with a Nature-school thread (15 abilities) that hints at flame-tending utility. The pack-clearing Pyromancer.",
+          "icon": "custom_t_phoenix_border",
+          "role": "Healer",
+          "roles": [
+            "Healer"
+          ],
+          "complexity": "Intermediate",
+          "primaryStats": [
+            "Spirit"
+          ],
+          "resource": "MANA",
+          "playstyle": "Weaving fire through the class's combo system (Flame Orb, Path of Flames): DoT-laced AoE that rewards routing flames through as many targets as possible — with a Nature-school thread (15 abilities) that hints at flame-tending utility. The pack-clearing Pyromancer.",
+          "statPriority": {
+            "pve": "Intellect > Spirit > Critical Strike > Haste > Spell Power",
+            "pvp": "Resilience > Stamina > Intellect > Spirit > Critical Strike > Haste > Spell Power",
+            "note": "Pure healer, so spell hit is dropped from the PvE order. The L15 passive converts Spirit directly into healing spell power and Ember Touch/Cinderheart/Kindle/Roaring Pyre/Phoenix Dive all scale off Spirit, so Spirit rides right behind the Intellect primary. PvP fronts Resilience > Stamina."
+          },
+          "weapon": {
+            "style": "Caster weapon",
+            "main": "Caster weapon (staff or 1H + off-hand)",
+            "off": "Held off-hand",
+            "note": "Caster — no weapon-damage abilities in the kit; itemize spell power (a staff or 1H + off-hand)."
+          }
+        },
+        {
+          "name": "Draconic",
+          "description": "Harness your draconic lineage to deliver fast, short-ranged Fire attacks, and build Breath Charges to unleash your breath weapon.",
+          "icon": "inv_misc_head_dragon_nexus",
+          "role": "Ranged DPS",
+          "roles": [
+            "Ranged DPS"
+          ],
+          "complexity": "Normal",
+          "primaryStats": [
+            "Intellect"
+          ],
+          "resource": "MANA",
+          "playstyle": "Draconic lineage in close: fast, short-ranged Fire attacks (36 fire abilities) with dragon-scale defensives and the Phoenix at your side. A battle-caster that fights inside the danger zone and is built to survive it.",
+          "statPriority": {
+            "pve": "Spell Hit (cap) > Intellect > Critical Strike > Haste > Spell Power > Stamina",
+            "pvp": "Resilience > Stamina > Spell Hit (cap) > Intellect > Critical Strike > Haste > Spell Power",
+            "note": "PvE order was already correct (Intellect leads after the hit cap, then Crit > Haste) because the L15 passive turns Intellect into spell damage, crit, and hit and Dragon's Edge/crits generate Heat. Only fix: the PvP order now fronts Resilience > Stamina per the priority rule (previously Stamina > Resilience behind spell hit)."
+          },
+          "weapon": {
+            "style": "Caster weapon",
+            "main": "Caster weapon (staff or 1H + off-hand)",
+            "off": "Held off-hand",
+            "note": "Caster — no weapon-damage abilities in the kit; itemize spell power (a staff or 1H + off-hand)."
+          }
+        }
+      ]
+    },
+    {
+      "id": 25,
+      "name": "Cultist",
+      "slug": "cultist",
+      "summary": "Above all else, Cultists are devoted to the four Old Gods. Some have formally renounced their dark masters, but many remain skeptical; regardless, their power cannot be denied, and they have been allowed back into the Horde and Alliance if they agree to denounce the Old Gods.",
+      "theme": "Old-God cultist",
+      "faction": "Both",
+      "icon": "classicon_cultist",
+      "color": "#9C45F2",
+      "specs": [
+        {
+          "name": "Godblade",
+          "description": "Invoke the powers of the Old Gods to destroy your enemies by corrupting their minds and assaulting them with Eldritch horrors.",
+          "icon": "achievement_boss_heraldofnzoth",
+          "role": "Melee DPS",
+          "roles": [
+            "Melee DPS"
+          ],
+          "complexity": "Normal",
+          "primaryStats": [
+            "Strength"
+          ],
+          "resource": "MANA",
+          "playstyle": "An Old God's edge: melee strikes that channel void corruption (Shadow 32 vs Physical 11 — a caster wearing a swordsman's stance) while the class's Insanity ticks toward madness at 100 stacks. Hybrid combo play with a built-in doomsday clock.",
+          "statPriority": {
+            "pve": "Hit (melee special-attack cap (until your specials stop missing a +3-level target)) > Expertise (until your attacks stop being dodged/parried) > Strength > Armor Penetration > Critical Strike > Haste",
+            "pvp": "Resilience > Stamina > Hit (to cap) > Expertise > Strength > Critical Strike",
+            "note": "Its weapon-damage-based melee specials (Netherstrike, Hammer of Twilight, Entropic Slam/Strike, Reaving Blade) need the special-attack hit and dodge caps met first, after which Strength is doubly valuable because Void Strength converts it into both Shadow spell damage and spell hit for the class's off-school Shadow procs."
+          },
+          "weapon": {
+            "style": "Two-handed",
+            "main": "Two-hand weapon",
+            "off": "—",
+            "note": "Two-handed — Netherstrike requires a two-hander."
+          }
+        },
+        {
+          "name": "Corruption",
+          "description": "Summon powers from the infinite void to annihilate enemies with blasts of shadowy magic.",
+          "icon": "spell_shadow_unholyfrenzy",
+          "role": "Ranged DPS",
+          "roles": [
+            "Ranged DPS"
+          ],
+          "complexity": "Intermediate",
+          "primaryStats": [
+            "Intellect"
+          ],
+          "resource": "MANA",
+          "playstyle": "Void annihilation from range: corruption DoTs punctuated by tentacle and Eldritch Horror summons. Classic warlock-descended gameplay — afflict, summon, drain — with Insanity management as the spice.",
+          "statPriority": {
+            "pve": "Spell Hit (until your spells stop missing a +3-level target) > Spell Power > Intellect > Critical Strike > Haste > Spirit/MP5",
+            "pvp": "Resilience > Stamina > Spell Hit (to cap) > Spell Power > Critical Strike > Haste",
+            "note": "A pure Shadow dot-weave/burst caster (C'Thun's Power scales damage off Intellect) whose kit explicitly rewards crit (Lightbreaker +50% crit damage, Wicked Intentions, Madness stacking) and whose instant-cast spam and DoT ticks (Abyssal Decay, Darkwither) benefit from haste after hit is capped."
+          },
+          "weapon": {
+            "style": "Caster weapon",
+            "main": "Caster weapon (staff or 1H + off-hand)",
+            "off": "Held off-hand",
+            "note": "Caster — no weapon-damage abilities in the kit; itemize spell power (a staff or 1H + off-hand)."
+          }
+        },
+        {
+          "name": "Dreadnought",
+          "description": "The void sword-and-board, confirmed by its full tree: Twilight Shieldtoss bounces cursed shields, Adaptive Combatant stacks parry/dodge, and Malignant Armor converts every 100 armor into attack power. A classic avoidance tank whose defense literally becomes its damage.",
+          "icon": "inv_shield_1h_artifactstormfist_d_05",
+          "role": "Tank",
+          "roles": [
+            "Tank"
+          ],
+          "complexity": "Advanced",
+          "primaryStats": [
+            "Strength",
+            "Stamina"
+          ],
+          "resource": "MANA",
+          "playstyle": "The void sword-and-board, confirmed by its full tree: Twilight Shieldtoss bounces cursed shields, Adaptive Combatant stacks parry/dodge, and Malignant Armor converts every 100 armor into attack power. A classic avoidance tank whose defense literally becomes its damage.",
+          "statPriority": {
+            "pve": "Defense (to crit-immunity) > Stamina > Dodge/Parry Rating > Strength > Block Rating > Armor",
+            "pvp": "Resilience > Stamina > Defense > Dodge/Parry > Strength > Armor",
+            "note": "A void avoidance/absorb tank. Survival stats come first: cap Defense for crit-immunity, then Stamina (its Void-Enhanced Shield absorb scales off Stamina, as does its slam damage), then avoidance from Adaptive Combatant (flat parry+dodge). Strength matters for threat because Strength of the Sha (L20) converts Strength into Shadow spell damage and its Shadow-spell threat is doubled by Twilight Domain. There is no Strength-to-Block-Rating or armor-to-attack-power conversion in the kit; the prior note invented those."
+          },
+          "weapon": {
+            "style": "1H + Shield",
+            "main": "One-hand melee",
+            "off": "Shield",
+            "note": "Sword-and-board — Twilight Shieldtoss requires a shield."
+          }
+        },
+        {
+          "name": "Heretic",
+          "description": "Heal by the Old Gods' influence (DB line name: Influence): shield-forward dark mending — 6 ward effects against 4 DoTs, wrapping allies in whispers instead of light. A proactive absorb-healer with a damage thread woven through it.",
+          "icon": "spell_holy_devotion",
+          "role": "Healer",
+          "roles": [
+            "Healer"
+          ],
+          "complexity": "Intermediate",
+          "primaryStats": [
+            "Intellect",
+            "Strength"
+          ],
+          "resource": "MANA",
+          "playstyle": "Heal by the Old Gods' influence (DB line name: Influence): shield-forward dark mending — 6 ward effects against 4 DoTs, wrapping allies in whispers instead of light. A proactive absorb-healer with a damage thread woven through it.",
+          "statPriority": {
+            "pve": "Spell Power > Intellect > Haste > Critical Strike > Spirit/MP5 > Spell Hit (minor, for Malevolence's damage component)",
+            "pvp": "Resilience > Stamina > Spell Power > Intellect > Haste > Critical Strike",
+            "note": "A shield-forward absorb healer whose ward/heal formulas scale directly off spell power / bonus healing (healing power, healing power) with Intellect as the secondary (Abyssal Protection's heal scales with Intellect and spell power). Haste speeds its ticking auras (Entropic Host, Armageddon) and short-cast heals, and Crit feeds Blessing of Yogg-Saron's on-crit empower. Its damage component needs little hit because Shadow Training makes its attacks unable to miss. There is no passive that converts Intellect into hit/expertise (the prior note's 'Herald of Yogg-Saron' conversion does not exist)."
+          },
+          "weapon": {
+            "style": "Melee weapon",
+            "main": "Melee weapon",
+            "off": "—",
+            "note": "Melee — abilities accept any melee weapon; no specific type is required."
+          }
+        }
+      ]
+    },
+    {
+      "id": 26,
+      "name": "Starcaller",
+      "slug": "starcaller",
+      "summary": "The Starcaller is a heavily armed and heavily armoured warrior imbued with the power of the Moon and the Stars. Versatile and adaptive to different fighting styles, their disciplines range from followers of Elune and the Earthmother to Arcane-trained battle astronomers.",
+      "theme": "Elune moon-knight",
+      "faction": "Both",
+      "icon": "classicon_starcaller",
+      "color": "#8FFFFF",
+      "specs": [
+        {
+          "name": "Moon Guard",
+          "description": "Martial weapons imbued with Moon and Stars: the kit's 5 shields and 3 defensives over an Arcane-Physical melee core make this the Starcaller's frontline line — an astral warder who guards with moonlight barriers. Role read from the kit; verify in the builder.",
+          "icon": "artifactability_balancedruid_newmoon",
+          "role": "Tank",
+          "roles": [
+            "Tank"
+          ],
+          "complexity": "Advanced",
+          "primaryStats": [
+            "Intellect",
+            "Stamina"
+          ],
+          "resource": "MANA",
+          "playstyle": "Martial weapons imbued with Moon and Stars: the kit's 5 shields and 3 defensives over an Arcane-Physical melee core make this the Starcaller's frontline line — an astral warder who guards with moonlight barriers. Role read from the kit; verify in the builder.",
+          "statPriority": {
+            "pve": "Defense (crit-immune (far less Defense than retail at level 60)) > Stamina > Hit/Expertise (land Starsunder/Celestial Cleave threat swings) > Parry (feeds the Vengeance of Elune parry-proc plus Cosmic Vengeance/Lunar Blades/Starsweeper triggers) > Dodge > Block (Celestial Aegis, Blanket of Stars, Enchanted Aegis) > Agility (Attack Power via Virtue, block value) > Intellect (fuels %-mana shields: Astral Armor, Moonlit Bulwark, Cosmic Presence) > Critical Strike",
+            "pvp": "Resilience > Stamina > Defense/Dodge/Parry/Block (Blanket of Stars, Cosmic Crown) > Hit/Expertise > Agility > Intellect",
+            "note": "Five shield/block talents (Blanket of Stars, Cosmic Crown, Enchanted Aegis) and a parry-gated Vengeance of Elune push Defense-capped avoidance to the top, while the kit's %-mana barriers (Astral Armor, Moonlit Bulwark) make Intellect matter more than for a typical tank."
+          },
+          "weapon": {
+            "style": "1H + Shield",
+            "main": "One-hand melee",
+            "off": "Shield",
+            "note": "Sword-and-board — Blanket of Stars requires a shield."
+          }
+        },
+        {
+          "name": "Sentinel",
+          "description": "Arrows enchanted with Elune's power: Arcane-and-Fire ranged volleys (the old 'Moonbow' school). Sustained celestial archery — starfall on a bowstring.",
+          "icon": "_diablo3_arrowrain_mage",
+          "role": "Ranged DPS",
+          "roles": [
+            "Ranged DPS"
+          ],
+          "complexity": "Normal",
+          "primaryStats": [
+            "Intellect"
+          ],
+          "resource": "MANA",
+          "playstyle": "Arrows enchanted with Elune's power: Arcane-and-Fire ranged volleys (the old 'Moonbow' school). Sustained celestial archery — starfall on a bowstring.",
+          "statPriority": {
+            "pve": "Hit (ranged special-attack cap (until your specials stop missing a +3-level target)) > Agility (Ranged AP and weapon-damage scaling on Starfire/Huntress Shot, plus the RAP term in Aspect of the Huntress) > Critical Strike (Astral Quickness haste-on-crit, Starfury, Scattered Stars application) > Haste (faster Starfire Shot/Starcall casts and cooldowns) > Spell Power (Rain of Comets, Starcall, the SP term in Aspect of the Huntress) > Intellect (mana)",
+            "pvp": "Resilience > Stamina > Agility > Critical Strike > Haste > Spell Power",
+            "note": "Starfire Shot and Huntress Shot are majority Ranged-Weapon-Damage physical hits needing the ranged hit cap and Agility, but Rain of Comets, Starcall, and Aspect of the Huntress scale directly off Spell Power, making this a true Agility/Spell-Power hybrid archer."
+          },
+          "weapon": {
+            "style": "Ranged",
+            "main": "Ranged weapon",
+            "off": "—",
+            "note": "Ranged weapon — Arrow of the Goddess requires one."
+          }
+        },
+        {
+          "name": "Moon Priest",
+          "description": "Water magic under moonlight (Arcane 21/Frost 19): flowing, tide-like restoration — the alpha 'Tides' healer under a priestly name. Keep the tide rolling over the party rather than spot-fixing single wounds.",
+          "icon": "custom_t_nhance_rpg_icons_magicmoonbuff_border",
+          "role": "Healer",
+          "roles": [
+            "Healer"
+          ],
+          "complexity": "Intermediate",
+          "primaryStats": [
+            "Intellect"
+          ],
+          "resource": "MANA",
+          "playstyle": "Water magic under moonlight (Arcane 21/Frost 19): flowing, tide-like restoration — the alpha 'Tides' healer under a priestly name. Keep the tide rolling over the party rather than spot-fixing single wounds.",
+          "statPriority": {
+            "pve": "Spell Power > Haste (extra Torrent/Slipstream/Pond ticks, faster Deluge/Water Bolt casts) > Critical Strike (Scepter of the Moon, Moon's Embrace, Enchanted Water) > Intellect (mana pool + spell crit) > Spirit/MP5 (sustain through long tide-healing channels)",
+            "pvp": "Resilience > Stamina > Spell Power > Critical Strike > Haste > Intellect/Spirit",
+            "note": "Torrent, Slipstream, and Pond are HoT-style channels that reward Haste for extra ticks, while crit-triggered Lunar Phase talents (Scepter of the Moon, Moon's Embrace) and big single heals (Moonwater Blessing, Aegis of Neptulon) reward stacking Spell Power and Crit on top."
+          },
+          "weapon": {
+            "style": "Melee weapon",
+            "main": "Melee weapon",
+            "off": "—",
+            "note": "Melee — abilities accept any melee weapon; no specific type is required."
+          }
+        },
+        {
+          "name": "Warden",
+          "description": "Corrected from the full tree: not a tank — an arcane blade-dancer. Fan of Knives and Starsunder crits build Scattered Stars stacks, Astral Blade spends mana for precision Arcane strikes. The night-elf assassin fantasy running on starlight instead of energy.",
+          "icon": "inv_pet_wardenowl",
+          "role": "Melee DPS",
+          "roles": [
+            "Melee DPS"
+          ],
+          "complexity": "Intermediate",
+          "primaryStats": [
+            "Intellect"
+          ],
+          "resource": "MANA",
+          "playstyle": "Corrected from the full tree: not a tank — an arcane blade-dancer. Fan of Knives and Starsunder crits build Scattered Stars stacks, Astral Blade spends mana for precision Arcane strikes. The night-elf assassin fantasy running on starlight instead of energy.",
+          "statPriority": {
+            "pve": "Hit (melee special-attack cap (until your specials stop missing a +3-level target)) > Expertise (until your attacks stop being dodged/parried, keeps Aspect of the Warden swings and Astral Blade/Sentinel Glaive landing) > Agility (Attack Power, crit) > Critical Strike (Shadowsong's Mandate proc engine, Scattered Stars crit application) > Spell Power (Astral Blade's dominant SP term) > Haste (more swings for Aspect of the Warden procs and faster Scattered Stars stacking)",
+            "pvp": "Resilience > Stamina > Hit/Expertise > Agility > Critical Strike > Spell Power",
+            "note": "Astral Blade's SP coefficient outweighs its AP term even inside a weapon-swing builder-spender loop, so this crit-focused blade-dancer still wants Spell Power stacked alongside Hit/Expertise to land Aspect of the Warden procs and Shadowsong's Mandate crits."
+          },
+          "weapon": {
+            "style": "Melee weapon",
+            "main": "Melee weapon",
+            "off": "—",
+            "note": "Melee — abilities accept any melee weapon; no specific type is required."
+          }
+        }
+      ]
+    },
+    {
+      "id": 27,
+      "name": "Sun Cleric",
+      "slug": "sun-cleric",
+      "summary": "Sun Clerics are masters of Holy and Sun magic, priests visited by a powerful Valkyrie spirit said to hail from the Sun itself. As the ultimate war priests, some take the Valkyron Oath to fill their bodies with the strength of the sun and defend their allies from harm.",
+      "theme": "Solar priest",
+      "faction": "Both",
+      "icon": "classicon_suncleric",
+      "color": "#FFB240",
+      "specs": [
+        {
+          "name": "Piety",
+          "description": "Smite evil with the searing light of the sun.",
+          "icon": "5_priestskill26_border",
+          "role": "Ranged DPS",
+          "roles": [
+            "Ranged DPS"
+          ],
+          "complexity": "Advanced",
+          "primaryStats": [
+            "Intellect"
+          ],
+          "resource": "MANA",
+          "playstyle": "Smite evil with searing sunlight: Holy-Fire casting that stacks the class's Solar Power (small damage/heal bonus that lasts 2 minutes but never refreshes — keep earning it). The battle-priest face of the Sun Cleric.",
+          "statPriority": {
+            "pve": "Spell Hit (until your spells stop missing a +3-level target vs raid boss) > Spell Power > Critical Strike > Haste > Intellect > MP5/Spirit",
+            "pvp": "Resilience > Spell Hit (cap) > Spell Power > Critical Strike > Stamina > Haste",
+            "note": "Its Holy/Fire nuke chain (Flash, Dawnsear, Solar Wrath, Sun Ray, Radiant Flame) is entirely Spell-Power-scaled with real cast/channel times, and its stack of crit-chance talents (Radiant Marks, Servant of the Light, Solar Incandescence, Ancient Etchings) reward Crit over Haste once hit is capped."
+          },
+          "weapon": {
+            "style": "Caster weapon",
+            "main": "Caster weapon (staff or 1H + off-hand)",
+            "off": "Held off-hand",
+            "note": "Caster — no weapon-damage abilities in the kit; itemize spell power (a staff or 1H + off-hand)."
+          }
+        },
+        {
+          "name": "Blessings",
+          "description": "Restore your allies by calling upon the power of the Holy light.",
+          "icon": "item_holyspark",
+          "role": "Healer",
+          "roles": [
+            "Healer"
+          ],
+          "complexity": "Intermediate",
+          "primaryStats": [
+            "Intellect"
+          ],
+          "resource": "MANA",
+          "playstyle": "The classic Holy healer of COA: direct restoration by the power of the Light (Holy 28), backed by 3 protective wards. Reactive triage — see the wound, close the wound. The safest healer fantasy on the realm.",
+          "statPriority": {
+            "pve": "Spell Power > Haste > Critical Strike > Intellect > MP5 > Spirit",
+            "pvp": "Resilience > Stamina > Spell Power > Haste > Critical Strike > Intellect",
+            "note": "Direct/HoT heals (Shine, Sunshine, Solar Beam, Guidance line) scale off Spell Power and carry meaningful cast times, and crit-triggered payoffs (Everglow refresh, Resplendence guaranteed-crit, Lightward) make Haste (more casts per fight) and Crit (bonus procs) both outrank raw Intellect."
+          },
+          "weapon": {
+            "style": "Caster weapon",
+            "main": "Caster weapon (staff or 1H + off-hand)",
+            "off": "Held off-hand",
+            "note": "Caster — no weapon-damage abilities in the kit; itemize spell power (a staff or 1H + off-hand)."
+          }
+        },
+        {
+          "name": "Valkyrie",
+          "description": "Corrected from the full tree: Valkyr's Grip lets you dual-wield TWO-HANDED maces, swords or polearms; Glorious Execution strikes with both and refunds mana, with Odyn's Vanguard resetting it on proc, and Sunslam stunning on holy impact. A val'kyr juggernaut — pure melee DPS, not the tank the class blurb implied.",
+          "icon": "inv_valkiergoldpet",
+          "role": "Melee DPS",
+          "roles": [
+            "Melee DPS"
+          ],
+          "complexity": "Normal",
+          "primaryStats": [
+            "Strength"
+          ],
+          "resource": "MANA",
+          "playstyle": "Corrected from the full tree: Valkyr's Grip lets you dual-wield TWO-HANDED maces, swords or polearms; Glorious Execution strikes with both and refunds mana, with Odyn's Vanguard resetting it on proc, and Sunslam stunning on holy impact. A val'kyr juggernaut — pure melee DPS, not the tank the class blurb implied.",
+          "statPriority": {
+            "pve": "Hit (to dual-wield special/auto cap, until your dual-wield white swings land) > Expertise (until your attacks stop being dodged/parried) > Strength > Critical Strike > Haste > Armor Penetration",
+            "pvp": "Resilience > Stamina > Hit (cap) > Expertise (cap) > Strength > Critical Strike",
+            "note": "Dual-wielding two two-handers for weapon-damage finishers (Glorious Execution, Justice) is the worst-case miss profile in the game, so Hit then Expertise cap before Strength (Valorous Champion turns Strength into AP + spell-hit) scales the weapon damage. The kit is proc-driven (Odyn's Vanguard-style Glorious Execution resets), so Critical Strike is weighted above Haste and Armor Penetration rather than behind them."
+          },
+          "weapon": {
+            "style": "Two-handed",
+            "main": "Two-hand weapon",
+            "off": "—",
+            "note": "Two-handed — Justice requires a two-hander."
+          }
+        },
+        {
+          "name": "Seraphim",
+          "description": "Take the Valkyron Oath and charge into the front lines of battle to protect your allies from evil, gaining a rage bar and the ability to wield shields and heavy armor.",
+          "icon": "ability_paladin_conviction",
+          "role": "Tank",
+          "roles": [
+            "Tank"
+          ],
+          "complexity": "Intermediate",
+          "primaryStats": [
+            "Strength",
+            "Stamina"
+          ],
+          "resource": "MANA",
+          "playstyle": "Angelic war-form: the biggest Holy kit in the game (38 Holy-school abilities) with ascension windows, wards and radiant burst. Where Piety smites steadily, Seraphim transforms and erupts.",
+          "statPriority": {
+            "pve": "Strength > Spell Hit (until your Holy/Fire attacks stop missing a +3-level target) > Spell Power > Attack Power > Critical Strike > Haste",
+            "pvp": "Resilience > Stamina > Strength > Spell Hit (cap) > Spell Power > Attack Power > Critical Strike",
+            "note": "Holy Strength converts Strength into spell power while Solar Might/Impartial raise Strength directly, so a single point of Strength scales BOTH the physical (attack power) and holy/fire sides of every hybrid formula (Justicar's Wrath, Dawnbreak, Hammer of Kings) — making Strength the true primary, not the co-equal Intellect the old note implied. Spell Hit still gates the spell attacks (Justicar's Wrath, Angel's Calling), so it caps ahead of raw Spell Power/Attack Power."
+          },
+          "weapon": {
+            "style": "1H + Shield",
+            "main": "One-hand melee",
+            "off": "Shield",
+            "note": "Sword-and-board — Dawnbreak requires a shield."
+          }
+        }
+      ]
+    },
+    {
+      "id": 28,
+      "name": "Tinker",
+      "slug": "tinker",
+      "summary": "Tinkers are genius engineers that use their extensive knowledge of technology for military purposes. Some excel in the use of firearms, while others rely on their mechanical inventions to operate on their behalf.",
+      "theme": "Gnomish engineer",
+      "faction": "Both",
+      "icon": "classicon_tinker",
+      "color": "#D9D9D9",
+      "specs": [
+        {
+          "name": "Demolition",
+          "description": "Explosives and ordnance: bombs, rockets and the class's Ammo System (Rifle/Shotgun/Sniper swaps) driving Fire-and-Physical AoE demolition. Manage ammo, place charges, enjoy the fireworks.",
+          "icon": "inv_eng_bombfire",
+          "role": "Ranged DPS",
+          "roles": [
+            "Ranged DPS"
+          ],
+          "complexity": "Intermediate",
+          "primaryStats": [
+            "Agility",
+            "Intellect"
+          ],
+          "resource": "MANA",
+          "playstyle": "Explosives and ordnance: bombs, rockets and the class's Ammo System (Rifle/Shotgun/Sniper swaps) driving Fire-and-Physical AoE demolition. Manage ammo, place charges, enjoy the fireworks.",
+          "statPriority": {
+            "pve": "Hit (ranged special-attack cap (until your specials stop missing a +3-level target)) > Critical Strike > Haste > Agility > Attack Power > Spell Power > Armor Penetration",
+            "pvp": "Resilience > Stamina > Hit (ranged) > Critical Strike > Agility > Haste > Spell Power",
+            "note": "Core damage rides weapon-based Rounds (Blackpowder Shot, Ranged Weapon Damage plus X) that need Hit to land, while a crit/crit-effectiveness-heavy talent kit (Precision Scopes, Firearm Training, always/guaranteed-crit Air Strike and Take Aim) and cadence talents (Deft Hands, Hotswap, Rounds and Rounds) push Crit and Haste ahead of the Agility/AP base and the secondary RAP*/SP* hybrid bomb scaling."
+          },
+          "weapon": {
+            "style": "Ranged",
+            "main": "Ranged weapon",
+            "off": "—",
+            "note": "Ranged weapon — Tracer Augmentation requires one."
+          }
+        },
+        {
+          "name": "Invention",
+          "description": "Construct useful inventions or mechs to aid you in combat or provide utility for you and your group.",
+          "icon": "inv_plate_mechagnome_c_01shoulder",
+          "role": "Healer",
+          "roles": [
+            "Healer"
+          ],
+          "complexity": "Normal",
+          "primaryStats": [
+            "Intellect"
+          ],
+          "resource": "MANA",
+          "playstyle": "The gadget healer: 5 heal effects delivered through nanobots, deployables and the Clockwork Assistant pet (9 construct effects in the kit). You engineer the healing before it's needed — machines mend the party while you keep the machines running.",
+          "statPriority": {
+            "pve": "Spell Power > Intellect > Spirit > Haste > Critical Strike > MP5",
+            "pvp": "Resilience > Stamina > Spell Power > Intellect > Spirit > Haste",
+            "note": "Every heal scales directly off Spell Power (Nanobot Reconstruction's SP, ZIGGI-6K's SP, My Greatest Invention's SP) with explicit 25%-of-Intellect and 25%-of-Spirit healing-power conversions (Battle Medic, Medical Training) layered on top, and Haste accelerates its many periodic ticks (Nanobot Reconstruction, Restorative Beacon) and few cast-time heals (Repair Shot, Hastened Shots)."
+          },
+          "weapon": {
+            "style": "Ranged",
+            "main": "Ranged weapon",
+            "off": "—",
+            "note": "Ranged weapon — Stim Augmentation requires one."
+          }
+        },
+        {
+          "name": "Mechanics",
+          "description": "Mech-pilot warfare: build and command Bruiser and Strider Bots (11 construct effects) with real defensive plating (6 mitigation effects) — a pet-commander bruiser that can flex toward off-tanking behind its machines.",
+          "icon": "5_engineerskill01_border",
+          "role": "Ranged DPS",
+          "roles": [
+            "Ranged DPS"
+          ],
+          "complexity": "Advanced",
+          "primaryStats": [
+            "Agility",
+            "Intellect"
+          ],
+          "resource": "MANA",
+          "playstyle": "Mech-pilot warfare: build and command Bruiser and Strider Bots (11 construct effects) with real defensive plating (6 mitigation effects) — a pet-commander bruiser that can flex toward off-tanking behind its machines.",
+          "statPriority": {
+            "pve": "Hit (melee special-attack cap (until your specials stop missing a +3-level target)) > Expertise (until your attacks stop being dodged/parried) > Agility > Attack Power > Critical Strike > Haste > Armor Penetration",
+            "pvp": "Resilience > Stamina > Hit > Expertise > Agility > Critical Strike > Haste",
+            "note": "Output is flat-Physical and melee-weapon damage (Scrap Slam's 105% Weapon Damage, Bot: Hydraulic Strike, Bot: Crash & Thrash) delivered alongside a commanded pet whose own scaling (Combat Augment: Flame Jets, Sentry Turret's AP) piggybacks on the Tinker's stats, so Hit/Expertise to keep both attacker and pet landing come first, then Agility/AP for the shared melee base, with Crit/Haste feeding extra-attack procs like Improved Spanner Smash."
+          },
+          "weapon": {
+            "style": "Caster weapon",
+            "main": "Caster weapon (staff or 1H + off-hand)",
+            "off": "Held off-hand",
+            "note": "Caster — no weapon-damage abilities in the kit; itemize spell power (a staff or 1H + off-hand)."
+          }
+        }
+      ]
+    },
+    {
+      "id": 29,
+      "name": "Venomancer",
+      "slug": "venomancer",
+      "summary": "Venomancers are a collection of druidic peoples devoted to Shadra, the Loa of Spiders. Shadra allows her followers to take the form of a giant Spider or Scorpid, imbuing them with healing and defensive magics.",
+      "theme": "Venom caster",
+      "faction": "Both",
+      "icon": "inv_firstaid_healingsalve",
+      "color": "#6BA600",
+      "specs": [
+        {
+          "name": "Rot",
+          "description": "Poison your enemies by invoking Shadra to grant you offensive Nature magics, healing power, and the ability to conjure spider webs.",
+          "icon": "_instableaffliction_green",
+          "role": "Ranged DPS",
+          "roles": [
+            "Ranged DPS"
+          ],
+          "complexity": "Advanced",
+          "primaryStats": [
+            "Intellect"
+          ],
+          "resource": "MANA",
+          "playstyle": "COA's most inverted healer: poison enemies by Shadra's grace and transmute affliction into ally healing (14 DoT effects feeding 5 heal + 3 HoT effects). Your healing throughput starts with your poisons ticking — a fully proactive, damage-woven healer unlike anything on Bronzebeard.",
+          "statPriority": {
+            "pve": "Spell Hit (until your spells stop missing a +3-level target — poison DoTs must land before any healing is generated) > Haste (Acceleration, Rotpriest, Genesis, and Weaver Form all explicitly speed up periodic ticks, multiplying both damage-to-heal conversion and mana efficiency) > Spell Power > Intellect (mana pool + healing power, per Vital Mending's direct Int-to-healing conversion) > Critical Strike (Worship/Shadra's Command) > Spirit/MP5",
+            "pvp": "Resilience > Stamina > Spell Hit > Haste > Spell Power > Intellect > Critical Strike",
+            "note": "Its healing is entirely downstream of poison DoTs that can miss, and a cluster of talents (Acceleration, Rotpriest, Genesis, Weaver Form) explicitly reward faster ticking, so hit-to-land and haste both outrank raw spell power for this dot-to-heal transmuter."
+          },
+          "weapon": {
+            "style": "Caster weapon",
+            "main": "Caster weapon (staff or 1H + off-hand)",
+            "off": "Held off-hand",
+            "note": "Caster — no weapon-damage abilities in the kit; itemize spell power (a staff or 1H + off-hand)."
+          }
+        },
+        {
+          "name": "Stalking",
+          "description": "Take the form of a giant spider to skitter through the shadows and assassinate foes with fangs, poisons, and impressive speed.",
+          "icon": "_d3corpsespiders",
+          "role": "Melee DPS",
+          "roles": [
+            "Melee DPS"
+          ],
+          "complexity": "Intermediate",
+          "primaryStats": [
+            "Intellect"
+          ],
+          "resource": "ENERGY",
+          "playstyle": "Giant-spider assassination: skitter through shadows, ambush, and let 10 poison effects do the murdering after you've moved on. Hit-and-fade melee where the target dies on a delay.",
+          "statPriority": {
+            "pve": "Spell Hit (until your spells stop missing a +3-level target — the core bites Nerubian Sting, Widowmaker, Facemelter, Withering Venom are Shadow/Nature/Plague school and must land) > Spell Power (direct +SP coefficients on those bites) > Intellect (Prowler converts Intellect into spell damage AND hit rating; Deadly Venom/Precision Bites convert it into crit rating) > Haste (Skitter Smack/Acidfang stack melee haste, speeding rage generation and proc uptime) > Critical Strike (Boding Dread/Glory To Shadra Shadow/Nature spell crit) > Hit/Expertise (keeps auto-attack procs like Drenched Fangs landing) > Armor Penetration",
+            "pvp": "Resilience > Stamina > Spell Hit > Spell Power > Intellect > Haste > Critical Strike",
+            "note": "Despite the melee/Spider Form delivery, nearly every damaging bite is a Shadow/Nature/Plague spell with explicit +SP scaling, and the Prowler passive (not 'Fang's Guidance', which does not exist in the kit) converts Intellect into both spell damage and hit rating — so this is a spell-hit-and-spell-power spec wearing a rogue's positioning rules."
+          },
+          "weapon": {
+            "style": "Caster weapon",
+            "main": "Caster weapon (staff or 1H + off-hand)",
+            "off": "Held off-hand",
+            "note": "Caster — no weapon-damage abilities in the kit; itemize spell power (a staff or 1H + off-hand)."
+          }
+        },
+        {
+          "name": "Fortitude",
+          "description": "Transform into an armored Scorpid, allowing you to sustain massive amounts of damage and protect your allies from harm.",
+          "icon": "_venomorb_green",
+          "role": "Tank",
+          "roles": [
+            "Tank"
+          ],
+          "complexity": "Normal",
+          "primaryStats": [
+            "Intellect",
+            "Stamina"
+          ],
+          "resource": "RAGE",
+          "playstyle": "Armored Scorpid tanking: transform and absorb massive punishment behind chitin (5 defensives, 2 HoTs, Nature 38) while 8 venom effects punish attackers. A self-sustaining poison-tank — damage into you becomes damage over them.",
+          "statPriority": {
+            "pve": "Defense rating (to the crit-immunity cap) > Stamina > Intellect (Beetle Form adds max health from a % of Intellect, and Regenerative Strikes self-healing scales off Intellect + spell power) > Agility (also feeds Beetle Form's bonus max health and the Toxic Rage self-heal) > Dodge rating > Armor > Attack Power/Spell Power (Carapace Crash/Chitin Rush/Hivebreak/Venomtip threat scale off attack power + spell power, and Poisonous converts attack power into spell damage)",
+            "pvp": "Resilience > Stamina > Defense rating > Intellect > Agility > Dodge rating > Armor",
+            "note": "There is no Defense-rating conversion in this kit — the previous 'Enchanted Exoskeleton converts Agility into Defense' is a misattribution (that passive belongs to Stalking and converts Intellect into dodge). Beetle Form scales bonus max health off Intellect and Agility, Regenerative Strikes self-heals off Intellect (Intellect), and Poisonous turns attack power into spell-damage threat, so after the Defense crit-immunity cap Intellect leads Agility."
+          },
+          "weapon": {
+            "style": "Caster weapon",
+            "main": "Caster weapon (staff or 1H + off-hand)",
+            "off": "Held off-hand",
+            "note": "Caster — no weapon-damage abilities in the kit; itemize spell power (a staff or 1H + off-hand)."
+          }
+        },
+        {
+          "name": "Vizier",
+          "description": "Confirmed by its full tree as the gentle serpent-healer: Mending Mist blankets up to 8 allies in HoTs, Shadra's Vigil rides on every Serpent's Fang heal, and Mycelial Healing stacks your periodic output ever higher. Where Venom transmutes poison, Vizier simply soothes — COA's purest HoT healer.",
+          "icon": "nhi_naturestaff_border",
+          "role": "Healer",
+          "roles": [
+            "Healer"
+          ],
+          "complexity": "Normal",
+          "primaryStats": [
+            "Intellect"
+          ],
+          "resource": "MANA",
+          "playstyle": "Confirmed by its full tree as the gentle serpent-healer: Mending Mist blankets up to 8 allies in HoTs, Shadra's Vigil rides on every Serpent's Fang heal, and Mycelial Healing stacks your periodic output ever higher. Where Venom transmutes poison, Vizier simply soothes — COA's purest HoT healer.",
+          "statPriority": {
+            "pve": "Haste (Vizier Form explicitly lets its HoT effects benefit from spell haste — faster ticks mean more allies topped off per GCD) > Spell Power > Intellect (mana pool and scales heals like Venomcult Blessing/Serpent Lord's Amulet) > Spirit/MP5 (heavy mana costs — Unity 25%, Shadra's Aid 19%, Ritual Healing 17% of base mana) > Critical Strike > Stamina",
+            "pvp": "Resilience > Stamina > Haste > Spell Power > Intellect > Spirit/MP5",
+            "note": "Every ability targets allies rather than enemies (no spell-hit requirement at all), and Vizier Form calls out spell haste benefiting its HoTs directly, so haste-driven tick throughput plus mana sustain for its very expensive kit outweigh raw spell power or crit."
+          },
+          "weapon": {
+            "style": "Caster weapon",
+            "main": "Caster weapon (staff or 1H + off-hand)",
+            "off": "Held off-hand",
+            "note": "Caster — no weapon-damage abilities in the kit; itemize spell power (a staff or 1H + off-hand)."
+          }
+        }
+      ]
+    },
+    {
+      "id": 30,
+      "name": "Reaper",
+      "slug": "reaper",
+      "summary": "Reapers are warriors who have come upon a dark and hungry spirit trapped inside a scythe, born of souls the Lich King imprisoned within enchanted Hungering Scythes. These 'free' Reapers resist the call of the scourge while wielding the immense power the weapons grant them.",
+      "theme": "Scythe soul-reaper",
+      "faction": "Both",
+      "icon": "classicon_reaper",
+      "color": "#0A876B",
+      "specs": [
+        {
+          "name": "Harvest",
+          "description": "The scythe at work: siphoning two-handed sweeps that harvest the class's Reaped Souls (Essence Harvester is literally in the kit). Build souls with every cut, then trigger Soul Infusion at cap. Grim, rhythmic builder-spender melee. Harvester bakes in 15% lifesteal on ALL damage — the self-sufficiency is the spec.",
+          "icon": "ability_revendreth_deathknight",
+          "role": "Melee DPS",
+          "roles": [
+            "Melee DPS"
+          ],
+          "complexity": "Normal",
+          "primaryStats": [
+            "Strength"
+          ],
+          "resource": "RUNIC_POWER",
+          "playstyle": "The scythe at work: siphoning two-handed sweeps that harvest the class's Reaped Souls (Essence Harvester is literally in the kit). Build souls with every cut, then trigger Soul Infusion at cap. Grim, rhythmic builder-spender melee. Harvester bakes in 15% lifesteal on ALL damage — the self-sufficiency is the spec.",
+          "statPriority": {
+            "pve": "Hit (melee/special, until your specials stop missing a +3-level target) > Expertise (until your attacks stop being dodged/parried) > Strength > Armor Penetration > Critical Strike > Haste",
+            "pvp": "Resilience > Stamina > Hit > Expertise > Strength > Critical Strike",
+            "note": "Crow's Harvest/Slaughter/Doomrend/Cull are all weapon-damage-% two-hand Physical hits that must land and not be dodged (no offhand to cover a miss), Annihilation explicitly doubles down on Armor Penetration, and Darkrend Scythe's bleed 'scales with haste' while Harvester's flat 15% lifesteal on all damage means Critical Strike compounds the self-heal on every crit."
+          },
+          "weapon": {
+            "style": "Two-handed",
+            "main": "Two-hand weapon",
+            "off": "—",
+            "note": "Two-handed — Crow's Harvest requires a two-hander."
+          }
+        },
+        {
+          "name": "Soul",
+          "description": "Collect the souls of fallen enemies to unleash devastating shadow magics, or skulk through the shadows with dual scytheblades, striking down unsuspecting enemies with ghostly precision.",
+          "icon": "nhi_souldarkening_border",
+          "role": "Melee DPS",
+          "roles": [
+            "Melee DPS"
+          ],
+          "complexity": "Normal",
+          "primaryStats": [
+            "Strength"
+          ],
+          "resource": "RUNIC_POWER",
+          "playstyle": "Spend what you reap: collected souls fuel devastating Shadow magic (43 shadow-school abilities — the class's caster payoff line). The Reaper who converts melee harvesting into ranged devastation.",
+          "statPriority": {
+            "pve": "Spell Hit (until your Shadow spells stop missing a +3-level target) > Agility > Attack Power > Critical Strike > Haste > Intellect",
+            "pvp": "Resilience > Stamina > Spell Hit > Agility > Attack Power > Critical Strike",
+            "note": "Dark Pact converts 150% of Agility into Attack Power, and the payoff kit is AP-driven (Deathchaser, Gravesite, Soulrot, Spectre Stride, Jailer's Call, plus the AP terms in Soulrend and Wraithblade) — 7 AP-scaling abilities vs 2 spell-power ones, so Agility is the true primary. Spell Hit still leads because the Shadow-school damage must land; Soul Catcher's Int-to-spell-damage/crit and the small spell power terms make Intellect only a minor tail stat."
+          },
+          "weapon": {
+            "style": "One-hand melee",
+            "main": "One-hand melee",
+            "off": "Off-hand weapon",
+            "note": "One-hand melee — Dirge requires a one-hander (dual-wield or 1H + off-hand)."
+          }
+        },
+        {
+          "name": "Domination",
+          "description": "Weaken enemies and sustain yourself with dark protection magic to defend your allies from harm.",
+          "icon": "nhi_ghosthand_border",
+          "role": "Tank",
+          "roles": [
+            "Tank"
+          ],
+          "complexity": "Intermediate",
+          "primaryStats": [
+            "Strength",
+            "Stamina"
+          ],
+          "resource": "RUNIC_POWER",
+          "playstyle": "Weaken enemies and shield the group with dark protections: a debuff-support line (wards, an enslaved pet effect, enemy-sapping auras) that makes every enemy hit softer and every ally tougher. The death-knight-flavored utility pick.",
+          "statPriority": {
+            "pve": "Hit > Expertise (until your attacks stop being dodged/parried) > Stamina > Strength > Critical Strike > Haste",
+            "pvp": "Resilience > Stamina > Hit > Expertise > Strength",
+            "note": "Soulwarden's Resolve, Spectral Warden, and Soulstorm all explicitly scale their armor/magic-resist, ally shield, and enemy-AP-reduction debuff directly off the caster's own Stamina (with Jailer's Bargain/Bolstered Form adding Stamina-adjacent max-health cooldowns), making Stamina the real payoff stat for this support spec behind simply landing its weapon-based Requiem/Dreadwake hits."
+          },
+          "weapon": {
+            "style": "Two-handed",
+            "main": "Two-hand weapon",
+            "off": "—",
+            "note": "Two-handed — Dreadwake requires a two-hander."
+          }
+        }
+      ]
+    },
+    {
+      "id": 31,
+      "name": "Primalist",
+      "slug": "primalist",
+      "summary": "Primalists are an elite group of the Earthen Ring that have refined their primal shamanic and druidic abilities for battle, invoking bestial strength to empower their blows. They are also master shapers of the Earth, with the strongest taking the form of an Earth Elemental to defend their allies.",
+      "theme": "Primal totem-warrior",
+      "faction": "Both",
+      "icon": "custom_elementl(earth)_b_01_border",
+      "color": "#E38C59",
+      "specs": [
+        {
+          "name": "Wildwalker",
+          "description": "Harness the power of the great beasts of Azeroth to make powerful melee attacks and generate Rage.",
+          "icon": "ability_druid_ripandtear",
+          "role": "Melee DPS",
+          "roles": [
+            "Melee DPS"
+          ],
+          "complexity": "Normal",
+          "primaryStats": [
+            "Strength"
+          ],
+          "resource": "RAGE",
+          "playstyle": "Channel Azeroth's great beasts: melee strikes stacked with Boons (up to 3 — e.g. Boon of the Bear) and party-buffing Roars (9 buff effects). A shout-heavy bruiser whose presence makes the whole group hit harder. Signature: you can TAME BEASTS of Azeroth as companions — the class's hunter side.",
+          "statPriority": {
+            "pve": "Hit (until your specials stop missing a +3-level target) > Expertise (until your attacks stop being dodged/parried) > Strength > Critical Strike > Armor Penetration > Haste",
+            "pvp": "Resilience > Stamina > Hit (to cap) > Strength > Expertise > Critical Strike > Armor Penetration",
+            "note": "Pure attack power physical kit (Wildaxe/Totemic Smash/Primal Shred/Rexxar's Might) whose signature effects are crit-gated (Legacy of Rexxar, Rexxar's Might bleed-on-crit, Druid of the Claw, Bestial Strikes, My Totem My Rules). Because the kit is crit-driven, Critical Strike outranks Armor Penetration; primary attribute is Strength (AP)."
+          },
+          "weapon": {
+            "style": "Melee weapon",
+            "main": "Melee weapon",
+            "off": "—",
+            "note": "Melee — abilities accept any melee weapon; no specific type is required."
+          }
+        },
+        {
+          "name": "Geomancy",
+          "description": "Spend Rage to sunder the Earth and destroy enemies with the destructive forces of the elements.",
+          "icon": "inv_custom_hearthstone_fire",
+          "role": "Ranged DPS",
+          "roles": [
+            "Ranged DPS"
+          ],
+          "complexity": "Advanced",
+          "primaryStats": [
+            "Intellect"
+          ],
+          "resource": "RAGE",
+          "playstyle": "Spend Rage to sunder the earth: seismic Fire-and-Nature slams with serious stone defensives (7 mitigation effects) — an earthshaker that borders on off-tank. Break the ground, wear the mountain.",
+          "statPriority": {
+            "pve": "Spell Hit (until your spells stop missing a +3-level target) > Spell Power > Intellect > Haste > Critical Strike > Strength > Armor Penetration",
+            "pvp": "Resilience > Stamina > Spell Power > Spell Hit > Intellect > Haste > Critical Strike",
+            "note": "Geomancy's real throughput (Earthspine, Earthquake, Stonefall, Seismic Spike, Eruption) is cast Nature/Fire spellwork carrying Spell Power terms alongside smaller Attack Power terms, and Body of Magma literally converts Intellect into spell haste and spell crit, so caster hit/Spell Power/Intellect rank above the secondary Strength/Armor Pen that only benefit the minor physical components and stone defensives."
+          },
+          "weapon": {
+            "style": "Caster weapon",
+            "main": "Caster weapon (staff or 1H + off-hand)",
+            "off": "Held off-hand",
+            "note": "Caster — no weapon-damage abilities in the kit; itemize spell power (a staff or 1H + off-hand)."
+          }
+        },
+        {
+          "name": "Grovekeeper",
+          "description": "Spend Rage to heal allies with natural creation magic, and grant them short-lasting boons related to different beasts.",
+          "icon": "ui_darkshore_warfront_alliance_keeper_of_the_grove",
+          "role": "Support",
+          "roles": [
+            "Support"
+          ],
+          "complexity": "Intermediate",
+          "primaryStats": [
+            "Strength",
+            "Intellect"
+          ],
+          "resource": "RAGE",
+          "playstyle": "Healing that runs on Rage: creation magic (4 heals, 3 HoTs on a Nature core) fueled by the class's fury — you fight to fill the bar, then bloom it into the party. A rhythm unlike mana healers: aggression literally becomes restoration.",
+          "statPriority": {
+            "pve": "Strength (Attack Power) > Haste > Intellect > Critical Strike > Spirit/MP5",
+            "pvp": "Resilience > Stamina > Strength (Attack Power) > Haste > Spirit/MP5 > Critical Strike",
+            "note": "Grovekeeper L15 passive turns Attack Power into spell/healing power and Strength into melee haste + spell hit, and the heals themselves scale off attack power+healing power (Hand of the Earthmother, Spirit Charge, Seismic Wave, Earthmother's Binding, Grove Guardian) rather than spell power. So Strength/Attack Power is the primary throughput stat, not Spell Power; Haste (extra HoT ticks/faster casts) follows. Pure healing, so no spell-hit line in PvE."
+          },
+          "weapon": {
+            "style": "Caster weapon",
+            "main": "Caster weapon (staff or 1H + off-hand)",
+            "off": "Held off-hand",
+            "note": "Caster — no weapon-damage abilities in the kit; itemize spell power (a staff or 1H + off-hand)."
+          }
+        },
+        {
+          "name": "Mountain King",
+          "description": "The dwarf-legend line read from its full tree: Quake stomps on charges, Aftershock procs off auto-attacks, Stone Soldier boosts off-hand damage, and Unyielding Form stacks parry/dodge/armor. A dual-wielding seismic bruiser that off-tanks on demand rather than a dedicated main tank.",
+          "icon": "spell_holy_devotion",
+          "role": "Tank",
+          "roles": [
+            "Tank"
+          ],
+          "complexity": "Intermediate",
+          "primaryStats": [
+            "Strength",
+            "Stamina"
+          ],
+          "resource": "RAGE",
+          "playstyle": "The dwarf-legend line read from its full tree: Quake stomps on charges, Aftershock procs off auto-attacks, Stone Soldier boosts off-hand damage, and Unyielding Form stacks parry/dodge/armor. A dual-wielding seismic bruiser that off-tanks on demand rather than a dedicated main tank.",
+          "statPriority": {
+            "pve": "Hit (to the special-attack and dual-wield white hit caps) > Expertise (until your attacks stop being dodged/parried) > Strength > Armor Penetration > Critical Strike > Haste",
+            "pvp": "Resilience > Stamina > Hit (to cap) > Strength > Expertise > Armor Penetration > Critical Strike",
+            "note": "Mountain King is a one-handed, dual-wield-flavored bruiser (Rock Barrier, Stone Edge, Quake, Gaze of Theradras all require a one-hand melee weapon) whose Quake/Mountain Fury specials and sustained auto-attacks need to land and avoid being dodged/parried to keep its stacking mitigation and rage income flowing, so Hit and Expertise cap ahead of the Strength/Armor Pen/Crit/Haste that scale its weapon damage."
+          },
+          "weapon": {
+            "style": "One-hand melee",
+            "main": "One-hand melee",
+            "off": "Off-hand weapon",
+            "note": "One-hand melee — Bash requires a one-hander (dual-wield or 1H + off-hand)."
+          }
+        }
+      ]
+    },
+    {
+      "id": 32,
+      "name": "Runemaster",
+      "slug": "runemaster",
+      "summary": "Runemasters are the master arcanists of Azeroth, with powers over all forms of magic. The Runemaster specialises in teleportation, and their immense knowledge of the magical arts makes them effective mage hunters.",
+      "theme": "Rune spellcaster",
+      "faction": "Both",
+      "icon": "classicon_spiritmage",
+      "color": "#40C7EB",
+      "specs": [
+        {
+          "name": "Glyphic",
+          "description": "Cast powerful arcane spells to vanquish your foes.",
+          "icon": "70_inscription_vantus_rune_azure",
+          "role": "Ranged DPS",
+          "roles": [
+            "Ranged DPS"
+          ],
+          "complexity": "Advanced",
+          "primaryStats": [
+            "Intellect",
+            "Spirit"
+          ],
+          "resource": "MANA",
+          "playstyle": "Pure arcane artillery driven by the class's Essence Combo system (DB line: Spellslinger — and the deepest talent line in COA at 17 talents). Sequence your runes for combo payoffs; the most theorycraft-dense caster on the realm.",
+          "statPriority": {
+            "pve": "Spell Hit (until your spells stop missing a +3-level target) > Spell Power > Intellect > Spirit > Critical Strike > Haste",
+            "pvp": "Resilience > Spell Hit (to cap) > Spell Power > Intellect/Stamina > Spirit > Critical Strike > Haste",
+            "note": "Chaos Engraving directly converts Intellect (15% dmg) and Spirit (10% dmg, 20% crit) into damage/crit while Glyphic Ruin/Thaumaturgy/Primordial Blast/Runic Obliteration scale off Spell Power, so the combo-reliant rotation hit-caps first, then stacks SP/Int/Spirit, with Eye of the Beholder's 25% crit window outweighing the smaller Ancient Teachings/Runeslinger haste procs."
+          },
+          "weapon": {
+            "style": "Caster weapon",
+            "main": "Caster weapon (staff or 1H + off-hand)",
+            "off": "Held off-hand",
+            "note": "Caster — no weapon-damage abilities in the kit; itemize spell power (a staff or 1H + off-hand)."
+          }
+        },
+        {
+          "name": "Engravement",
+          "description": "Inscribe magical runes to empower your spell casting.",
+          "icon": "novart_magicspell_(14)_border",
+          "role": "Melee DPS",
+          "roles": [
+            "Melee DPS"
+          ],
+          "complexity": "Normal",
+          "primaryStats": [
+            "Agility"
+          ],
+          "resource": "MANA",
+          "playstyle": "Inscribe runes to empower your casting (DB line: Conjuration): a setup-heavy line where damage flows from prepared inscriptions and familiar synergy. Slower cadence, bigger empowered windows.",
+          "statPriority": {
+            "pve": "Hit (until your specials stop missing a +3-level target) > Expertise (until your attacks stop being dodged/parried) > Agility > Critical Strike > Haste",
+            "pvp": "Resilience > Stamina > Hit/Expertise (cap) > Agility > Spell Penetration > Critical Strike > Haste",
+            "note": "Primordial Strength converts attack power into spell damage and Agility into hit/spell-hit, so this is an Agility/AP weapon spec, not a caster. The signature Fists of Power and the whole damage kit (Fist of the Ancients attack power, Runeblade attack power, Runic Brand attack power, all Weapon Engravings) scale off attack power from Agility; only tiny secondary Word of Flames/Oblivion Intellect coefficients exist. Melee hit-then-expertise caps come first, then Agility for AP/crit, with the proc-heavy Weapon Engraving triggers (Engraved and Ready boosts their crit) favoring Crit over Haste. Crucially, the damage is largely ELEMENTAL/magic: every Weapon Engraving procs elemental damage off your hits and Primordial Strength converts attack power into spell damage — so Armor Penetration does nothing here (it only bypasses physical armor). Dual-wield two FAST one-handers to maximize engraving proc frequency (Fists of Power also strikes with your offhand), and value Spell (elemental) Penetration — especially in PvP — to push the magic damage through resistances. Agility + spell penetration is hard to itemize together; spell-pen PvP gems help."
+          },
+          "weapon": {
+            "style": "One-hand melee",
+            "main": "One-hand melee",
+            "off": "Off-hand weapon",
+            "note": "One-hand melee — Fist of the Ancients requires a one-hander (dual-wield or 1H + off-hand)."
+          }
+        },
+        {
+          "name": "Riftblade",
+          "description": "Use your knowledge of the Arcane to hunt mages using dual daggers and stealth.",
+          "icon": "trade_archaeology_zinrokh_sword",
+          "role": "Melee DPS",
+          "roles": [
+            "Melee DPS"
+          ],
+          "complexity": "Intermediate",
+          "primaryStats": [
+            "Agility"
+          ],
+          "resource": "MANA",
+          "playstyle": "The mage-hunter: dual daggers riding arcane rifts, with a striking 8 defensive effects — built to close on casters, cut through their spells and survive the answer. Reactive, anti-magic melee with off-tank bones.",
+          "statPriority": {
+            "pve": "Hit (melee special-attack cap (until your specials stop missing a +3-level target), also covers Blade-spell hits) > Expertise (until your attacks stop being dodged/parried) > Agility > Critical Strike > Haste > Armor Penetration",
+            "pvp": "Resilience > Stamina > Hit/Expertise > Agility > Critical Strike > Haste",
+            "note": "Elemental Assassin converts Agility straight into spell damage, spell crit, and hit rating on top of its normal dagger AP/crit contribution, and the reactive proc kit (Primordial Echoes, Surging Slash, Windsage) all trigger off critical strikes, so after hit/expertise caps Agility and Crit outrank the smaller Haste/Armor Pen gains from weapon-damage finishers like Runeblade, Smolder, and Fracture."
+          },
+          "weapon": {
+            "style": "Two-handed",
+            "main": "Two-hand weapon",
+            "off": "—",
+            "note": "Two-handed — Fracture requires a two-hander."
+          }
+        }
+      ]
+    }
+  ]
+}
