@@ -100,7 +100,11 @@ export function GearPlanner() {
   const editableWeightKeys = useMemo(() => {
     const profileKeys = Object.keys(selectedProfile?.weights ?? fallbackWeights) as StatKey[];
     const savedKeys = Object.keys(weights) as StatKey[];
-    return [...new Set([...profileKeys, ...savedKeys])].filter((key) => !isSystemPowerKey(key));
+    const keys = [...new Set([...profileKeys, ...savedKeys])].filter((key) => !isSystemPowerKey(key));
+    const originalOrder = new Map(keys.map((key, index) => [key, index]));
+    return keys.sort((left, right) =>
+      (weights[right] ?? 0) - (weights[left] ?? 0)
+        || (originalOrder.get(left) ?? 0) - (originalOrder.get(right) ?? 0));
   }, [selectedProfile, weights]);
   const totalEp = useMemo(() => Object.values(loadout).reduce((sum, item) => sum + calculateEp(resolveItemStats(item, level, profile.hybridRules), profile), 0), [level, loadout, profile]);
   const allStats = useMemo(() => Object.values(loadout).reduce<StatMap>((sum, item) => {
