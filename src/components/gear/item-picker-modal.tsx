@@ -2,10 +2,9 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ArrowRight, Check, EyeOff, Gem, MapPin, Search, Sparkles, TrendingUp, X } from "lucide-react";
-import { canEquipItemAtLevel, compareScoredItems, contextualPower, isSystemPowerKey, scoreItem, statDelta, type WeightProfile } from "@/lib/ep";
+import { canEquipItemAtLevel, compareScoredItems, contextualPower, isSystemPowerKey, scoreItem, statDelta, STAT_LABELS, type EquipmentSlot, type GearItem, type ScoredItem, type StatKey, type WeightProfile } from "@/domain/gear";
 import { applyRecommendedEnchant } from "@/lib/enchants";
 import type { GearContext } from "@/types/coa";
-import { STAT_LABELS, type EquipmentSlot, type GearItem, type ScoredItem, type StatKey } from "@/types/gear";
 import { GameItemIcon } from "./game-item-icon";
 
 const qualityClass: Record<GearItem["quality"], string> = {

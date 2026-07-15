@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { SLOT_ICON } from "@/data/demo-items";
 import { ascensionIconUrl } from "@/lib/icons";
-import type { EquipmentSlot, GearItem } from "@/types/gear";
+import type { EquipmentSlot, GearItem } from "@/domain/gear";
 
 interface GameItemIconProps {
   item?: GearItem;

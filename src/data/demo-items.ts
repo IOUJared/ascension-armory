@@ -1,4 +1,4 @@
-import type { EquipmentSlot, GearItem, StatMap } from "@/types/gear";
+import type { EquipmentSlot, GearItem, StatMap } from "@/domain/gear";
 
 const slotNames: Record<EquipmentSlot, string> = {
   HEAD: "Crown of the Unbound", NECK: "Chain of the First Flame", SHOULDERS: "Mantle of Conquest",

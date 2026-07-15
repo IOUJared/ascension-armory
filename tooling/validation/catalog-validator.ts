@@ -1,4 +1,4 @@
-import { EQUIPMENT_SLOTS, STAT_LABELS, type EquipmentSlot, type GearItem } from "../../src/types/gear";
+import { EQUIPMENT_SLOTS, STAT_LABELS, type EquipmentSlot, type GearItem } from "../../src/domain/gear";
 
 const equipmentSlots = new Set<string>(EQUIPMENT_SLOTS);
 const statKeys = new Set<string>(Object.keys(STAT_LABELS));

@@ -3,8 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Check, Search, Sparkles, Trash2, X } from "lucide-react";
 import { enchantEnhancement, enchantEp, findEnchantsForItem, recommendEnchant, type CoAEnchant } from "@/lib/enchants";
-import type { GearEnhancement, GearItem } from "@/types/gear";
-import type { WeightProfile } from "@/lib/ep";
+import type { GearEnhancement, GearItem, WeightProfile } from "@/domain/gear";
 
 interface EnchantEditorModalProps {
   item: GearItem;

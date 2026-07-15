@@ -12,7 +12,7 @@ import {
   type HybridScalingRule,
   type StatKey,
   type StatMap,
-} from "@/types/gear";
+} from "@/domain/gear";
 
 export const BUILD_STORAGE_KEY = "ascension-armory:planner-build";
 export const LEGACY_BUILD_STORAGE_KEY = "conquest-gear:planner-build";

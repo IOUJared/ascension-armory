@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { ascensionIconUrl } from "@/lib/icons";
-import type { EquipmentSlot, GearItem } from "@/types/gear";
+import type { EquipmentSlot, GearItem } from "@/domain/gear";
 
 const wearableLayers: Array<{ slot: EquipmentSlot; placement: string }> = [
   { slot: "BACK", placement: "cloak" },

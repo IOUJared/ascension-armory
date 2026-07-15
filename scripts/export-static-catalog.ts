@@ -1,7 +1,7 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { prisma } from "../src/lib/db";
-import type { GearAcquisitionSource, GearItem, StatMap } from "../src/types/gear";
+import type { GearAcquisitionSource, GearItem, StatMap } from "../src/domain/gear";
 import catalogAdditions from "../src/data/catalog-additions.json";
 import worldforgedItems from "../src/data/worldforged-items.json";
 import worldforgedUpgrades from "../src/data/worldforged-upgrades.json";

@@ -1,4 +1,4 @@
-import type { StatMap } from "@/types/gear";
+import type { StatMap } from "@/domain/gear";
 
 export type GearContext = "pve" | "pvp";
 

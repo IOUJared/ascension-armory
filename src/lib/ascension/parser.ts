@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import type { EquipmentSlot, StatKey } from "@/types/gear";
+import type { EquipmentSlot, StatKey } from "@/domain/gear";
 
 export interface ParsedAscensionItem {
   id: bigint;

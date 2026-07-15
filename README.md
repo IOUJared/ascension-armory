@@ -215,23 +215,36 @@ src/
 │   ├── gear-import-modal.tsx    Addon instructions and AA1 import flow
 │   └── item-picker-modal.tsx    Ranking and side-by-side comparison
 ├── data/demo-items.ts           Zero-setup development fixture
+├── domain/gear/
+│   ├── vocabulary.ts            Slots, stat keys and display labels
+│   ├── types.ts                 Gear, enhancement and acquisition models
+│   ├── stats.ts                 Stat composition and hybrid scaling
+│   ├── eligibility.ts           Character-level equipment rules
+│   ├── scoring.ts               EP profiles, caps and Ascension Power
+│   └── comparison.ts            Ranking and stat deltas
 ├── lib/
 │   ├── ascension/               Fetch, parse and transactional store adapter
 │   ├── items/static-catalog.ts  Browser-side static catalog lookup
 │   ├── items/repository.ts      PostgreSQL catalog-generation lookup
-│   ├── db.ts                    Shared Prisma client
-│   └── ep.ts                    EP, caps, enhancements and hybrid scaling
-└── types/gear.ts                Domain types and slot/stat vocabulary
+│   └── db.ts                    Shared Prisma client
+└── types/coa.ts                 CoA class and specialization contracts
 prisma/
 ├── schema.prisma                PostgreSQL schema
 └── seed.ts                      Stat definitions
 scripts/ingest-items.ts          Rate-limited ingestion CLI
 scripts/export-static-catalog.ts PostgreSQL-to-static-catalog exporter
+tooling/validation/              Published-catalog integrity checks
 addon/AscensionArmoryExporter/   In-game level and equipment exporter
+tests/                           Domain and data regression suite
 ```
 
 ## Calculation model
 
-`resolveItemStats` composes base stats, armor/weapon DPS, effect estimates, inserted gems/REs, per-level scaling and hybrid conversion rules. `calculateEp` then applies user weights and optional soft/hard caps. This separates raw item truth from specialization-specific interpretation across Conquest of Azeroth's original classes.
+`resolveItemStats` composes base stats, armor/weapon DPS, effect estimates, inserted gems/REs, per-level scaling and hybrid conversion rules. `calculateEp` then applies user weights and optional soft/hard caps. This separates raw item truth from specialization-specific interpretation across Conquest of Azeroth's 21 classes.
 
-Mystic Enchants and gems are normalized in PostgreSQL. `scalingFormula`, `hybridRule`, and `customData` are JSONB escape hatches for mechanics that cannot be represented as flat stats; deterministic mechanics should be promoted into typed rules in `src/lib/ep.ts` as they are verified in-game.
+The gear domain is deliberately framework-free. ESLint prevents it from
+importing React, Next.js, Prisma, application components, or infrastructure
+libraries, so the same rules remain reusable by the browser, tests, and catalog
+tooling.
+
+Mystic Enchants and gems are normalized in PostgreSQL. `scalingFormula`, `hybridRule`, and `customData` are JSONB escape hatches for mechanics that cannot be represented as flat stats; deterministic mechanics should be promoted into the pure modules in `src/domain/gear/` as they are verified in-game.

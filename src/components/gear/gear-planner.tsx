@@ -3,12 +3,11 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Check, ChevronDown, EyeOff, RotateCcw, Save, Settings2, Sparkles, Trash2, Upload, X } from "lucide-react";
 import { isCoASelection, resolveCoAProfile } from "@/lib/coa";
-import { calculateEp, isSystemPowerKey, resolveItemStats, scoreItem, withoutSystemPowerWeights, type WeightProfile } from "@/lib/ep";
+import { calculateEp, isSystemPowerKey, resolveItemStats, scoreItem, STAT_LABELS, withoutSystemPowerWeights, type EquipmentSlot, type GearItem, type StatKey, type StatMap, type WeightProfile } from "@/domain/gear";
 import { findStaticItemsForSlot } from "@/lib/items/static-catalog";
 import { applyRecommendedEnchant, findEnchantsForItem } from "@/lib/enchants";
 import { BUILD_STORAGE_KEY, LEGACY_BUILD_STORAGE_KEY, LEGACY_PROFILE_STORAGE_KEY, makePlannerBuild, parsePlannerBuild } from "@/lib/planner-storage";
 import type { CoASelection } from "@/types/coa";
-import { STAT_LABELS, type EquipmentSlot, type GearItem, type StatKey, type StatMap } from "@/types/gear";
 import { ItemPickerModal } from "./item-picker-modal";
 import { GameItemIcon } from "./game-item-icon";
 import { GearImportModal } from "./gear-import-modal";

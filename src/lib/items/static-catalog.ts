@@ -1,5 +1,4 @@
-import type { EquipmentSlot, GearItem } from "@/types/gear";
-import { canEquipItemAtLevel } from "@/lib/ep";
+import { canEquipItemAtLevel, type EquipmentSlot, type GearItem } from "@/domain/gear";
 
 interface StaticCatalog {
   generatedAt: string;

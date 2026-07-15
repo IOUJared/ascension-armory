@@ -1,4 +1,4 @@
-import type { EquipmentSlot, GearItem } from "../src/types/gear";
+import type { EquipmentSlot, GearItem } from "../src/domain/gear";
 
 export function makeGearItem(overrides: Partial<GearItem> = {}): GearItem {
   return {

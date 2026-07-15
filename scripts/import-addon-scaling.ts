@@ -3,7 +3,7 @@ import { readFile } from "node:fs/promises";
 import { Prisma } from "@prisma/client";
 import { prisma } from "../src/lib/db";
 import { API_STAT_KEYS } from "../src/lib/gear-import";
-import type { StatKey, StatMap } from "../src/types/gear";
+import type { StatKey, StatMap } from "../src/domain/gear";
 
 interface ScaleSnapshot {
   itemId: string;

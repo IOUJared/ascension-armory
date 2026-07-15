@@ -8,7 +8,7 @@ import {
   resolveItemStats,
   scoreItem,
   statDelta,
-} from "../src/lib/ep";
+} from "../src/domain/gear";
 import { makeGearItem } from "./fixtures";
 
 test("exact level snapshots replace base stats, armor, and weapon DPS", () => {

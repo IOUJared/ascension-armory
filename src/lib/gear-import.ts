@@ -1,4 +1,4 @@
-import { EQUIPMENT_SLOTS, type EquipmentSlot, type GearItem, type StatKey, type StatMap } from "@/types/gear";
+import { EQUIPMENT_SLOTS, type EquipmentSlot, type GearItem, type StatKey, type StatMap } from "@/domain/gear";
 
 interface ImportedItemSnapshot {
   name: string;

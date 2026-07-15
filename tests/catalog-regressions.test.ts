@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
-import type { GearItem } from "../src/types/gear";
+import type { GearItem } from "../src/domain/gear";
 
 interface CatalogDocument {
   generatedAt: string;

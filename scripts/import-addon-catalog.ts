@@ -3,7 +3,7 @@ import { readFile } from "node:fs/promises";
 import { EquipmentSlot, ItemQuality, Prisma } from "@prisma/client";
 import { prisma } from "../src/lib/db";
 import { API_STAT_KEYS } from "../src/lib/gear-import";
-import type { StatKey } from "../src/types/gear";
+import type { StatKey } from "../src/domain/gear";
 
 const QUALITY: ItemQuality[] = ["POOR", "COMMON", "UNCOMMON", "RARE", "EPIC", "LEGENDARY", "ARTIFACT", "HEIRLOOM"];
 const SLOT: Record<string, EquipmentSlot> = {

@@ -5,7 +5,7 @@ import { Check, ClipboardPaste, Download, LoaderCircle, Upload, X } from "lucide
 import { parseGearImport } from "@/lib/gear-import";
 import { findStaticItemsById } from "@/lib/items/static-catalog";
 import { enchantEnhancement, findEnchantByEnchantmentId } from "@/lib/enchants";
-import type { GearItem } from "@/types/gear";
+import type { GearItem } from "@/domain/gear";
 
 interface GearImportModalProps {
   onImport: (level: number, loadout: Record<string, GearItem>) => void;

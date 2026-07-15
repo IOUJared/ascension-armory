@@ -1,6 +1,5 @@
 import enchantData from "@/data/coa-enchants.json";
-import { calculateEp, type WeightProfile } from "@/lib/ep";
-import type { EquipmentSlot, GearEnhancement, GearItem, StatMap } from "@/types/gear";
+import { calculateEp, type EquipmentSlot, type GearEnhancement, type GearItem, type StatMap, type WeightProfile } from "@/domain/gear";
 
 export interface CoAEnchant {
   id: string;

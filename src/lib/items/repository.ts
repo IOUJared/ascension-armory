@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/db";
-import type { EquipmentSlot, GearItem, StatMap } from "@/types/gear";
+import type { EquipmentSlot, GearItem, StatMap } from "@/domain/gear";
 
 function baseSlot(slot: EquipmentSlot): EquipmentSlot[] {
   if (slot.startsWith("FINGER")) return ["FINGER_1", "FINGER_2"];

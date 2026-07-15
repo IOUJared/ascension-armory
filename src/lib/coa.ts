@@ -1,6 +1,6 @@
 import classData from "@/data/coa-classes.json";
 import type { CoAClass, CoAProfile, CoASelection, CoASpec } from "@/types/coa";
-import type { StatKey, StatMap } from "@/types/gear";
+import type { StatKey, StatMap } from "@/domain/gear";
 
 export const COA_CLASSES = classData.classes as CoAClass[];
 export const COA_DATA_SOURCE = classData.source;
