@@ -19,10 +19,15 @@ Run the complete source and catalog safety net before committing a UI or data-pi
 npm run check
 ```
 
-This runs TypeScript, ESLint, the calculation/import/storage regression tests,
-and structural validation of the published item catalog. `npm run build` remains
-the final static-export check. The GitHub Pages workflow runs both commands
-before deployment.
+This runs TypeScript, ESLint, the calculation/import/storage/catalog repository
+regression tests, and structural validation of the published item catalog.
+`npm run build` remains the final static-export check.
+
+The GitHub Pages workflow also runs `npm run test:browser` against the completed
+`out/` export in headless Firefox. That smoke test selects a class and
+specialization, opens a gear slot, verifies that real catalog rows render,
+equips an item, and reloads the page to confirm the saved build is restored.
+The Pages artifact is uploaded only after all three layers pass.
 
 Catalog validation can also be run independently. It rejects truncated exports,
 duplicate item IDs, unknown stat keys, malformed scaling snapshots, invalid

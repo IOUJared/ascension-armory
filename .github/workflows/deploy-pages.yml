@@ -39,6 +39,19 @@ jobs:
       - name: Build static site
         run: npm run build
 
+      - name: Set up Firefox
+        uses: browser-actions/setup-firefox@v1
+        with:
+          firefox-version: latest
+
+      - name: Set up geckodriver
+        uses: browser-actions/setup-geckodriver@v1
+        with:
+          geckodriver-version: "0.36.0"
+
+      - name: Smoke test built planner in Firefox
+        run: npm run test:browser
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v5
         with:
