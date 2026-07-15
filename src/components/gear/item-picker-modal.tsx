@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { ArrowRight, Check, EyeOff, Gem, Search, Sparkles, TrendingUp, X } from "lucide-react";
-import { compareScoredItems, contextualPower, isSystemPowerKey, scoreItem, statDelta, type WeightProfile } from "@/lib/ep";
+import { canEquipItemAtLevel, compareScoredItems, contextualPower, isSystemPowerKey, scoreItem, statDelta, type WeightProfile } from "@/lib/ep";
 import type { GearContext } from "@/types/coa";
 import { STAT_LABELS, type EquipmentSlot, type GearItem, type ScoredItem, type StatKey } from "@/types/gear";
 import { GameItemIcon } from "./game-item-icon";
@@ -77,7 +77,7 @@ export function ItemPickerModal({ slot, equipped, candidates, loading = false, l
   const powerMode = level >= 60 && Boolean(context);
   const equippedPower = equippedScore ? contextualPower(equippedScore.resolvedStats, level, context) : 0;
   const ranked = useMemo(() => candidates
-    .filter((item) => item.name.toLowerCase().includes(search.toLowerCase()))
+    .filter((item) => canEquipItemAtLevel(item, level) && item.name.toLowerCase().includes(search.toLowerCase()))
     .map((item) => scoreItem(item, level, profile))
     .sort((a, b) => compareScoredItems(a, b, level, context)), [candidates, context, level, profile, search]);
   const [selectedId, setSelectedId] = useState<string | undefined>(ranked[0]?.id);
@@ -119,6 +119,7 @@ export function ItemPickerModal({ slot, equipped, candidates, loading = false, l
                     <span className={`block truncate text-sm font-semibold ${qualityClass[item.quality]}`}>{item.name}</span>
                     <span className="mt-1 flex flex-wrap items-center gap-1.5 text-xs text-stone-500">
                       <span>iLvl {item.itemLevel}</span>
+                      <span>Requires L{item.requiredLevel}</span>
                       {hasExactScale ? <span className="scaled-badge">Scaled L{level}</span> : null}
                       {item.worldforged ? <span className="worldforged-badge">Worldforged</span> : null}
                       {item.dungeonTier ? <span className="dungeon-badge">{item.dungeonTier} dungeon</span> : null}
@@ -135,7 +136,7 @@ export function ItemPickerModal({ slot, equipped, candidates, loading = false, l
               );
             })}
             {loading ? <div className="p-10 text-center text-sm text-stone-500">Querying the equipment vault…</div> : null}
-            {!loading && !ranked.length ? <div className="p-10 text-center text-sm text-stone-500">No matching items.</div> : null}
+            {!loading && !ranked.length ? <div className="p-10 text-center text-sm text-stone-500">No equippable matching items at level {level}.</div> : null}
           </div>
 
           {selected ? (
@@ -151,7 +152,7 @@ export function ItemPickerModal({ slot, equipped, candidates, loading = false, l
                 <div className="hidden pt-16 text-amber-500 sm:block"><ArrowRight size={20} /></div>
                 <article className="compare-card candidate-card">
                   <p className="eyebrow text-amber-400">Potential upgrade</p>
-                  <div className="mt-4 flex items-center gap-3"><ItemIcon item={selected} size="lg" /><div><h3 className={`font-semibold ${qualityClass[selected.quality]}`}>{selected.name}</h3><p className="flex flex-wrap items-center gap-2 text-xs text-stone-500">Item level {selected.itemLevel}{selected.worldforged ? <span className="worldforged-badge">Worldforged</span> : null}{selected.dungeonTier ? <span className="dungeon-badge">{selected.dungeonTier} dungeon</span> : null}<SourceBadge item={selected} /></p></div></div>
+                  <div className="mt-4 flex items-center gap-3"><ItemIcon item={selected} size="lg" /><div><h3 className={`font-semibold ${qualityClass[selected.quality]}`}>{selected.name}</h3><p className="flex flex-wrap items-center gap-2 text-xs text-stone-500">Item level {selected.itemLevel} · Requires level {selected.requiredLevel}{selected.worldforged ? <span className="worldforged-badge">Worldforged</span> : null}{selected.dungeonTier ? <span className="dungeon-badge">{selected.dungeonTier} dungeon</span> : null}<SourceBadge item={selected} /></p></div></div>
                   <div className="my-4 h-px bg-white/7" /><StatLines item={selected} compareTo={equippedScore} level={level} context={context} />
                 </article>
               </div>

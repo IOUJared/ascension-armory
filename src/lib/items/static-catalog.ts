@@ -1,4 +1,5 @@
 import type { EquipmentSlot, GearItem } from "@/types/gear";
+import { canEquipItemAtLevel } from "@/lib/ep";
 
 interface StaticCatalog {
   generatedAt: string;
@@ -32,8 +33,7 @@ export async function findStaticItemsForSlot(slot: EquipmentSlot, level: number)
   const catalog = await loadCatalog();
   return catalog.items
     .filter((item) => {
-      const scaled = item.scaleSnapshots?.find((snapshot) => snapshot.effectiveLevel === level);
-      return matchesSlot(item.slot, slot) && (scaled?.requiredLevel ?? item.requiredLevel) <= level;
+      return matchesSlot(item.slot, slot) && canEquipItemAtLevel(item, level);
     })
     .map((item) => item.slot === slot ? item : { ...item, slot });
 }

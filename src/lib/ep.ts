@@ -34,6 +34,15 @@ export function resolveItemStats(item: GearItem, level: number, profileRules: Hy
   return resolved;
 }
 
+export function requiredLevelAt(item: GearItem, level: number): number {
+  return item.scaleSnapshots?.find((snapshot) => snapshot.effectiveLevel === level)?.requiredLevel
+    ?? item.requiredLevel;
+}
+
+export function canEquipItemAtLevel(item: GearItem, level: number): boolean {
+  return requiredLevelAt(item, level) <= level;
+}
+
 function applyHybridRules(stats: StatMap, rules: HybridScalingRule[]): void {
   for (const rule of rules) {
     const converted = Math.min((stats[rule.source] ?? 0) * rule.coefficient, rule.cap ?? Number.POSITIVE_INFINITY);
