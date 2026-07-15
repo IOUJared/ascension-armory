@@ -1,9 +1,9 @@
 import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { EquipmentSlot, ItemQuality, Prisma } from "@prisma/client";
-import { prisma } from "../src/lib/db";
-import { API_STAT_KEYS } from "../src/lib/gear-import";
-import type { StatKey } from "../src/domain/gear";
+import { prisma } from "../../src/lib/db";
+import type { StatKey } from "../../src/domain/gear";
+import { decodeAddonField, finiteNumber, parseAddonStats, renderedTooltipArmor } from "./addon-snapshot";
 
 const QUALITY: ItemQuality[] = ["POOR", "COMMON", "UNCOMMON", "RARE", "EPIC", "LEGENDARY", "ARTIFACT", "HEIRLOOM"];
 const SLOT: Record<string, EquipmentSlot> = {
@@ -39,46 +39,19 @@ interface Snapshot {
   subClassID: number;
 }
 
-function decode(value: string): string {
-  try { return decodeURIComponent(value); } catch { return value; }
-}
-
-function number(value: string): number {
-  const parsed = Number(value);
-  return Number.isFinite(parsed) ? parsed : 0;
-}
-
-function renderedTooltipArmor(tooltip: string): number | undefined {
-  const clean = tooltip.replace(/\|c[0-9a-f]{8}/gi, "").replaceAll("|r", "");
-  for (const column of clean.split(/[\n\t]/)) {
-    const match = column.match(/^\s*(\d+)\s+armor\s*$/i);
-    if (match) return number(match[1]);
-  }
-  return undefined;
-}
-
 function parse(line: string): Snapshot | null {
   const fields = line.split("~");
   if (fields[0] !== "AAI1" || !/^\d+$/.test(fields[1] ?? "") || fields.length < 19) return null;
-  const quality = QUALITY[number(fields[3])] ?? "COMMON";
-  const stats: Partial<Record<StatKey, number>> = {};
-  const rawStats: Record<string, number> = {};
-  for (const pair of (fields[14] ?? "").split(",")) {
-    const separator = pair.lastIndexOf(":");
-    const rawKey = pair.slice(0, separator);
-    const key = API_STAT_KEYS[rawKey];
-    const value = number(pair.slice(separator + 1));
-    if (separator > 0) rawStats[rawKey] = value;
-    if (separator > 0 && key && value) stats[key] = (stats[key] ?? 0) + value;
-  }
+  const quality = QUALITY[finiteNumber(fields[3])] ?? "COMMON";
+  const { stats, rawStats } = parseAddonStats(fields[14] ?? "");
   return {
-    id: fields[1], link: decode(fields[2]), quality,
-    itemLevel: number(fields[4]), requiredLevel: number(fields[5]),
-    itemType: decode(fields[6]), itemSubType: decode(fields[7]),
-    equipLocation: decode(fields[8]), icon: decode(fields[9]).toLowerCase(),
-    name: decode(fields[10]), pvePower: number(fields[11]), pvpPower: number(fields[12]),
-    playerLevel: number(fields[13]), stats, rawStats, tooltip: decode(fields[15]),
-    inventoryType: number(fields[16]), classID: number(fields[17]), subClassID: number(fields[18]),
+    id: fields[1], link: decodeAddonField(fields[2]), quality,
+    itemLevel: finiteNumber(fields[4]), requiredLevel: finiteNumber(fields[5]),
+    itemType: decodeAddonField(fields[6]), itemSubType: decodeAddonField(fields[7]),
+    equipLocation: decodeAddonField(fields[8]), icon: decodeAddonField(fields[9]).toLowerCase(),
+    name: decodeAddonField(fields[10]), pvePower: finiteNumber(fields[11]), pvpPower: finiteNumber(fields[12]),
+    playerLevel: finiteNumber(fields[13]), stats, rawStats, tooltip: decodeAddonField(fields[15]),
+    inventoryType: finiteNumber(fields[16]), classID: finiteNumber(fields[17]), subClassID: finiteNumber(fields[18]),
   };
 }
 

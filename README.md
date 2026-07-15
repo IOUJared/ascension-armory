@@ -245,8 +245,10 @@ src/
 prisma/
 ├── schema.prisma                PostgreSQL schema
 └── seed.ts                      Stat definitions
-scripts/ingest-items.ts          Rate-limited ingestion CLI
-scripts/export-static-catalog.ts PostgreSQL-to-static-catalog exporter
+tooling/extraction/              Client, realm-cache and AtlasLoot decoders
+tooling/importers/               Normalized PostgreSQL import adapters
+tooling/enrichment/              Source joins and candidate generation
+tooling/exporters/               PostgreSQL-to-static-catalog exporter
 tooling/catalog/                 Static catalog distribution writers
 tooling/validation/              Published-catalog integrity checks
 addon/AscensionArmoryExporter/   In-game level and equipment exporter

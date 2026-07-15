@@ -2,7 +2,7 @@ import { createReadStream } from "node:fs";
 import { createGunzip } from "node:zlib";
 import { createInterface } from "node:readline";
 import { EquipmentSlot, ItemQuality, Prisma } from "@prisma/client";
-import { prisma } from "../src/lib/db";
+import { prisma } from "../../src/lib/db";
 
 interface ExtractedItem {
   id: string;

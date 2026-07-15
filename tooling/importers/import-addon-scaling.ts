@@ -1,9 +1,9 @@
 import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { Prisma } from "@prisma/client";
-import { prisma } from "../src/lib/db";
-import { API_STAT_KEYS } from "../src/lib/gear-import";
-import type { StatKey, StatMap } from "../src/domain/gear";
+import { prisma } from "../../src/lib/db";
+import type { StatKey, StatMap } from "../../src/domain/gear";
+import { decodeAddonField, finiteNumber, parseAddonStats } from "./addon-snapshot";
 
 interface ScaleSnapshot {
   itemId: string;
@@ -17,39 +17,20 @@ interface ScaleSnapshot {
   sourceRealm: string;
 }
 
-function decode(value: string): string {
-  try { return decodeURIComponent(value); } catch { return value; }
-}
-
-function number(value: string): number {
-  const parsed = Number(value);
-  return Number.isFinite(parsed) ? parsed : 0;
-}
-
 function parse(line: string): ScaleSnapshot | null {
   const fields = line.split("~");
   if (fields[0] !== "AAS1" || !/^\d+$/.test(fields[1] ?? "") || fields.length < 12) return null;
-  const stats: StatMap = {};
-  const rawStats: Record<string, number> = {};
-  for (const pair of (fields[7] ?? "").split(",")) {
-    const separator = pair.lastIndexOf(":");
-    if (separator < 1) continue;
-    const rawKey = pair.slice(0, separator);
-    const value = number(pair.slice(separator + 1));
-    const key = API_STAT_KEYS[rawKey];
-    rawStats[rawKey] = value;
-    if (key && value) stats[key] = (stats[key] ?? 0) + value;
-  }
+  const { stats, rawStats } = parseAddonStats(fields[7] ?? "");
   return {
     itemId: fields[1],
-    effectiveLevel: number(fields[2]),
-    link: decode(fields[3]),
-    itemLevel: number(fields[4]),
-    requiredLevel: Math.max(1, number(fields[5])),
-    capturedPlayerLevel: number(fields[6]),
+    effectiveLevel: finiteNumber(fields[2]),
+    link: decodeAddonField(fields[3]),
+    itemLevel: finiteNumber(fields[4]),
+    requiredLevel: Math.max(1, finiteNumber(fields[5])),
+    capturedPlayerLevel: finiteNumber(fields[6]),
     stats,
     rawStats,
-    sourceRealm: decode(fields[8]),
+    sourceRealm: decodeAddonField(fields[8]),
   };
 }
 

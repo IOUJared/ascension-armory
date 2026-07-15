@@ -1,8 +1,8 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import type { EquipmentSlot, ItemQuality, Prisma } from "@prisma/client";
-import { prisma } from "../src/lib/db";
-import atlasLoot from "../src/data/atlasloot-coa-items.json";
+import { prisma } from "../../src/lib/db";
+import atlasLoot from "../../src/data/atlasloot-coa-items.json";
 
 type DungeonTier = "NORMAL" | "HEROIC" | "MYTHIC";
 

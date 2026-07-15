@@ -1,12 +1,12 @@
 import { resolve } from "node:path";
-import { prisma } from "../src/lib/db";
-import type { GearAcquisitionSource, GearItem, StatMap } from "../src/domain/gear";
-import catalogAdditions from "../src/data/catalog-additions.json";
-import worldforgedItems from "../src/data/worldforged-items.json";
-import worldforgedUpgrades from "../src/data/worldforged-upgrades.json";
-import atlasLootItems from "../src/data/atlasloot-coa-items.json";
-import dungeonVariants from "../src/data/dungeon-variants.json";
-import { writeCatalogAssets } from "../tooling/catalog/write-catalog-assets";
+import { prisma } from "../../src/lib/db";
+import type { GearAcquisitionSource, GearItem, StatMap } from "../../src/domain/gear";
+import catalogAdditions from "../../src/data/catalog-additions.json";
+import worldforgedItems from "../../src/data/worldforged-items.json";
+import worldforgedUpgrades from "../../src/data/worldforged-upgrades.json";
+import atlasLootItems from "../../src/data/atlasloot-coa-items.json";
+import dungeonVariants from "../../src/data/dungeon-variants.json";
+import { writeCatalogAssets } from "../catalog/write-catalog-assets";
 
 const outputPath = resolve(process.cwd(), process.argv[2] ?? "public/data/coa-items.json");
 

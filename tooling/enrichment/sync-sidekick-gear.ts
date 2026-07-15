@@ -1,5 +1,5 @@
 import { StatSource } from "@prisma/client";
-import { prisma } from "../src/lib/db";
+import { prisma } from "../../src/lib/db";
 
 const SOURCE_URL = "https://ascensionsidekick.com/data.js";
 const PREFIX = "window.ASC = ";

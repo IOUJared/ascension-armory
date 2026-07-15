@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
-import { AscensionDbClient } from "../src/lib/ascension/client";
-import { storeAscensionItem } from "../src/lib/ascension/store";
-import { prisma } from "../src/lib/db";
+import { AscensionDbClient } from "../../src/lib/ascension/client";
+import { storeAscensionItem } from "../../src/lib/ascension/store";
+import { prisma } from "../../src/lib/db";
 
 function parseArgs(argv: string[]): string[] {
   const idsIndex = argv.indexOf("--ids");

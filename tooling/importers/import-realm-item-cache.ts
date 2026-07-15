@@ -2,7 +2,7 @@ import { createReadStream } from "node:fs";
 import { createGunzip } from "node:zlib";
 import { createInterface } from "node:readline";
 import { EquipmentSlot, ItemQuality, Prisma, SocketColor } from "@prisma/client";
-import { prisma } from "../src/lib/db";
+import { prisma } from "../../src/lib/db";
 
 interface RealmCacheItem {
   id: string;

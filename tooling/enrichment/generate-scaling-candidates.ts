@@ -1,7 +1,7 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { Prisma } from "@prisma/client";
-import { prisma } from "../src/lib/db";
+import { prisma } from "../../src/lib/db";
 
 interface ScalingCandidate {
   id: string;

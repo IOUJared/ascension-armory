@@ -1,7 +1,7 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { Prisma } from "@prisma/client";
-import { prisma } from "../src/lib/db";
+import { prisma } from "../../src/lib/db";
 
 interface UpgradeRow {
   id: string;
