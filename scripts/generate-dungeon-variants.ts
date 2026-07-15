@@ -12,6 +12,7 @@ interface AtlasEntry {
   sourceFile: string;
   section: string;
   kind: string;
+  sourceType?: string;
 }
 
 interface ItemRow {
@@ -31,17 +32,18 @@ function displayId(item: ItemRow): number | null {
 }
 
 function tier(item: ItemRow): DungeonTier | null {
-  const marker = item.rawTooltipHtml.match(/^@([^@]+)@/)?.[1] ?? "";
-  if (item.itemLevel === 57 && item.rawTooltipHtml.trim() === "") return "NORMAL";
-  if (item.itemLevel === 61 && (marker === "Heroic Dungeon" || marker === "Heroic")) return "HEROIC";
-  if (item.itemLevel === 64 && (marker === "Mythic Dungeon" || marker === "Mythic")) return "MYTHIC";
+  // Direct live scans replace the client marker tooltip, so difficulty must
+  // remain recoverable from the generated tier's fixed item level.
+  if (item.itemLevel === 57) return "NORMAL";
+  if (item.itemLevel === 61) return "HEROIC";
+  if (item.itemLevel === 64) return "MYTHIC";
   return null;
 }
 
 async function main(): Promise<void> {
   const outputPath = resolve(process.argv[2] ?? "src/data/dungeon-variants.json");
   const entries = (atlasLoot.items as AtlasEntry[]).filter((item) =>
-    item.kind === "atlasloot-entry" && item.sourceFile.endsWith("/Instances.lua"));
+    item.kind === "atlasloot-entry" && item.sourceType === "DUNGEON" && item.section);
   const sectionById = new Map(entries.map((item) => [item.id, item.section]));
   const baseRows = await prisma.item.findMany({
     where: { id: { in: entries.map((item) => BigInt(item.id)) }, slot: { not: null } },
@@ -52,11 +54,16 @@ async function main(): Promise<void> {
   }) as ItemRow[];
 
   const baseFamilies = new Map<string, ItemRow[]>();
+  const baseFamiliesByNameSlot = new Map<string, ItemRow[]>();
   for (const item of baseRows) {
     const key = `${item.name}\u0000${item.slot}\u0000${displayId(item) ?? 0}`;
     const family = baseFamilies.get(key) ?? [];
     family.push(item);
     baseFamilies.set(key, family);
+    const nameSlotKey = `${item.name}\u0000${item.slot}`;
+    const nameSlotFamily = baseFamiliesByNameSlot.get(nameSlotKey) ?? [];
+    nameSlotFamily.push(item);
+    baseFamiliesByNameSlot.set(nameSlotKey, nameSlotFamily);
   }
   const names = [...new Set(baseRows.map((item) => item.name))];
   const possibleVariants: ItemRow[] = [];
@@ -65,7 +72,6 @@ async function main(): Promise<void> {
       where: {
         name: { in: names.slice(offset, offset + 500) },
         slot: { not: null },
-        sourceRealm: "ASCENSION_CLIENT_ALL_REALMS",
         itemLevel: { in: [57, 61, 64] },
       },
       select: {
@@ -90,7 +96,11 @@ async function main(): Promise<void> {
     const dungeonTier = tier(item);
     if (!dungeonTier) continue;
     const key = `${item.name}\u0000${item.slot}\u0000${displayId(item) ?? 0}`;
-    const family = baseFamilies.get(key)?.filter((base) => base.id !== item.id);
+    // A live scan replaces rawPayload and can omit ItemDisplayInfo. Fall back
+    // to the exact name/slot family so rescanning does not erase a known tier.
+    const family = (baseFamilies.get(key)
+      ?? baseFamiliesByNameSlot.get(`${item.name}\u0000${item.slot}`))
+      ?.filter((base) => base.id !== item.id);
     if (!family?.length) continue;
     const base = family.sort((left, right) => left.itemLevel - right.itemLevel || Number(left.id - right.id))[0];
     variants.set(item.id.toString(), {

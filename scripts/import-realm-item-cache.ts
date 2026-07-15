@@ -38,12 +38,25 @@ async function main(): Promise<void> {
   const lines = createInterface({ input: source, crlfDelay: Number.POSITIVE_INFINITY });
   let batch: RealmCacheItem[] = [];
   let imported = 0;
+  let skippedAuthoritative = 0;
 
   async function flush(): Promise<void> {
     if (!batch.length) return;
     const current = batch;
     batch = [];
-    await prisma.$transaction(current.flatMap((item) => {
+    // A refreshed WDB must never downgrade a direct GetItemStats capture.
+    const protectedRows = await prisma.item.findMany({
+      where: {
+        id: { in: current.map((item) => BigInt(item.id)) },
+        sourceUrl: { startsWith: "ingame-scan://" },
+      },
+      select: { id: true },
+    });
+    const protectedIds = new Set(protectedRows.map((item) => item.id.toString()));
+    const ingestible = current.filter((item) => !protectedIds.has(item.id));
+    skippedAuthoritative += current.length - ingestible.length;
+    if (!ingestible.length) return;
+    await prisma.$transaction(ingestible.flatMap((item) => {
       const id = BigInt(item.id);
       const data = {
         name: item.name,
@@ -78,7 +91,7 @@ async function main(): Promise<void> {
       ];
     }));
 
-    await prisma.$transaction(current.flatMap((item) => {
+    await prisma.$transaction(ingestible.flatMap((item) => {
       const itemId = BigInt(item.id);
       const operations: Prisma.PrismaPromise<unknown>[] = [];
       const stats = Object.entries(item.stats).filter(([, value]) => Number.isFinite(value) && value !== 0);
@@ -96,8 +109,8 @@ async function main(): Promise<void> {
       }
       return operations;
     }));
-    imported += current.length;
-    if (imported % 1_000 === 0 || current.length < BATCH_SIZE) console.log(`imported ${imported.toLocaleString()} current-realm items`);
+    imported += ingestible.length;
+    if (imported % 1_000 === 0 || current.length < BATCH_SIZE) console.log(`imported ${imported.toLocaleString()} cache items; preserved ${skippedAuthoritative.toLocaleString()} live scans`);
   }
 
   for await (const line of lines) {
@@ -108,7 +121,7 @@ async function main(): Promise<void> {
     if (batch.length >= BATCH_SIZE) await flush();
   }
   await flush();
-  console.log(JSON.stringify({ imported, source: "Rexxar - Conquest of Azeroth itemcache.wdb" }));
+  console.log(JSON.stringify({ imported, skippedAuthoritative, source: "Conquest of Azeroth itemcache.wdb (provisional discovery)" }));
 }
 
 main().finally(() => prisma.$disconnect());

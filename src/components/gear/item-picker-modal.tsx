@@ -33,8 +33,8 @@ function SourceBadge({ item }: { item: GearItem }) {
   const label = item.dataSource === "COA_INGAME_SCAN" ? "In-game verified"
     : item.dataSource === "USER_VERIFIED" ? "Tooltip verified"
       : item.dataSource === "PLAYER_IMPORT" ? "Player import"
-        : "CoA base template";
-  return <span className={`source-badge ${item.dataSource === "COA_INGAME_SCAN" || item.dataSource === "USER_VERIFIED" ? "verified" : ""}`}>{label}</span>;
+        : "Cache stats provisional";
+  return <span className={`source-badge ${item.dataSource === "COA_INGAME_SCAN" || item.dataSource === "USER_VERIFIED" ? "verified" : item.dataSource === "COA_REALM_CACHE" ? "provisional" : ""}`}>{label}</span>;
 }
 
 const acquisitionLabels: Record<NonNullable<GearItem["acquisition"]>["type"], string> = {
@@ -96,6 +96,7 @@ function StatLines({ item, compareTo, level, context }: { item: ScoredItem; comp
 export function ItemPickerModal({ slot, equipped, candidates, loading = false, level, profile, context, profileLabel, onEquip, onClose }: ItemPickerModalProps) {
   const [search, setSearch] = useState("");
   const equippedScore = equipped ? scoreItem(equipped, level, profile) : undefined;
+  const slotEnchant = equipped?.enhancements?.find((enhancement) => enhancement.kind === "ENCHANT");
   const powerMode = level >= 60 && Boolean(context);
   const equippedPower = equippedScore ? contextualPower(equippedScore.resolvedStats, level, context) : 0;
   const ranked = useMemo(() => {
@@ -105,9 +106,13 @@ export function ItemPickerModal({ slot, equipped, candidates, loading = false, l
       && equipped.name.toLowerCase().includes(search.toLowerCase())
       && !matchingCandidates.some((item) => item.id === equipped.id);
     return [...matchingCandidates, ...(includeEquipped ? [equipped] : [])]
+      .map((item) => slotEnchant ? {
+        ...item,
+        enhancements: [...(item.enhancements ?? []).filter((enhancement) => enhancement.kind !== "ENCHANT"), slotEnchant],
+      } : item)
       .map((item) => scoreItem(item, level, profile))
       .sort((a, b) => compareScoredItems(a, b, level, context));
-  }, [candidates, context, equipped, level, profile, search]);
+  }, [candidates, context, equipped, level, profile, search, slotEnchant]);
   const [selectedId, setSelectedId] = useState<string | undefined>(equipped?.id ?? ranked[0]?.id);
   const selected = ranked.find((item) => item.id === selectedId) ?? ranked[0];
   const selectedPowerDelta = selected ? contextualPower(selected.resolvedStats, level, context) - equippedPower : 0;
@@ -121,7 +126,7 @@ export function ItemPickerModal({ slot, equipped, candidates, loading = false, l
             <div>
               <p className="eyebrow">Equipment vault</p>
               <h2 className="mt-1 font-display text-2xl text-stone-100">Choose {slot.replace("_", " ").toLowerCase()}</h2>
-              <p className="mt-1 text-sm text-stone-500">Ranked for {profileLabel ?? "your live EP weights"} · Level {level}{level >= 60 && context ? ` · ${context.toUpperCase()} Power first, EP second` : " · EP only"}</p>
+              <p className="mt-1 text-sm text-stone-500">Verified gear first · Ranked for {profileLabel ?? "your live EP weights"} · Level {level}{level >= 60 && context ? ` · ${context.toUpperCase()} Power, then EP` : " · EP"}</p>
             </div>
             <button className="icon-button" onClick={onClose} aria-label="Close item picker"><X size={18} /></button>
           </div>
@@ -195,7 +200,8 @@ export function ItemPickerModal({ slot, equipped, candidates, loading = false, l
               <AcquisitionCard item={selected} />
 
               <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                <div className="mechanic-tile"><Sparkles size={16} /><div><p>Mystic Enchant</p><span>{selected.enhancements?.[0]?.name ?? "No RE inserted"}</span></div></div>
+                <div className="mechanic-tile"><Sparkles size={16} /><div><p>Mystic Enchant</p><span>{selected.enhancements?.find((enhancement) => enhancement.kind === "MYSTIC_ENCHANT")?.name ?? "No RE inserted"}</span></div></div>
+                {selected.dataSource === "COA_REALM_CACHE" ? <div className="mechanic-tile provisional-tile"><EyeOff size={16} /><div><p>Provisional cache stats</p><span>This item is queued for direct in-game validation; its cache values may differ from the current tooltip.</span></div></div> : null}
                 {selected.scaleSnapshots?.some((snapshot) => snapshot.effectiveLevel === level)
                   ? <div className="mechanic-tile scaled-tile"><TrendingUp size={16} /><div><p>Exact level scaling</p><span>Stats and item level were captured from the current CoA client at effective level {level}.</span></div></div>
                   : null}

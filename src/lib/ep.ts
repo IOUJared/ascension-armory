@@ -89,6 +89,12 @@ export function contextualPower(stats: StatMap, level: number, context?: GearCon
  * use normal EP as the tie-breaker. Below max level, ranking is EP-only.
  */
 export function compareScoredItems(a: ScoredItem, b: ScoredItem, level: number, context?: GearContext): number {
+  // Cache templates are valuable for discovery but can disagree with the live
+  // tooltip. Never let provisional values displace directly verified gear.
+  const confidence = (item: GearItem) => item.dataSource === "COA_INGAME_SCAN" || item.dataSource === "USER_VERIFIED" ? 2
+    : item.dataSource === "PLAYER_IMPORT" ? 1 : 0;
+  const confidenceDifference = confidence(b) - confidence(a);
+  if (confidenceDifference) return confidenceDifference;
   const powerDifference = contextualPower(b.resolvedStats, level, context) - contextualPower(a.resolvedStats, level, context);
   return Math.abs(powerDifference) > 0.001 ? powerDifference : b.ep - a.ep;
 }

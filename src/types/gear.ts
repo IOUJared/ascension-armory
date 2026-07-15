@@ -25,7 +25,7 @@ export interface GearEffect {
 export interface GearEnhancement {
   id: string;
   name: string;
-  kind: "MYSTIC_ENCHANT" | "GEM" | "SOCKET_BONUS" | "CUSTOM";
+  kind: "ENCHANT" | "MYSTIC_ENCHANT" | "GEM" | "SOCKET_BONUS" | "CUSTOM";
   stats: StatMap;
   perLevel?: StatMap;
   hybridScaling?: HybridScalingRule[];

@@ -13,6 +13,7 @@ import { GameItemIcon } from "./game-item-icon";
 import { GearImportModal } from "./gear-import-modal";
 import { ClassicCharacterPaperDoll } from "./classic-character-paper-doll";
 import { CoAClassSelector } from "./coa-class-selector";
+import { EnchantEditorModal } from "./enchant-editor-modal";
 
 const leftSlots: EquipmentSlot[] = ["HEAD", "NECK", "SHOULDERS", "BACK", "CHEST", "WRISTS", "MAIN_HAND", "RANGED"];
 const rightSlots: EquipmentSlot[] = ["HANDS", "WAIST", "LEGS", "FEET", "FINGER_1", "FINGER_2", "TRINKET_1", "TRINKET_2", "OFF_HAND"];
@@ -24,11 +25,12 @@ function labelSlot(slot: EquipmentSlot): string {
   return slot.replace("_1", " I").replace("_2", " II").replaceAll("_", " ");
 }
 
-function SlotCard({ slot, item, level, profile, side, onClick, onClear }: { slot: EquipmentSlot; item?: GearItem; level: number; profile: WeightProfile; side: "left" | "right"; onClick: () => void; onClear: () => void }) {
+function SlotCard({ slot, item, level, profile, side, onClick, onClear, onEnchant }: { slot: EquipmentSlot; item?: GearItem; level: number; profile: WeightProfile; side: "left" | "right"; onClick: () => void; onClear: () => void; onEnchant: () => void }) {
   const ep = item ? scoreItem(item, level, profile).ep : 0;
+  const enchant = item?.enhancements?.find((enhancement) => enhancement.kind === "ENCHANT");
   return (
     <div className="gear-slot-wrap">
-      <button className={`gear-slot ${side} group`} onClick={onClick} aria-label={`Choose item for ${labelSlot(slot)}`}>
+      <button className={`gear-slot ${side} group ${item ? "with-enchant" : ""}`} onClick={onClick} aria-label={`Choose item for ${labelSlot(slot)}`}>
         <GameItemIcon item={item} slot={slot} className={`slot-icon ${qualityBorder[item?.quality ?? "COMMON"] ?? ""}`} />
         <div className={`min-w-0 flex-1 ${side === "right" ? "text-right" : "text-left"}`}>
           <span className="slot-label">{labelSlot(slot)}</span>
@@ -36,6 +38,7 @@ function SlotCard({ slot, item, level, profile, side, onClick, onClear }: { slot
         </div>
         <span className="slot-ep">{ep.toFixed(0)}</span>
       </button>
+      {item ? <button type="button" className={`slot-enchant ${side} ${enchant ? "active" : ""}`} onClick={onEnchant} aria-label={`${enchant ? "Edit" : "Add"} enchant for ${item.name}`} title={enchant?.name ?? "Add enchant"}><Sparkles size={10} /><span>{enchant?.name ?? "Add enchant"}</span></button> : null}
       {item ? <button type="button" className={`slot-clear ${side}`} onClick={onClear} aria-label={`Unequip ${item.name} from ${labelSlot(slot)}`} title={`Unequip ${item.name}`}><X size={12} /></button> : null}
     </div>
   );
@@ -88,6 +91,7 @@ export function GearPlanner() {
   const [saveConfirmed, setSaveConfirmed] = useState(false);
   const [importerOpen, setImporterOpen] = useState(false);
   const [activeSlot, setActiveSlot] = useState<EquipmentSlot | null>(null);
+  const [activeEnchantSlot, setActiveEnchantSlot] = useState<EquipmentSlot | null>(null);
   const [candidates, setCandidates] = useState<GearItem[]>([]);
   const [loadingCandidates, setLoadingCandidates] = useState(false);
   const selectedProfile = useMemo(() => selection ? resolveCoAProfile(selection) : undefined, [selection]);
@@ -191,6 +195,7 @@ export function GearPlanner() {
   }
 
   function clearSlot(slot: EquipmentSlot): void {
+    if (activeEnchantSlot === slot) setActiveEnchantSlot(null);
     setLoadout((current) => {
       if (!current[slot]) return current;
       const next = { ...current };
@@ -240,9 +245,9 @@ export function GearPlanner() {
 
         <div className="planner-layout" id="planner">
           <section className="armory-panel">
-            <div className="panel-heading"><div><p className="eyebrow">Paper doll</p><h2>Equipped loadout</h2></div><div className="panel-heading-actions"><button type="button" className="clear-loadout-button" disabled={Object.keys(loadout).length === 0} onClick={() => setLoadout({})}><Trash2 size={13} /> Clear all gear</button><div className="total-ep"><span>Total score</span><strong>{totalEp.toFixed(1)} <small>EP</small></strong></div></div></div>
+            <div className="panel-heading"><div><p className="eyebrow">Paper doll</p><h2>Equipped loadout</h2></div><div className="panel-heading-actions"><button type="button" className="clear-loadout-button" disabled={Object.keys(loadout).length === 0} onClick={() => { setLoadout({}); setActiveEnchantSlot(null); }}><Trash2 size={13} /> Clear all gear</button><div className="total-ep"><span>Total score</span><strong>{totalEp.toFixed(1)} <small>EP</small></strong></div></div></div>
             <div className="paper-doll-grid">
-              <div className="slot-column">{leftSlots.map((slot) => <SlotCard key={slot} slot={slot} item={loadout[slot]} level={level} profile={profile} side="left" onClick={() => openSlot(slot)} onClear={() => clearSlot(slot)} />)}</div>
+              <div className="slot-column">{leftSlots.map((slot) => <SlotCard key={slot} slot={slot} item={loadout[slot]} level={level} profile={profile} side="left" onClick={() => openSlot(slot)} onClear={() => clearSlot(slot)} onEnchant={() => setActiveEnchantSlot(slot)} />)}</div>
               <div className="character-stage">
                 <div className="model-nameplate"><span>Level {level}</span><strong>{selectedProfile ? `${selectedProfile.spec.name} ${selectedProfile.classInfo.name}` : "Azerothian Hero"}</strong></div>
                 <div className="character-glow" />
@@ -251,9 +256,9 @@ export function GearPlanner() {
                 <div className="model-turn-control"><small>Equipped appearance</small></div>
                 <div className="realm-chip"><span /> Conquest of Azeroth</div>
               </div>
-              <div className="slot-column">{rightSlots.map((slot) => <SlotCard key={slot} slot={slot} item={loadout[slot]} level={level} profile={profile} side="right" onClick={() => openSlot(slot)} onClear={() => clearSlot(slot)} />)}</div>
+              <div className="slot-column">{rightSlots.map((slot) => <SlotCard key={slot} slot={slot} item={loadout[slot]} level={level} profile={profile} side="right" onClick={() => openSlot(slot)} onClear={() => clearSlot(slot)} onEnchant={() => setActiveEnchantSlot(slot)} />)}</div>
             </div>
-            <div className="mobile-slot-grid">{[...leftSlots, ...rightSlots].map((slot) => <SlotCard key={slot} slot={slot} item={loadout[slot]} level={level} profile={profile} side="left" onClick={() => openSlot(slot)} onClear={() => clearSlot(slot)} />)}</div>
+            <div className="mobile-slot-grid">{[...leftSlots, ...rightSlots].map((slot) => <SlotCard key={slot} slot={slot} item={loadout[slot]} level={level} profile={profile} side="left" onClick={() => openSlot(slot)} onClear={() => clearSlot(slot)} onEnchant={() => setActiveEnchantSlot(slot)} />)}</div>
           </section>
 
           <aside className="weights-panel" id="weights">
@@ -297,6 +302,24 @@ export function GearPlanner() {
         profileLabel={profileName}
         onEquip={(item) => setLoadout((current) => ({ ...current, [activeSlot]: item }))}
         onClose={() => setActiveSlot(null)}
+      /> : null}
+      {activeEnchantSlot && loadout[activeEnchantSlot] ? <EnchantEditorModal
+        slot={activeEnchantSlot}
+        item={loadout[activeEnchantSlot]}
+        profile={profile}
+        onApply={(enchant) => setLoadout((current) => {
+          const item = current[activeEnchantSlot];
+          if (!item) return current;
+          const enhancements = [...(item.enhancements ?? []).filter((enhancement) => enhancement.kind !== "ENCHANT"), enchant];
+          return { ...current, [activeEnchantSlot]: { ...item, enhancements } };
+        })}
+        onRemove={() => setLoadout((current) => {
+          const item = current[activeEnchantSlot];
+          if (!item) return current;
+          const enhancements = (item.enhancements ?? []).filter((enhancement) => enhancement.kind !== "ENCHANT");
+          return { ...current, [activeEnchantSlot]: { ...item, enhancements: enhancements.length ? enhancements : undefined } };
+        })}
+        onClose={() => setActiveEnchantSlot(null)}
       /> : null}
       {importerOpen ? <GearImportModal
         onImport={(importedLevel, importedLoadout) => { setLevel(importedLevel); setLoadout(importedLoadout); setActiveSlot(null); }}

@@ -84,10 +84,27 @@ async function main(): Promise<void> {
   if (!snapshots.length) throw new Error(`No AAI1 catalog snapshots were found in ${filename}. Run /aacatalog and /reload in game first.`);
 
   let imported = 0;
+  let cacheArmorConflicts = 0;
+  let cacheStatConflicts = 0;
   for (let offset = 0; offset < snapshots.length; offset += 100) {
     const batch = snapshots.slice(offset, offset + 100);
+    const existingRows = await prisma.item.findMany({
+      where: { id: { in: batch.map((snapshot) => BigInt(snapshot.id)) } },
+      include: { stats: true },
+    });
+    const existingById = new Map(existingRows.map((item) => [item.id.toString(), item]));
+    for (const snapshot of batch) {
+      const existing = existingById.get(snapshot.id);
+      if (!existing?.sourceUrl.startsWith("realm-cache://")) continue;
+      if ((existing.armor ?? 0) !== (snapshot.stats.armor ?? 0)) cacheArmorConflicts += 1;
+      const cachedStats = new Map(existing.stats.map((stat) => [stat.statKey, stat.value]));
+      if ((Object.entries(snapshot.stats) as Array<[StatKey, number]>).some(([key, value]) =>
+        key !== "armor" && key !== "weapon_dps" && cachedStats.has(key) && cachedStats.get(key) !== value)) cacheStatConflicts += 1;
+    }
     await prisma.$transaction(batch.flatMap((snapshot) => {
       const id = BigInt(snapshot.id);
+      const previousPayload = existingById.get(snapshot.id)?.rawPayload as { item?: { displayId?: unknown } } | null | undefined;
+      const displayId = Number(previousPayload?.item?.displayId);
       const armor = snapshot.stats.armor ?? 0;
       const weaponDps = snapshot.stats.weapon_dps ?? null;
       const rawPayload = {
@@ -96,6 +113,7 @@ async function main(): Promise<void> {
         itemSubType: snapshot.itemSubType, equipLocation: snapshot.equipLocation,
         inventoryType: snapshot.inventoryType, classID: snapshot.classID,
         subClassID: snapshot.subClassID, apiStats: snapshot.stats, apiStatsRaw: snapshot.rawStats,
+        ...(Number.isInteger(displayId) && displayId > 0 ? { item: { displayId } } : {}),
       } satisfies Prisma.InputJsonObject;
       const data = {
         name: snapshot.name || `Unknown Item ${snapshot.id}`,
@@ -128,7 +146,7 @@ async function main(): Promise<void> {
     }));
     imported += batch.length;
   }
-  console.log(JSON.stringify({ imported, source: filename, authority: "current in-game CoA API and tooltip" }));
+  console.log(JSON.stringify({ imported, cacheArmorConflicts, cacheStatConflicts, source: filename, authority: "current in-game CoA API and tooltip" }));
 }
 
 main().finally(() => prisma.$disconnect());

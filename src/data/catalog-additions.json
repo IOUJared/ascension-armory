@@ -11,10 +11,24 @@
         "stats": { "stamina": 7, "intellect": 11, "spell_power": 14 }
       }
     },
+    {
+      "id": "6688",
+      "verification": "User-verified current CoA in-game tooltip, 2026-07-15",
+      "overrides": {
+        "armor": 84
+      }
+    },
     { "id": "23169" },
     { "id": "2061226" },
     { "id": "4732" },
-    { "id": "2800" },
+    {
+      "id": "2800",
+      "verification": "User-verified current CoA in-game tooltip, 2026-07-15",
+      "overrides": {
+        "armor": 50,
+        "stats": { "intellect": 15, "stamina": 6 }
+      }
+    },
     { "id": "14148" },
     { "id": "9395" },
     { "id": "2067372" },

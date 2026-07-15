@@ -19,7 +19,12 @@ interface AtlasItem {
 interface AtlasMenu {
   name?: string;
   type?: string;
-  groups: string[];
+  groups: Array<{ name: string; references: string[] }>;
+}
+
+interface MenuReference {
+  section: string;
+  groupIndex: number;
 }
 
 function argument(name: string, fallback: string): string {
@@ -81,7 +86,11 @@ async function extractMenus(atlasDir: string): Promise<Map<string, AtlasMenu>> {
         if (type) menu.type = type;
         if (before === sectionDepth + 1 && /^\s*\{/.test(line)) {
           const group = menuValue(line);
-          if (group) menu.groups.push(group);
+          if (group) {
+            const referenceBlock = line.match(/,\s*\{([^}]*)\}/)?.[1] ?? "";
+            const references = [...referenceBlock.matchAll(/\b\d+\b/g)].map((match) => match[0]);
+            menu.groups.push({ name: group, references });
+          }
         }
       }
       depth += braceDelta(line);
@@ -102,20 +111,28 @@ function sourceMetadata(sourceFile: string, section: string | undefined, groupIn
   if (section === "WorldforgedClassic") sourceType = "WORLDFORGED";
   else if (section === "AQOpening") sourceType = "WORLD_EVENT";
   else if (/WorldEpics/i.test(section)) sourceType = "WORLD_DROP";
-  else if (file === "Instances.lua") sourceType = /Raid/i.test(menu?.type ?? "") ? "RAID" : "DUNGEON";
+  else if (/Raid/i.test(menu?.type ?? "")) sourceType = "RAID";
+  else if (/Dungeon/i.test(menu?.type ?? "")) sourceType = "DUNGEON";
+  else if (file === "Instances.lua") sourceType = "DUNGEON";
   else if (file === "Crafting.lua") sourceType = "CRAFTING";
   else if (file === "Factions.lua") sourceType = "FACTION";
   else if (file === "PvP.lua") sourceType = "PVP";
   else if (file === "Worldevents.lua") sourceType = "WORLD_EVENT";
   else if (file === "Collections.lua") sourceType = "COLLECTION";
   if (!sourceType) return {};
-  const encounter = groupIndex > 0 ? menu?.groups[groupIndex - 1] : undefined;
+  const encounter = groupIndex > 0 ? menu?.groups[groupIndex - 1]?.name : undefined;
   return {
     sourceType,
     sourceName: section === "AQOpening" ? "Ahn'Qiraj Opening Event" : menu?.name ?? humanize(section),
     ...(encounter ? { encounter } : {}),
     sourceConfidence: encounter && (sourceType === "DUNGEON" || sourceType === "RAID") ? "EXACT" : "CATEGORY",
   };
+}
+
+function sourceRank(item: AtlasItem): number {
+  if (item.sourceConfidence === "EXACT") return 2;
+  if (item.sourceType) return 1;
+  return 0;
 }
 
 async function main(): Promise<void> {
@@ -135,6 +152,16 @@ async function main(): Promise<void> {
   const itemsById = new Map<string, AtlasItem>();
   const worldforgedBaseIds = new Set<string>();
   const menus = await extractMenus(atlasDir);
+  const menuReferences = new Map<string, MenuReference[]>();
+  for (const [section, menu] of menus) {
+    menu.groups.forEach((group, index) => {
+      for (const reference of group.references) {
+        const sources = menuReferences.get(reference) ?? [];
+        sources.push({ section, groupIndex: index + 1 });
+        menuReferences.set(reference, sources);
+      }
+    });
+  }
 
   for (const file of sourceFiles) {
     const source = await readFile(file, "utf8");
@@ -170,17 +197,23 @@ async function main(): Promise<void> {
       if (match && match[1] !== "0") {
         const id = match[1];
         if (inWorldforged) worldforgedBaseIds.add(id);
-        if (!itemsById.has(id)) {
-          itemsById.set(id, {
-            id,
-            ...(sourceName(line) ? { name: sourceName(line) } : {}),
-            sourceFile,
-            line: index + 1,
-            ...(section ? { section } : {}),
-            ...sourceMetadata(sourceFile, section, groupIndex, menus),
-            kind: "atlasloot-entry",
-          });
-        }
+        const referenceId = line.match(/\brefLootEntry\s*=\s*(\d+)/)?.[1];
+        const referenceMatches = referenceId ? menuReferences.get(referenceId) ?? [] : [];
+        const uniqueReferences = new Map(referenceMatches.map((source) => [`${source.section}:${source.groupIndex}`, source]));
+        const referenceSource = uniqueReferences.size === 1 ? [...uniqueReferences.values()][0] : undefined;
+        const resolvedSection = section ?? referenceSource?.section;
+        const resolvedGroupIndex = section ? groupIndex : referenceSource?.groupIndex ?? 0;
+        const candidate: AtlasItem = {
+          id,
+          ...(sourceName(line) ? { name: sourceName(line) } : {}),
+          sourceFile,
+          line: index + 1,
+          ...(resolvedSection ? { section: resolvedSection } : {}),
+          ...sourceMetadata(sourceFile, resolvedSection, resolvedGroupIndex, menus),
+          kind: "atlasloot-entry",
+        };
+        const existing = itemsById.get(id);
+        if (!existing || sourceRank(candidate) > sourceRank(existing)) itemsById.set(id, candidate);
       }
       depth += braceDelta(line);
       if (section && !inWorldforged && depth <= sectionDepth) {

@@ -19,7 +19,7 @@ interface DungeonVariantSource {
 }
 
 interface CurrentCatalog {
-  items: Array<{ id: string }>;
+  items: Array<{ id: string; dataSource?: string }>;
 }
 
 async function main(): Promise<void> {
@@ -63,6 +63,12 @@ async function main(): Promise<void> {
   for (const item of dungeonVariants.items) {
     candidates.set(item.id, `  { id = ${Number(item.id)}, baseId = ${Number(item.baseId)}, itemLevel = ${item.itemLevel}, source = "dungeon-${item.tier.toLowerCase()}" },`);
   }
+  for (const item of currentCatalog.items) {
+    // Realm WDB rows are discovery data, not final tooltip verification. Queue
+    // every cache-only item so GetItemStats can supersede it on the live realm.
+    if (item.dataSource !== "COA_REALM_CACHE" || candidates.has(item.id)) continue;
+    candidates.set(item.id, `  { id = ${Number(item.id)}, source = "realm-cache-validation" },`);
+  }
   for (const item of atlasLoot.items) {
     // Existing LootCollector/client candidates remain in the list so an
     // interrupted scan can resume. Atlas-only IDs already verified by the
@@ -87,6 +93,7 @@ async function main(): Promise<void> {
     lootCollector: source.itemIds.length,
     upgrades: upgrades.items.length,
     dungeonVariants: dungeonVariants.items.length,
+    realmCacheValidation: currentCatalog.items.filter((item) => item.dataSource === "COA_REALM_CACHE").length,
     atlasLoot: atlasLoot.items.length,
     atlasLootAlreadyCurrent: atlasLoot.items.filter((item) => alreadyCurrent.has(item.id)).length,
   }));
