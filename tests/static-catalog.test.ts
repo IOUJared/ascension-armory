@@ -113,3 +113,17 @@ test("catalog lookup falls back to the canonical document when shard delivery fa
     "/armory/data/catalog/item-index.json",
   ]);
 });
+
+test("catalog fetch uses the browser global receiver required by Firefox", async () => {
+  let receiverVerified = false;
+  const fetcher = async function (this: unknown, url: string) {
+    assert.equal(this, globalThis);
+    receiverVerified = true;
+    const document = url.endsWith("manifest.json") ? manifest : shard("HEAD", [helm]);
+    return { ok: true, status: 200, json: async () => document };
+  };
+  const catalog = new StaticCatalogRepository("/armory", fetcher);
+
+  assert.equal((await catalog.findForSlot("HEAD", 60)).length, 1);
+  assert.equal(receiverVerified, true);
+});

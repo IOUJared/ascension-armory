@@ -119,7 +119,10 @@ export class StaticCatalogRepository implements CatalogRepository {
   }
 
   private async loadJson<T>(path: string, label: string): Promise<T> {
-    const response = await this.fetcher(this.assetUrl(path));
+    // Firefox enforces WebIDL's Window receiver for the native fetch function.
+    // Calling a stored fetcher as `this.fetcher(...)` incorrectly supplies this
+    // repository as the receiver and makes every catalog request fail.
+    const response = await this.fetcher.call(globalThis, this.assetUrl(path));
     if (!response.ok) throw new Error(`${label} failed with ${response.status}`);
     return response.json() as Promise<T>;
   }
